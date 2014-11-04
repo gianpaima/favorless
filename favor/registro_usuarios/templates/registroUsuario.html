@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<title>Favorless</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!--Bootstrap -->
+	  {% load static from staticfiles %}
+	   <link href="{% static "css/bootstrap2.css"%}" rel="stylesheet">
+	<link rel="stylesheet" href="{% static "css/estilos.css"%}">
+	<style type="text/css">
+	.nombreUsuario
+	{
+		display: block;
+	}
+	</style>
+
+    <script src="{% static  "js/respond.min.js"%}"></script>
+</head>
+<body>
+
+<div class="container">
+	<header class="row">
+		<nav class="navbar navbar-default" role="navigation">
+		  <!-- B%}rand and toggle get grouped for better mobile display -->
+		  	<div class="col-lg-12">
+		  		<div class="navbar-header">
+		   		 <a class="navbar-brand" href="#"><img src="{% static "img/logo.png"%}" alt=""></a>
+		    	</div>
+		  	</div>
+			
+		</nav>
+	</header>
+
+	<div class="row">
+
+		<!--registro-->
+<div class="panel panel-default col-sm-12 col-md-12">
+<div class="navbar-default navbar-default2" role="navigation">		
+ <div class="navbar-header">
+ 	 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+ 	 	 <span class="sr-only">Toggle navigation</span>
+      <span class="glyphicon glyphicon-user"></span>
+
+    </button>
+     <a class="navbar2-brand" href="#">Registrate Please</a>
+       <div class="collapse navbar-collapse navbar-collapse2" id="bs-example-navbar-collapse-1">
+       	<div class="navbar-nav">
+		
+			<div class="panel-heading"><h1><strong>Regístrate</strong><small>Vota y elige lo mejor.</small></h1></div>
+  			<div class="panel-body">
+    			<form method="post" action="/create/user/" class="form-horizontal" role="form">
+    				{% csrf_token %}
+    				{% include 'formRegistrar.html' %}
+				</form>
+  			</div>
+  		<!--</div>//panel--></div>
+  	  </div>	
+  </div>	</div><!--nav -->
+  	</div>
+  </div>  </div>
+  			<!--Fin registro-->
+	<footer class="row">
+		<p><small>Favorless © ® Inc. 2013</small></p>
+	</footer>
+
+</div>
+
+<!-- javascript -->
+	<script src="{% static "js/jquery-1.10.2.min.js"%}"></script>
+    <script src="{% static "js/bootstrap.min.js"%}"></script>	
+</body>
+</html>
