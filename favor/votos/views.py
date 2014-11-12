@@ -1,3 +1,9 @@
 from django.shortcuts import render
 
-# Create your views here.
+
+def votos(self):
+	pass
+
+def votos_p(self):
+	pass
+
