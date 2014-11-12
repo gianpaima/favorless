@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<title>Favorless</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!--Bootstrap -->
+	  {% load static from staticfiles %}
+	   <link href="{% static "static/css/bootstrap2.css"%}" rel="stylesheet">
+	<link rel="stylesheet" href="{% static "static/css/estilos.css"%}">
+    <script src="{% static  "static/js/respond.min.js"%}"></script>
+</head>
+<body>
+
+<div class="container">
+	<header class="row">
+		<nav class="navbar navbar-default" role="navigation">
+		  <!-- B%}rand and toggle get grouped for better mobile display -->
+		  	<div class="col-lg-12">
+		  		<div class="navbar-header">
+		   		 <a class="navbar-brand" href="#"><img src="{% static "static/img/titulologo2.png"%}" alt=""></a>
+		    	</div>
+		  	</div>
+			
+		</nav>
+	</header>
+
+	<div class="row">
+		
+ <!--Logueo -->
+ 		<div class="panel panel-default col-sm-12 col-md-12">
+ 		<div class="navbar-default navbar-default2" role="navigation">
+ 		<div class="navbar-header">
+ 	 	<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-2">
+ 	 	 	<span class="sr-only">Toggle navigation</span>
+      		<span class="glyphicon glyphicon-registration-mark"></span>
+
+    	</button>
+    	<a class="navbar2-brand" href="#">Iniciar Sesión</a>
+       <div class="collapse navbar-collapse navbar-collapse2" id="bs-example-navbar-collapse-2">
+	       	<div class="navbar-nav">
+	       	<div class="panel-heading"><h1><strong>Iniciar Sesión</strong><small>Credenciales</small></h1></div>	
+	 			<div class="panel-body">
+	 				<form action="/login/" method="POST" class="form-block" role="form">
+	 					{% csrf_token %}
+			  			{% include 'formularioIngresoSesion.html' %}
+					</form>
+	 			</div>
+			    	
+			</div>
+		</div>
+		</div>
+		</div>
+		</div>
+	</div>
+ </div>
+ <!--Fin Logueo-->
+
+	<footer class="row">
+		<p><small>Favorless © ® Inc. 2013</small></p>
+	</footer>
+
+
+
+<!-- javascript -->
+	<script src="{% static "static/js/jquery-1.10.2.min.js"%}"></script>
+    <script src="{% static "static/js/bootstrap.min.js"%}"></script>	
+</body>
+</html>
