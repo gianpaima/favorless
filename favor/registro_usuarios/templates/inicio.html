@@ -6,9 +6,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!--Bootstrap -->
 	  {% load static from staticfiles %}
-	   <link href="{% static "css/bootstrap2.css"%}" rel="stylesheet">
-	<link rel="stylesheet" href="{% static "css/estilos.css"%}">
-    <script src="{% static  "js/respond.min.js"%}"></script>
+	   <link href="{% static "static/css/bootstrap2.css"%}" rel="stylesheet">
+	<link rel="stylesheet" href="{% static "static/css/estilos.css"%}">
+    <script src="{% static  "static/js/respond.min.js"%}"></script>
 </head>
 <body>
 
@@ -18,7 +18,7 @@
 		  <!-- B%}rand and toggle get grouped for better mobile display -->
 		  	<div class="col-lg-12">
 		  		<div class="navbar-header">
-		   		 <a class="navbar-brand" href="#"><img src="{% static "img/titulologo2.png"%}" alt=""></a>
+		   		 <a class="navbar-brand" href="#"><img src="{% static "static/img/titulologo2.png"%}" alt=""></a>
 		    	</div>
 		  	</div>
 			
@@ -29,7 +29,7 @@
 		<!--imagen-->
 		<div class="col-sm-7 col-md-7">
 			
-			<img  src="{% static "img/vs10.jpg"%}" alt="vs2" class="img-responsive img-principal-comparar">
+			<img  src="{% static "static/img/vs10.jpg"%}" alt="vs2" class="img-responsive img-principal-comparar">
 			
 		</div>
  <!--Logueo -->
@@ -51,7 +51,7 @@
 	 			<div class="panel-body">
 	 				<form method="post" action="login/" class="form-block" role="form">
 	 					{% csrf_token %}
-			  			{% include 'formStart.html' %}
+			  			{% include 'formularioIngresoSesion.html' %}
 					</form>
 	 			</div>
 			    	
@@ -78,7 +78,7 @@
   			<div class="panel-body">
     			<form action="signup/" method="post" class="form-horizontal" role="form">
     				{% csrf_token %}
-    				{% include 'formRegistrar.html' %}
+    				{% include 'formularioRegistrar.html' %}
 				</form>
   			</div>
   		<!--</div>//panel--></div>
@@ -122,7 +122,7 @@
 </div>
 
 <!-- javascript -->
-	<script src="{% static "js/jquery-1.10.2.min.js"%}"></script>
-    <script src="{% static "js/bootstrap.min.js"%}"></script>	
+	<script src="{% static "static/js/jquery-1.10.2.min.js"%}"></script>
+    <script src="{% static "static/js/bootstrap.min.js"%}"></script>	
 </body>
 </html>

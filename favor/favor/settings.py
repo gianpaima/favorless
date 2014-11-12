@@ -20,9 +20,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = 'u&@a!wfxt&##muqzsi!vldt%+_ydp@x9--#!e)2qlb@bnayyj4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+
 DEBUG = True
 
-TEMPLATE_DEBUG = True
+
+TEMPLATE_DEBUG = DEBUG
 
 ALLOWED_HOSTS = []
 
@@ -84,5 +86,23 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
+im = os.sep.join(os.path.abspath(__file__).split(os.sep)[:-2] + ['registro_usuarios'])
 
+TEMPLATE_DIRS = (
+    os.path.join(im,'templates'),
+)
 STATIC_URL = '/static/'
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+#   'django.contrib.staticfiles.finders.DefaultStorageFinder',
+)
+
+ 
+
+MEDIA_ROOT = os.sep.join(os.path.abspath(__file__).split(os.sep)[:-2] + ['media'])
+STATIC_ROOT = os.sep.join(os.path.abspath(__file__).split(os.sep)[:-2] + ['content'])
+
+STATICFILES_STORAGE ='django.contrib.staticfiles.storage.CachedStaticFilesStorage'
+
+
