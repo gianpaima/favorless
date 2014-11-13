@@ -12,7 +12,7 @@ from forms import FormRegistrarUsuario,FormInciarSesion
 from models import *
 # Create your views here.
 def home(request):
-	template='inicio.html' 
+	template='principal.html' 
 	form_registrar_usuario = FormRegistrarUsuario()
 	form_iniciar_sesion = FormInciarSesion()
 	print "hola mundp"
