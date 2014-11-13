@@ -106,3 +106,7 @@ STATIC_ROOT = os.sep.join(os.path.abspath(__file__).split(os.sep)[:-2] + ['conte
 STATICFILES_STORAGE ='django.contrib.staticfiles.storage.CachedStaticFilesStorage'
 
 
+AUTHENTICATION_BACKENDS = (
+    'registro_usuarios.backendsIniciarSesion.EmailOrUsernameModelBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
