@@ -1,5 +1,5 @@
 from django.contrib import admin
-from models import TipoPrograma, Programa, Integrante
+from models import Categoria, Programa, Integrante
 
 class ProgramaAdmin(admin.ModelAdmin):
 	list_display =('nombre', 'fecha_creacion','hora_inicio_programa','hora_fin_programa','canal_programa','estado','logo')
@@ -9,6 +9,6 @@ class IntegranteAdmin(admin.ModelAdmin):
 
 
 # Register your models here.
-admin.site.register(TipoPrograma)
+admin.site.register(Categoria)
 admin.site.register(Programa,ProgramaAdmin)
 admin.site.register(Integrante,IntegranteAdmin)
