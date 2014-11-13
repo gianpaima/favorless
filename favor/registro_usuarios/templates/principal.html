@@ -6,8 +6,8 @@
 	  	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	    <!--Bootstrap -->
 	    {% load static from staticfiles %}
-	    <link href="{% static "css/bootstrap2.css"%}" rel="stylesheet">
-	    <link href="{% static "css/estilos.css"%}" rel="stylesheet">
+	    <link href="{% static "static/css/bootstrap2.css"%}" rel="stylesheet">
+	    <link href="{% static "static/css/estilos.css"%}" rel="stylesheet">
 	    <script src="js/respond.min.js"></script>
 	</head>
 
@@ -27,7 +27,7 @@
 		 				</div>
 
 		 				<div>
-		 					<a href="#" class="navbar-brand-centered"><img src="{% static "img/titulologo.png"%}" alt="favorless logo"></a>
+		 					<a href="#" class="navbar-brand-centered"><img src="{% static "static/img/titulologo.png"%}" alt="favorless logo"></a>
 		 				</div>
 		 				<div>
 							<a href="#" class="navbar-icon-checkin-right">
@@ -39,7 +39,7 @@
 
 						<div>
 							<a href="#" class="navbar-icon-checkin-right2">
-									<a href="{% url "cerrar" %}"><span style="font-size:16px;" class="glyphicon glyphicon-cog"></span> <span class="cog"></span>
+									<a href="{% url "logout" %}"><span style="font-size:16px;" class="glyphicon glyphicon-cog"></span> <span class="cog"></span>
 </a>							
 </a>
 		 				</div>
@@ -73,22 +73,22 @@
 				</nav>
 		</header>
 
-		{% load relationship_tags %}	
+			
 		<div class="row">
 			<section class="col-lg-4 col-sm-4 col-md-4 hidden-xs">
 				<article>
 					<div class="panel panel-default">
 					  <div class="panel-body">
 					    <div class="col-lg-12 text-center">
-					    	<img src="{% static "img/userseguir.png"%}" alt="Usuario">
+					    	<img src="{% static "static/img/userseguir.png"%}" alt="Usuario">
 					    </div>
 					    <div class="col-lg-12 text-center">
 					    	<span class="text-center"><a href="#">{{ user.username }}</a></span>
 					    </div>
 					    <ul class="list-inline col-lg-12 col-md-12">
 						  <li class="col-lg-3 col-md-3 text-center"><a href="#"><span style="font-size:24px;" class="glyphicon glyphicon-check"></span></a></li>
-						  <li class="col-lg-3 col-md-3 text-center"><a href="{% url "following" %}"><span style="font-size:24px;" class="glyphicon glyphicon-arrow-left"></span></a></li>
-						  <li class="col-lg-3 col-md-3 text-center"><a href="{% url "followers" %}"><span style="font-size:24px;" class="glyphicon glyphicon-arrow-right"></span></a></li>
+						  <li class="col-lg-3 col-md-3 text-center"><a href=""><span style="font-size:24px;" class="glyphicon glyphicon-arrow-left"></span></a></li>
+						  <li class="col-lg-3 col-md-3 text-center"><a href=""><span style="font-size:24px;" class="glyphicon glyphicon-arrow-right"></span></a></li>
 						  <li class="col-lg-3 col-md-3 text-center"><a href="#"><span style="font-size:24px;" class="glyphicon glyphicon-star"></span></a></li>
 						</ul>
 					    
@@ -101,7 +101,7 @@
 						<ul class="media-list">
 							<li class="media">
 								<a class="pull-left" href="#">
-							      <img class="media-object" src="{% static "img/userseguir.png"%}" alt="Usuario">
+							      <img class="media-object" src="{% static "static/img/userseguir.png"%}" alt="Usuario">
 							    </a>
 							<div class="media-body">
 							   	<h5 class="media-heading">Nombre Apellido</h5>
@@ -113,7 +113,7 @@
 
 							<li class="media">
 								<a class="pull-left" href="#">
-							      <img class="media-object" src="{% static "img/userseguir.png"%}" alt="Usuario">
+							      <img class="media-object" src="{% static "static/img/userseguir.png"%}" alt="Usuario">
 							    </a>
 							<div class="media-body">
 							   	<h5 class="media-heading">Nombre Apellido</h5>
@@ -125,7 +125,7 @@
 
 							<li class="media">
 								<a class="pull-left" href="#">
-							      <img class="media-object" src="{% static "img/userseguir.png"%}" alt="Usuario">
+							      <img class="media-object" src="{% static "static/img/userseguir.png"%}" alt="Usuario">
 							    </a>
 							<div class="media-body">
 							   	<h5 class="media-heading">Nombre Apellido</h5>
@@ -137,7 +137,7 @@
 
 							<li class="media">
 								<a class="pull-left" href="#">
-							      <img class="media-object" src="{% static "img/userseguir.png"%}" alt="Usuario">
+							      <img class="media-object" src="{% static "static/img/userseguir.png"%}" alt="Usuario">
 							    </a>
 							<div class="media-body">
 							   	<h5 class="media-heading">Nombre Apellido</h5>
@@ -184,13 +184,13 @@
 					  <div class="panel-body">
 					   <div class="col-lg-6 col-xs-6">
 					   		<a href="#" class="thumbnail">
-					      		<img src="{% static "img/vs7.jpg"%}" alt="...">
+					      		<img src="{% static "static/img/vs7.jpg"%}" alt="...">
 					    	</a>
 					  	</div>
 
 					   <div class="col-lg-6 col-xs-6">
 					    	<a href="#" class="thumbnail">
-					      		<img src="{% static "img/vs8.jpg"%}" alt="...">
+					      		<img src="{% static "static/img/vs8.jpg"%}" alt="...">
 					    	</a>
 					  	</div>
 		
@@ -202,13 +202,13 @@
 					  <div class="panel-body">
 					   <div class="col-lg-6 col-xs-6">
 					   		<a href="#" class="thumbnail">
-					      		<img src="{% static "img/imgvs1.png"%}" alt="...">
+					      		<img src="{% static "static/img/imgvs1.png"%}" alt="...">
 					    	</a>
 					  	</div>
 
 					   <div class="col-lg-6 col-xs-6">
 					    	<a href="#" class="thumbnail">
-					      		<img src="{% static "img/imgvs2.png"%}" alt="...">
+					      		<img src="{% static "static/img/imgvs2.png"%}" alt="...">
 					    	</a>
 					  	</div>
 		
@@ -220,13 +220,13 @@
 					  <div class="panel-body">
 					   <div class="col-lg-6 col-xs-6">
 					   		<a href="#" class="thumbnail">
-					      		<img src="{% static "img/imgvs1.png"%}" alt="...">
+					      		<img src="{% static "static/img/imgvs1.png"%}" alt="...">
 					    	</a>
 					  	</div>
 
 					   <div class="col-lg-6 col-xs-6">
 					    	<a href="#" class="thumbnail">
-					      		<img src="{% static "img/imgvs2.png"%}" alt="...">
+					      		<img src="{% static "static/img/imgvs2.png"%}" alt="...">
 					    	</a>
 					  	</div>
 		
@@ -240,7 +240,7 @@
 		</div>
 	</div> <!--fin container -->
 				<!-- javascript -->
-		   		<script src="{% static "js/jquery-1.10.2.min.js"%}"></script>
-    			<script src="{% static "js/bootstrap.min.js"%}"></script> 
+		   		<script src="{% static "static/js/jquery-1.10.2.min.js"%}"></script>
+    			<script src="{% static "static/js/bootstrap.min.js"%}"></script> 
 	</body>
 </html>
