@@ -14,14 +14,10 @@ from models import *
 
 
 def home(request):
-<<<<<<< HEAD
-	template='inicio.html'
-=======
-	template='principal.html' 
->>>>>>> d7b1109bc0bbe6d4355625d93348f0525de6b64d
-	form_registrar_usuario = FormRegistrarUsuario()
-	form_iniciar_sesion = FormInciarSesion()
-	return render_to_response(template,{"form_registrar_usuario":form_registrar_usuario,"form_iniciar_sesion":form_iniciar_sesion},context_instance=RequestContext(request))
+    template='inicio.html'
+    form_registrar_usuario = FormRegistrarUsuario()
+    form_iniciar_sesion = FormInciarSesion()
+    return render_to_response(template,{"form_registrar_usuario":form_registrar_usuario,"form_iniciar_sesion":form_iniciar_sesion},context_instance=RequestContext(request))
 
 
 def iniciarSesion(request):
