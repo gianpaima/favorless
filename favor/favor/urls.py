@@ -17,7 +17,7 @@ urlpatterns = patterns('',
     url(r'^principal/$', 'registro_usuarios.views.principal', name='principal'),
     url(r'^logout/$', 'registro_usuarios.views.cerrarSesion', name='logout'),
      url(r'^media/(?P<path>.*)$','django.views.static.serve',
-		{'document_root':settings.MEDIA_ROOT,} 
+		{'document_root':settings.MEDIA_ROOT,}
 		),
     url(r'^admin/', include(admin.site.urls)),
 )
