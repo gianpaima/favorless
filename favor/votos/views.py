@@ -7,3 +7,5 @@ def votos(self):
 def votos_p(self):
 	pass
 
+def votos_f(self):
+	pass
