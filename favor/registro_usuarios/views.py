@@ -50,6 +50,16 @@ def iniciarSesion(request):
         return HttpResponseRedirect("/principal")
 
 
+def registrarUsuario(request):
+    if not request.user.is_authenticated():
+        #Aca no vamos a validar el metodo post o get por que esto sirve solo para capturar datos, puesto por primera vez y ponerlos en el otro html...Menos la contrasena
+        registrar_usuario = FormRegistrarUsuario(request.REQUEST)
+        return render_to_response('registroUsuario.html',{"form_registrar_usuario":registrar_usuario},context_instance=RequestContext(request))
+    else:
+        #aca falta ver si el usuario...esta desactivado...o  reportado
+        return HttpResponseRedirect("/")
+
+
 def principal(request):
     template = "principal.html"
     return render_to_response(template,context_instance=RequestContext(request))
