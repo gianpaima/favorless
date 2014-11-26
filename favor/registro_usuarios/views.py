@@ -69,6 +69,7 @@ def principal(request):
 def cerrarSesion(request):
     logout(request)
     return  HttpResponseRedirect('/')
+<<<<<<< HEAD
 
 Programa
 
@@ -90,3 +91,5 @@ def preferencias(request):
 
 
     
+=======
+>>>>>>> 9f9b5b8474ac5c2edbc0b5d0c96af2a1703d5917
