@@ -35,15 +35,48 @@
 
       <div class="row center-block">
               <select class="form-control">
-                  <option>Cuenta Populares</option>
-                  <option>Deportes</option>
-                  <option>Musica</option>
-                  <option>Televisión</option>
-                  <option>Peliculas</option>
-                  <option>Entretenimiento</option>
-                  <option>Humor</option>
-                  <option>Politica</option>
+                  <option value  = "todos" selected = "true"> Todo </option>
+
+                {%for categoria in categoria_dato %}
+                  <option value = "{{categoria.titulo}}">{{categoria.titulo}}</option>
+
+                {%endfor%} 
               </select>
+
+
+
+
+      {%for programa in  preferencia_dato%}
+
+      <div class="col-xs-6 col-sm-6 col-md-4">
+          <div class="thumbnail">
+            <img src="/media/{{programa.logo}} "  style = "width=200px; height:200px" alt="...">
+            <div class="caption">
+              <h3>{{programa.nombre}}</h3>
+              <h4>{{programa.nombre_abreviado}}</h4>
+              <p>{{programa.tipo_programa}}</p>
+              <p><a href="#" class="btn btn-primary" role="button">Me gusta</a></p>
+            </div>
+          </div>
+      </div>
+
+      {%endfor%}
+
+      <!-- <div class="col-xs-6 col-sm-6 col-md-4">
+          <div class="thumbnail">
+            <img src="{% static "static/img/normal.jpg"%}" alt="...">
+            <div class="caption">
+              <h4>The Big Bang Theory</h4>
+              <p>Comedia</p>
+              <p><a href="#" class="btn btn-primary" role="button">Me gusta</a></p>
+            </div>
+          </div>
+        </div>
+
+
+
+
+
         <div class="col-xs-6 col-sm-6 col-md-4">
           <div class="thumbnail">
             <img src="{% static "static/img/normal.jpg"%}" alt="...">
@@ -90,7 +123,7 @@
           </div>
         </div>
 
-      </div>
+      </div>-->
 
     <!-- javascript -->
     <script src="{% static "static/js/jquery-1.10.2.min.js"%}"></script>
