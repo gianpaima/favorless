@@ -3,24 +3,25 @@ $(document).ready(function(){
     var form = $("#customForm");
     var name = $("#r_input_name_complete");
     var nameInfo = $("#nameInfo");
-    var email = $("#email");
+    var email = $("#r_input_email");
     var emailInfo = $("#emailInfo");
-    var pass1 = $("#pass1");
+    var pass1 = $("#r_input_password");
     var pass1Info = $("#pass1Info");
-    var pass2 = $("#pass2");
-    var pass2Info = $("#pass2Info");
-    var message = $("#message");
+    var username = $("#r_input_usuario");
+    var userInfo = $("#userInfo");
 
     //On blur
     name.blur(validateName);
     email.blur(validateEmail);
     pass1.blur(validatePass1);
+    username.blur(validateUserName)
     //On key press
     name.keyup(validateName);
+    username.keyup(validateUserName)
     pass1.keyup(validatePass1);
     //On Submitting
     form.submit(function(){
-        if(validateName() & validateEmail() & validatePass1())
+        if(validateName() & validateEmail() & validatePass1() & validateUserName)
             return true
             else
                 return false;
@@ -29,13 +30,15 @@ $(document).ready(function(){
             //validation functions
             function validateEmail(){
                 //testing regular expression
-                var a = $("#email").val();
+                var a = $("#r_input_email").val();
                 var filter = /^[a-zA-Z0-9]+[a-zA-Z0-9_.-]+[a-zA-Z0-9_-]+@[a-zA-Z0-9]+[a-zA-Z0-9.-]+[a-zA-Z0-9]+.[a-z]{2,4}$/;
                 //if it's valid email
                 if(filter.test(a)){
                     email.removeClass("error");
                     emailInfo.text("Te enviaremos una confirmación por correo electrónico.");
                     emailInfo.removeClass("error");
+                    name.addClass("success");
+                    emailInfo.addClass("success");
                     return true;
                 }
                 //if it's NOT valid
@@ -48,9 +51,9 @@ $(document).ready(function(){
             }
             function validateName(){
                 //if it's NOT valid
-                if(name.val().length < 4){
+                if(name.val().length < 2){
                     name.addClass("error");
-                    nameInfo.text("Tu nombre debe tener al menos 3 letras!");
+                    nameInfo.text("Tu nombre debe tener al menos 2 letras!");
                     nameInfo.addClass("error");
                     return false;
                 }
@@ -59,13 +62,12 @@ $(document).ready(function(){
                     name.removeClass("error");
                     nameInfo.text("El nombre se ve genial.");
                     nameInfo.removeClass("error");
+                    name.addClass("success");
+                    nameInfo.addClass("success");
                     return true;
                 }
             }
             function validatePass1(){
-                var a = $("#password1");
-                var b = $("#password2");
-
                 //it's NOT valid
                 if(pass1.val().length <5){
                     pass1.addClass("error");
@@ -78,7 +80,27 @@ $(document).ready(function(){
                     pass1.removeClass("error");
                     pass1Info.text("Bien hecho!");
                     pass1Info.removeClass("error");
-                    validatePass2();
+                    name.addClass("success");
+                    pass1Info.addClass("success");
+                    return true;
+                }
+            }
+
+            function validateUserName(){
+                //if it's NOT valid
+                if(username.val().length < 2){
+                    username.addClass("error");
+                    userInfo.text("Tu nombre debe tener al menos 2 letras!");
+                    userInfo.addClass("error");
+                    return false;
+                }
+                //if it's valid
+                else{
+                    username.removeClass("error");
+                    userInfo.text("El nombre se ve genial.");
+                    userInfo.removeClass("error");
+                    username.addClass("success");
+                    userInfo.addClass("success");
                     return true;
                 }
             }
