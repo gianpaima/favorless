@@ -12,3 +12,4 @@ class IntegranteAdmin(admin.ModelAdmin):
 admin.site.register(Categoria)
 admin.site.register(Programa,ProgramaAdmin)
 admin.site.register(Integrante,IntegranteAdmin)
+

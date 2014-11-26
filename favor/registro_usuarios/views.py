@@ -69,3 +69,19 @@ def principal(request):
 def cerrarSesion(request):
     logout(request)
     return  HttpResponseRedirect('/')
+
+def preferencias(request):
+    preferencias_todas = Programa.objects.all()
+    categoria_todas = Categoria.objects.all()
+    template = "inicio2.html"
+    return render_to_response(template, {"preferencia_dato":preferencias_todas , "categoria_dato":categoria_todas},context_instance=RequestContext(request))
+
+
+"""
+    def elegir_preferencias(request,valor_preferencia):
+        if valor_preferencia == "todos":
+            preferencias_todos = Programa.objects.all()
+    """    
+
+
+    

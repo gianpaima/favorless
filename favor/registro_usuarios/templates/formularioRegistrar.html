@@ -1,22 +1,64 @@
-          <div class="form-group">
-   				<!--	<input type="text" name="registro_input_nombre_completo" class="form-control" id="r_input_name_complete" placeholder="Nombre completo" maxlenght="20">-->
-          {{ form_registrar_usuario.registro_input_nombre_completo }}	
-  				</div>
-  				<div class="form-group">
-   				<!--	<input type="email" class="form-control" name="registro_input_email" id="r_input_email" placeholder="Correo electronico">	-->
-          {{ form_registrar_usuario.registro_input_email }} 
-  				</div>
-      		<div class="form-group">
-     					<!--<input type="password" class="form-control" name="registro_input_password" id="r_input_password" placeholder="Contraseña" value="{{password}}">-->
-          {{ form_registrar_usuario.registro_input_password }}
-      		</div>
-          <div class="form-group nombreUsuario">
-           <!--   <input type="text" class="form-control" name="registro_input_usuario" id="r_input_usuario" placeholder="Nombre de Usuario">-->
-           {{ form_registrar_usuario.registro_input_usuario }}
+<!--Bootstrap -->
+{% load static from staticfiles %}
+<link href="{% static "static/css/bootstrap2.css"%}" rel="stylesheet">
+<link rel="stylesheet" href="{% static "static/css/estilos.css"%}">
+<style type="text/css">
+.nombreUsuario
+{
+    display: block;
+}
+</style>
+<div class="container">
+    <form role="form" method="post" id="customForm">
+        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="form-group col-lg-6 col-md-6 col-sm-6">
+                <input type="text" name="registro_input_nombre_completo" class="form-control" id="r_input_name_complete" placeholder="Nombre completo" maxlenght="20">
+                <!--{{ form_registrar_usuario.registro_input_nombre_completo }}-->
+            </div>
+            <div class="span-group col-lg-6 col-md-6 col-sm-6">
+                <span id="nameInfo">Ingresa tu nombre y apellido.
+                </span>
+            </div>
+        </div>
 
-          </div>
-  				<div class="form-group">
-    				<div>
-      					<button type="submit" class="btn btn-primary">Terminado</button>
-    				</div>
-          </div>
+        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="form-group col-lg-6 col-md-6 col-sm-6">
+                <input type="email" class="form-control" name="registro_input_email" id="r_input_email" placeholder="Correo electronico">
+                <!--{{ form_registrar_usuario.registro_input_email }}-->
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <span id="emailInfo">¿Cual es tu dirección de correo electrónico?</span>
+            </div>
+        </div>
+
+        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="form-group col-lg-6 col-md-6 col-sm-6">
+                <input type="password" class="form-control" name="registro_input_password" id="r_input_password" placeholder="Contraseña" value="{{password}}">
+                <!--{{ form_registrar_usuario.registro_input_password }}-->
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <span id="pass1Info">6 caracteres o más! Sé ingenioso.
+                </span>
+            </div>
+        </div>
+
+        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="form-group nombreUsuario col-lg-6 col-md-6 col-sm-6">
+                <input type="text" class="form-control" name="registro_input_usuario" id="r_input_usuario" placeholder="Nombre de Usuario">
+        <!--        {{ form_registrar_usuario.registro_input_usuario }}-->
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <span id="userInfo">No te preocupes, puedes cambiarlo después.</span>
+            </div>
+        </div>
+
+        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="form-group col-lg-6 col-md-6 col-sm-6">
+                <button type="submit" class="btn btn-primary">Regístrate</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script src="{% static "static/js/jquery-1.10.2.min.js"%}"></script>
+<script src="{% static "static/js/validation.js"%}"></script>

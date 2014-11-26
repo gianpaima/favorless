@@ -33,7 +33,7 @@ class Programa(models.Model):
 		('TN','Túnez'),('TM','Turkmenistán'),('TR','Turquía'),('TV','Tuvalu'),('UA','Ucrania'),('UG','Uganda'),('UY','Uruguay'),('UZ','Uzbekistán'),('VU','Vanuatu'),('VE','Venezuela'),('VN','Vietnam'),('YE','Yemen'),('YU','Yugoslavia'),('ZM','Zambia'),('ZW','Zimbabue'),)
 	paises = models.CharField(max_length=2,choices=paises_todos,default="PE")
 
-	dia_programa_todos = (('LV', 'Lunes a Viernes'), ('SD', 'Sabados o Domingos'),)
+	dia_programa_todos = (('LV', 'Lunes a Viernes'), ('SD', 'Sabados o Domingos'),('NA', 'No tiene'),)
 	dia_programa = models.CharField(max_length=2,choices=dia_programa_todos,default="LV")
 	#Estado:Disponible,Cancelado,Break
 	estados_todos = (('Di', 'Disponible'), ('Br', 'Break'),('Ca', 'Cancelado'),)
