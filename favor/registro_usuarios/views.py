@@ -202,6 +202,8 @@ def validar(request):
 def cerrarSesion(request):
     logout(request)
     return  HttpResponseRedirect('/')
+
+    
 def preferencias(request):
     preferencias_todas = Programa.objects.all()
     categoria_todas = Categoria.objects.all()
