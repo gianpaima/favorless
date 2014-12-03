@@ -9,6 +9,8 @@
   <link href="{% static "static/css/bootstrap2.css"%}" rel="stylesheet">
   <link href="{% static "static/css/estilos.css"%}" rel="stylesheet">
   <script src="{% static "static/js/respond.min.js"%}"></script>
+  <script src="{% static "static/js/jquery-1.10.2.min.js"%}"></script>
+  <script src="{% static "static/js/bootstrap.min.js"%}"></script>
 </head>
 
 <body>
@@ -35,10 +37,10 @@
 
       <div class="row center-block">
               <select class="form-control">
-                  <option value  = "todos" selected = "true"> Todo </option>
+                  <option value  = "0" selected = "true"> Todo </option>
 
                 {%for categoria in categoria_dato %}
-                  <option value = "{{categoria.titulo}}">{{categoria.titulo}}</option>
+                  <option value = "{{categoria.id}}">{{categoria.titulo}}</option>
 
                 {%endfor%} 
               </select>
@@ -46,21 +48,172 @@
 
 
 
-      {%for programa in  preferencia_dato%}
+      {%for programa in programas_dato%}
+          <div class="col-xs-6 col-sm-6 col-md-4 programa categ{{programa.tipo_programa.id}}">
+              <div class="thumbnail">
+                <img src="{{MEDIA_URL}}{{programa.logo}} "  style = "width=200px; height:200px" alt="...">
+                <div class="caption">
+                  <h2>{{programa.id}}</h2>
+                  <h3>{{programa.nombre}}</h3>
+                  <h4>{{programa.nombre_abreviado}}</h4>
+                  <p>{{programa.tipo_programa}}</p>
+                  <p><a href="#" id  = "{{programa.id}}" class="js-megusta btn btn-primary"  role="
 
-      <div class="col-xs-6 col-sm-6 col-md-4">
-          <div class="thumbnail">
-            <img src="/media/{{programa.logo}} "  style = "width=200px; height:200px" alt="...">
-            <div class="caption">
-              <h3>{{programa.nombre}}</h3>
-              <h4>{{programa.nombre_abreviado}}</h4>
-              <p>{{programa.tipo_programa}}</p>
-              <p><a href="#" class="btn btn-primary" role="button">Me gusta</a></p>
-            </div>
+                  button"><span>Me gusta</span></a></p>
+                  
+                </div>
+              </div>
           </div>
-      </div>
+     
+      {%endfor%}
+
+<ul>
+      {%for preferencia in  preferencias_por_usuario%}
+
+          
+            <li> 
+
+               {{preferencia.programa.nombre}} <br> {{preferencia.estado}} 
+
+
+            </li>
+          
+
 
       {%endfor%}
+</ul>
+
+
+
+
+      <script>
+
+      $('select').on('change', buscar);
+
+            function buscar() {
+
+               var id  = $(this).val();
+               console.log(id);
+               todos_programas = $(".programa")
+               if( isNaN(id) || id === "0" || id === ""){
+
+                     for(i = 0 ;i<todos_programas.length ;i++){
+                        programa = todos_programas[i]
+                        $(programa).show("slow");
+                      }
+
+                  }
+
+                else{
+                
+                  for(i = 0 ;i<todos_programas.length ;i++){
+
+                    programa = todos_programas[i]
+                    valor =   $(programa).hasClass("categ"+id)
+                        if(valor === false){
+                            $(programa).hide("slow");
+                          }
+                        else{
+                             $(programa).show("slow");
+                         }
+            
+                    }
+
+                  }
+               /* $.ajax({
+                      data : {'id':id } ,
+                      url : '/preferenciasajax/',
+                      type : 'get',
+                      success : function(data)
+                      {console.log("pillin is yisus"+data)}
+                });*/
+            }
+
+
+
+          $(".js-megusta").click(function(){
+            var bot=$(this);
+            var id = $(this).prop("id");
+            console.log("le diste seguir a " +  id);
+            //$(this).removeClass( "js-megusta btn-primary" ).addClass( "js-no-megusta btn-danger" );
+
+
+            $.ajax({
+
+              data : {'id' : id },
+              url :'/addpreference/',
+              type : 'post',
+              success: function(data){
+
+              bot.removeClass( "js-megusta btn-primary" ).addClass( "js-no-megusta btn-danger" );  
+
+              console.log("el post manda esto :" + data);
+              }
+            });
+
+          });
+
+
+
+            // This function gets cookie with a given name
+            function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie != '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = jQuery.trim(cookies[i]);
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+
+            var csrftoken = getCookie('csrftoken');
+            /*
+            The functions below will create a header with csrftoken
+            */
+
+            function csrfSafeMethod(method) {
+                // these HTTP methods do not require CSRF protection
+                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+            }
+
+            function sameOrigin(url) {
+                // test that a given url is a same-origin URL
+                // url could be relative or scheme relative or absolute
+                var host = document.location.host; // host + port
+                var protocol = document.location.protocol;
+                var sr_origin = '//' + host;
+                var origin = protocol + sr_origin;
+                // Allow absolute or scheme relative URLs to same origin
+                return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+                    (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+                    // or any other URL that isn't scheme relative or absolute i.e relative.
+                    !(/^(\/\/|http:|https:).*/.test(url));
+            }
+
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
+                        // Send the token to same-origin, relative URLs only.
+                        // Send the token only if the method warrants CSRF protection
+                        // Using the CSRFToken value acquired earlier
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    }
+                }
+            });
+
+          </script>
+
+
+
+          
+
 
       <!-- <div class="col-xs-6 col-sm-6 col-md-4">
           <div class="thumbnail">
@@ -126,7 +279,6 @@
       </div>-->
 
     <!-- javascript -->
-    <script src="{% static "static/js/jquery-1.10.2.min.js"%}"></script>
-    <script src="{% static "static/js/bootstrap.min.js"%}"></script>
+  
   </body>
   </html>

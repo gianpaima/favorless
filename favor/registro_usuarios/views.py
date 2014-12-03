@@ -1,6 +1,6 @@
 from django.shortcuts import render_to_response, render
 from django.template.context import RequestContext
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 # Usuario
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, authenticate, logout
@@ -71,17 +71,37 @@ def cerrarSesion(request):
     return  HttpResponseRedirect('/')
 
 def preferencias(request):
-    preferencias_todas = Programa.objects.all()
+    user_p = request.user
+    programas_todas = Programa.objects.all()
     categoria_todas = Categoria.objects.all()
+    preferencias = Preferencia.objects.filter(user = user_p)
     template = "inicio2.html"
-    return render_to_response(template, {"preferencia_dato":preferencias_todas , "categoria_dato":categoria_todas},context_instance=RequestContext(request))
+    return render_to_response(template, {"programas_dato":programas_todas , "categoria_dato":categoria_todas , "preferencias_por_usuario":preferencias},context_instance=RequestContext(request))
 
 
-"""
-    def elegir_preferencias(request,valor_preferencia):
-        if valor_preferencia == "todos":
-            preferencias_todos = Programa.objects.all()
-    """    
+def addpreference(request):
+    if request.method == 'POST':
+        id_post  = request.POST.get('id','')
+        if (id_post.isdigit()):
+            programa_p  = Programa.objects.get(pk = id_post)
+            #print programa_p
+            user_p = request.user
+            #print  user_p
+
+            p = Preferencia.objects.create(user = user_p, programa = programa_p)
+            p.save()
+            #print programa_p.nombre
+            return HttpResponse(id_post)
+        else:
+            return HttpResponse( "No Existe" )
+
+    else: 
+        return HttpResponse("anda a casa estas borracho")
 
 
-    
+
+        
+
+
+
+
