@@ -43,6 +43,12 @@ $(document).ready(function(){
             emailInfo.removeClass("error");
             name.addClass("success");
             emailInfo.addClass("success");
+            //
+
+
+
+
+            //
             return true;
         }
         //if it's NOT valid
@@ -75,7 +81,7 @@ $(document).ready(function(){
     }
     function validatePass1(){
         //it's NOT valid
-        if(pass1.val().length <6){
+        if(pass1.val().length <5){
             pass1.addClass("error");
             pass1Info.text("La contraseña debe ser de al menos 6 caracteres.");
             pass1Info.addClass("error");

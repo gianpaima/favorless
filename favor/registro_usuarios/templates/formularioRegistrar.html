@@ -9,15 +9,29 @@
 }
 </style>
 <div class="container">
-    <form role="form" method="post" id="customForm">
+    <form role="form" action="/account/create/" method="post" id="customForm">
+        {% csrf_token %}
         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="form-group col-lg-6 col-md-6 col-sm-6">
                 <input type="text" name="registro_input_nombre_completo" class="form-control" id="r_input_name_complete" placeholder="Nombre completo" maxlenght="20">
                 <!--{{ form_registrar_usuario.registro_input_nombre_completo }}-->
             </div>
             <div class="span-group col-lg-6 col-md-6 col-sm-6">
-                <span id="nameInfo">Ingresa tu nombre y apellido.
-                </span>
+{% if  errorN %}
+    {% if errorN == '0' %}
+         <span id="nameInfo" class="success">El nombre se ve genial.
+        </span>
+    {% else %}
+       <span id="nameInfo" class="error">¡Se requiere un nombre!
+        </span>
+    {% endif %}
+{% else %}
+      <span id="nameInfo">Ingresa tu nombre y apellido.
+        </span>
+{% endif %}
+              
+              
+    
             </div>
         </div>
 
@@ -27,7 +41,12 @@
                 <!--{{ form_registrar_usuario.registro_input_email }}-->
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6">
-                <span id="emailInfo">¿Cual es tu dirección de correo electrónico?</span>
+
+           {% if  errorE %}
+    <p>Welcome to the weekend!</p>
+{% else %}
+     <span id="emailInfo">¿Cual es tu dirección de correo electrónico?</span>
+{% endif %}    
             </div>
         </div>
 
@@ -37,8 +56,19 @@
                 <!--{{ form_registrar_usuario.registro_input_password }}-->
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6">
-                <span id="pass1Info">6 caracteres o más! Sé ingenioso.
+   {% if  errorP %}
+     {% if errorN == '0' %}
+         <span id="pass1Info" class="success">Bien Hecho!
+        </span>
+    {% else %}
+       <span id="pass1Info" class="error">La contraseña debe ser de al menos 6 caracteres.
+        </span>
+    {% endif %}
+{% else %}
+      <span id="pass1Info">6 caracteres o más! Sé ingenioso.
                 </span>
+{% endif %}    
+               
             </div>
         </div>
 
@@ -48,17 +78,19 @@
         <!--        {{ form_registrar_usuario.registro_input_usuario }}-->
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6">
-                <span id="userInfo">No te preocupes, puedes cambiarlo después.</span>
+                 {% if  errorU %}
+    
+{% else %}
+      <span id="userInfo">No te preocupes, puedes cambiarlo después.</span>
+{% endif %}           
             </div>
         </div>
 
         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="form-group col-lg-6 col-md-6 col-sm-6">
-                <button type="submit" class="btn btn-primary">Regístrate</button>
+                <button type="button" id="registrar" class="btn btn-primary">Regístrate</button>
             </div>
         </div>
     </form>
 </div>
 
-<script src="{% static "static/js/jquery-1.10.2.min.js"%}"></script>
-<script src="{% static "static/js/validation.js"%}"></script>
