@@ -46,13 +46,15 @@ class Programa(models.Model):
 	tipo_programa=models.ForeignKey(Categoria)
 	def __unicode__(self):
 		return self.nombre
+		
 
 
 #Preferencias-> Gustos de los usuarios por los programas....
 class Preferencia(models.Model):
-    slug = models.CharField(verbose_name='PreferenciaSlug', max_length=100, help_text='Denota el gusto o preferencia del usuario')
+    slug = models.CharField(default = 'siguiendo', verbose_name='PreferenciaSlug', max_length=100, help_text='Denota el gusto o preferencia del usuario')
     fecha = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(User, verbose_name='Usuario', related_name='Preferencia')
+    estado = models.BooleanField(default = True)
     programa = models.ForeignKey(Programa, verbose_name='Programa')
 
     def __unicode__(self):

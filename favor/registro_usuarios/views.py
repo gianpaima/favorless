@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response, render
+from django.shortcuts import render_to_response, render, redirect 
 from django.template.context import RequestContext
 from django.http import HttpResponseRedirect,HttpResponse
 # Usuario
@@ -53,46 +53,23 @@ def iniciarSesion(request):
         return HttpResponseRedirect("/principal")
 
 
-def registrarUsuarioInicio(request):
-    if not request.user.is_authenticated():
-        #Aca no vamos a validar el metodo post o get por que esto sirve solo para capturar datos, puesto por primera vez y ponerlos en el otro html...Menos la contrasena
-        registrar_usuario = FormRegistrarUsuario(request.REQUEST)
-        return render_to_response('registroUsuario.html',{"form_registrar_usuario":registrar_usuario},context_instance=RequestContext(request))
-    else:
-        #aca falta ver si el usuario...esta desactivado...o  reportado
-        return HttpResponseRedirect("/")
 
-def registrarUsuarioFin(request):
+def registrarUsuario(request):
 
     if request.method== 'POST' and not request.user.is_authenticated():
-        print request.POST
-        print "++++++*****"
         password = request.POST.get('registro_input_password','')
         nombre = request.POST.get('registro_input_nombre_completo','')
         usuario = request.POST.get('registro_input_usuario','')
         email = request.POST.get('registro_input_email','')
-        kalena = ValidarUsuario().validarTodos(nombre, email, password, usuario)
-        print kalena
-        print "la twinem"
+        unico = ValidarUsuario().validarTodos(nombre, email, password, usuario)
         #VNOmbre...VEmail..VPassword...VUsername
-        print kalena.get('validoE')
-        if False and kalena.get('validoN') == "0" and kalena.get('validoE') == "0" and kalena.get('validoP') == "0" and kalena.get('validoU') == "0": 
+        print passwordBefore.get('validoE')
+        if unico.get('validoN') == "0" and unico.get('validoE') == "0" and unico.get('validoP') == "0" and unico.get('validoU') == "0": 
             try:
                 usuario_create = User.objects.create_user(username= usuario, email= email, password= password, nombreCompleto= nombre)
-                print "Usuario Creado"
-                print usuario_create
                 a=usuario_create.save()
-                print "Usuario Guardado"
-                print a
-                print "email"
-                print email
-                print "password"
-                print password
                 user = auth.authenticate(username = email, password= password)
-                print "Usuario Autenticado"
-                print user
-                print "QUE PASA!!!"
-
+                
                 if user is not None and user.is_active:
                     auth.login(request,user)
                 else:
@@ -105,39 +82,63 @@ def registrarUsuarioFin(request):
             else:
                 return HttpResponse("Se creo el usuario y logueo sin ningun error! Felicitaciones mi amigo!")
 
-        else:
-            #errores = {}
-         #   errores ={'validoN':'Que haces'}
-          #  for clave, valor in kalena.iteritems():
-           #    if valor == "0":
-            #        errores[clave] = valor
-             #   elif valor == "1":
-              #      errores[clave]=valor
-              #  elif valor == "2":
-               #     errores[clave] = valor
-               # else:
-                #    errores[clave] =valor
-            #validoN-validoE-validoP-validoU    
-            print "Llego a errores"
-            print kalena
-           # print kalena = {'validoN':'0'}
-            print "finish MIke"
-            return render_to_response('registroUsuario.html',{"errorN":kalena.get('validoN'),"errorE":kalena.get('validoE'), "errorP":kalena.get('validoP'),"errorU":kalena.get('validoU')},context_instance=RequestContext(request))            
+        else:   
+            registrar_usuario = FormRegistrarUsuario(request.POST)
+            return render_to_response('registroUsuario.html',{"form_registrar_usuario":registrar_usuario,"errorN":unico.get('validoN'),"errorE":unico.get('validoE'), "errorP":unico.get('validoP'),"errorU":unico.get('validoU')},context_instance=RequestContext(request))
+            #return redirect('/signup/', respuesta = request)            
             #return HttpResponse("Ha ocurrido ciertos errores")
-
-
-
-
-        #for candace in kalena.values():
         #Aca no vamos a validar el metodo post o get por que esto sirve solo para capturar datos, puesto por primera vez y ponerlos en el otro html...Menos la contrasena
         #registrar_usuario = FormRegistrarUsuario(request.REQUEST)
       #  return render_to_response('registroUsuario.html',{"form_registrar_usuario":"registrar_usuario"},context_instance=RequestContext(request))
     else:
-        if request.method == 'GET':
-            return HttpResponse("HOLA MUNDO")
-        return HttpResponse("era por esto")
+        registrar_usuario = FormRegistrarUsuario()
+        return render_to_response('registroUsuario.html',{"form_registrar_usuario":registrar_usuario},context_instance=RequestContext(request))
         #aca falta ver si el usuario...esta desactivado...o  reportado
         #return HttpResponseRedirect("/")
+
+@login_required(login_url='/login')
+def configuracionGeneral(request): 
+    return HttpResponseRedirect("/settings/password/")
+
+
+@login_required(login_url='/login')
+def configuracionPassword(request):
+    #Se debe de agregar la validacion, si el usuario, esta supendido 
+    if request.method == 'POST':
+        error = ""
+        before = request.POST.get('u_input_pass_before','')
+        now = request.POST.get('u_input_pass_now', '')
+        again = request.POST.get('u_input_pass_again', '')
+
+        if ValidarUsuario().passwordZero(before) and ValidarUsuario().passwordFirst(now) and ValidarUsuario().passwordSecond(now,again):
+            try: 
+                if request.user.check_password(before):
+                    print request.user.set_password(now)
+                    error = "Se actualizo tu contrasena"
+                else:
+                    error = "La contrasena que has ingresado es incorrecta. Por favor ingresa una contrasena diferente."
+            except:
+                error = "Ha ocurrido un fallo, vuelva a intentarlo!"
+        else:
+            if len(before) <6:
+                if len(before) == 0:
+                    error = "Debes ingresar tu contrasena actual para poder cambiarla."
+                else:
+                    error = "Tu contrasena actual debe ser mayor a 5 caracteres"
+            else:
+                if len(now) < 6:
+                    if len(now) == 0:
+                        error = "Debes introducir una nueva contrasena para poder cambiarla."
+                    else:
+                        error= "Tu nueva contrasena debe tener mas de 5 caracteres"   
+                else:
+                    if now != again:
+                        error = "Tu nueva contrasena debe ser confirmada correctamente."
+                    else:
+                        error = "Ha ocurrido un error"
+        return render_to_response('configuracion.html',{'error':error},context_instance=RequestContext(request))
+    else:
+        return render_to_response('configuracion.html',context_instance=RequestContext(request))
 
 
 def principal(request):
@@ -157,25 +158,19 @@ def validar(request):
             #data = serializers.serialize('json',ValidarUsuario().validarEmail(obj))
             #Retornar de forma ajax, en el
             d = json.dumps(datos)
-            print "T"
-            print d
-            print "FIN"
             return HttpResponse(d, content_type='application/json')
             #return HttpResponse(datos)
         elif data == "validarNombre":
             obj = request.REQUEST.get("objetos[nombre]",'')
             datos=ValidarUsuario().validarNombre(obj)
-            print datos
             return   HttpResponse(json.dumps(datos), content_type='application/json')
         elif data == "validarPassword":
             obj = request.REQUEST.get("objetos[password]",'')
             datos=ValidarUsuario().validarPassword(obj)
-            print datos
             return HttpResponse(json.dumps(datos), content_type='application/json')
         elif data == "validarUsername":
             obj = request.REQUEST.get("objetos[username]",'')
             datos=ValidarUsuario().validarUsername(obj)
-            print datos
             return HttpResponse(json.dumps(datos), content_type='application/json')
         else:
             print "Error"
@@ -203,19 +198,36 @@ def cerrarSesion(request):
     logout(request)
     return  HttpResponseRedirect('/')
 
-    
 def preferencias(request):
-    preferencias_todas = Programa.objects.all()
+    user_p = request.user
+    programas_todas = Programa.objects.all()
     categoria_todas = Categoria.objects.all()
+    preferencias = Preferencia.objects.filter(user = user_p)
     template = "inicio2.html"
-    return render_to_response(template, {"preferencia_dato":preferencias_todas , "categoria_dato":categoria_todas},context_instance=RequestContext(request))
+    return render_to_response(template, {"programas_dato":programas_todas , "categoria_dato":categoria_todas , "preferencias_por_usuario":preferencias},context_instance=RequestContext(request))
 
 
-"""
-    def elegir_preferencias(request,valor_preferencia):
-        if valor_preferencia == "todos":
-            preferencias_todos = Programa.objects.all()
-    """
+def addpreference(request):
+    if request.method == 'POST':
+        id_post  = request.POST.get('id','')
+        if (id_post.isdigit()):
+            programa_p  = Programa.objects.get(pk = id_post)
+            #print programa_p
+            user_p = request.user
+            #print  user_p
 
+            p = Preferencia.objects.create(user = user_p, programa = programa_p)
+            p.save()
+            #print programa_p.nombre
+            return HttpResponse(id_post)
+        else:
+            return HttpResponse( "No Existe" )
+
+    else: 
+        return HttpResponse("anda a casa estas borracho")
+
+
+
+        
 
 

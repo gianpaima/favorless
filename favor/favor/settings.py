@@ -86,6 +86,8 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
+
+MEDIA_URL = '/media/'
 im = os.sep.join(os.path.abspath(__file__).split(os.sep)[:-2] + ['registro_usuarios'])
 
 TEMPLATE_DIRS = (
