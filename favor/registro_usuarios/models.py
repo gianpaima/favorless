@@ -51,14 +51,14 @@ class Programa(models.Model):
 
 #Preferencias-> Gustos de los usuarios por los programas....
 class Preferencia(models.Model):
-    slug = models.CharField(default = 'siguiendo', verbose_name='PreferenciaSlug', max_length=100, help_text='Denota el gusto o preferencia del usuario')
+    slug = models.CharField(default = 'le gusta', verbose_name='PreferenciaSlug', max_length=100, help_text='Denota el gusto o preferencia del usuario')
     fecha = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(User, verbose_name='Usuario', related_name='Preferencia')
     estado = models.BooleanField(default = True)
     programa = models.ForeignKey(Programa, verbose_name='Programa')
 
     def __unicode__(self):
-        return self.slug
+        return "  %s , %s"%(self.user ,self.programa)
 
 #Integrantes de los programas
 class Integrante(models.Model):

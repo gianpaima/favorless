@@ -202,14 +202,23 @@ def validar(request):
 def cerrarSesion(request):
     logout(request)
     return  HttpResponseRedirect('/')
-    
+
+
+@login_required(login_url='/login')
 def preferencias(request):
-    user_p = request.user
-    programas_todas = Programa.objects.all()
+    user_p = request.user.id
+    print "---------------------------------------"
+    print user_p
+    print "--------------------------------------"
+    print "------------------------------------"
     categoria_todas = Categoria.objects.all()
     preferencias = Preferencia.objects.filter(user = user_p)
+    print "xD"
+    #print preferencias.filter("programa")
+    #programas_todas = Programa.objects.exclude(id=preferencias.iterator())
+    programas_todas = Programa.objects.all().exclude(id__in=preferencias.values_list('programa', flat=True))
     template = "inicio2.html"
-    return render_to_response(template, {"programas_dato":programas_todas , "categoria_dato":categoria_todas , "preferencias_por_usuario":preferencias},context_instance=RequestContext(request))
+    return render_to_response(template, {"list_programa_pref":preferencias,"programas_dato":programas_todas , "categoria_dato":categoria_todas , "preferencias_por_usuario":preferencias},context_instance=RequestContext(request))
 
 
 def addpreference(request):
@@ -220,7 +229,6 @@ def addpreference(request):
             #print programa_p
             user_p = request.user
             #print  user_p
-
             p = Preferencia.objects.create(user = user_p, programa = programa_p)
             p.save()
             #print programa_p.nombre
