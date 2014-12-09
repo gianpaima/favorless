@@ -53,3 +53,21 @@ class ValidarUsuario():
         'validoP': self.validarPassword(password).get('valido',''),
         'validoU': self.validarUsername(username).get('valido','')}
         #,self.validarEmail(email),self.validarPassword(password),self.validarUsername(username)}
+
+    def passwordZero(self,password=''):
+        if len(password)> 5:
+            return True
+        return False
+
+    def passwordFirst(self, password=''):
+        if len(password)> 5:
+            return True
+        return False
+
+    def passwordSecond(self, password1, password2):
+        if len(password2) <6 :
+            return False
+        elif password1 == password2:
+            return True
+        else:
+            return False
