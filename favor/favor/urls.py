@@ -23,6 +23,7 @@ urlpatterns = patterns('',
     url(r'^logout/$', 'registro_usuarios.views.cerrarSesion', name='logout'),
     url(r'^preferencias/$', 'registro_usuarios.views.preferencias', name='preferencias'),
     url(r'^addpreference/$', 'registro_usuarios.views.addpreference', name='addpreference'),
+    url(r'^removepreference/$', 'registro_usuarios.views.removepreference', name='removepreference'),
    # url(r'^preferenciasajax/$', 'registro_usuarios.views.preferenciasajax', name='preferenciasajax'),
     url(r'^media/(?P<path>.*)$','django.views.static.serve',
 		{'document_root':settings.MEDIA_ROOT,} 

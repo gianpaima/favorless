@@ -52,14 +52,25 @@
               <div class="thumbnail">
                 <img src="{{MEDIA_URL}}{{programa_fav.programa.logo}} "  style = "width=200px; height:200px" alt="...">
                 <div class="caption">
-                  <h2>{{programa_fav.programa.id}}</h2>
+                 
                   <h3>{{programa_fav.programa.nombre}}</h3>
                   <h4>{{programa_fav.programa.nombre_abreviado}}</h4>
                   <p>{{programa_fav.programa.tipo_programa}}</p>
                   
                   <p>
-                    <a href="#" id  = "{{programa_fav.id}}" class="js-no-megusta btn btn-danger"  role="button">
-                    <span>No me gusta</span></a>
+
+                    {% if programa_fav.estado == True %}
+
+                     <a href="#" id  = "{{programa_fav.id}}" class="js-no-megusta btn btn-danger"  role="button">
+                     <span>Ya no  me gusta</span></a>
+                      
+                    {% else %}
+
+                    <a href="#" id  = "{{programa_fav.id}}" class="js-megusta btn btn-primary" role="button">
+                    <span>Me gusta</span></a>
+
+                    {% endif%}
+                    
                   </p>
                     
 
@@ -94,21 +105,7 @@
      
       {%endfor%}
 
-<ul>
-      {%for preferencia in  preferencias_por_usuario%}
 
-          
-            <li> 
-
-               {{preferencia.programa.nombre}} <br> {{preferencia.estado}} 
-
-
-            </li>
-          
-
-
-      {%endfor%}
-</ul>
 
 
 
@@ -124,11 +121,11 @@
                todos_programas = $(".programa")
                if( isNaN(id) || id === "0" || id === ""){
 
-                     for(i = 0 ;i<todos_programas.length ;i++){
-                        programa = todos_programas[i]
-                        $(programa).show("slow");
-                      }
+                 for(i = 0 ;i<todos_programas.length ;i++){
+                    programa = todos_programas[i]
+                    $(programa).show("slow");
 
+                    }
                   }
 
                 else{
@@ -137,24 +134,18 @@
 
                     programa = todos_programas[i]
                     valor =   $(programa).hasClass("categ"+id)
+
                         if(valor === false){
                             $(programa).hide("slow");
                           }
+
                         else{
                              $(programa).show("slow");
                          }
             
                     }
-
                   }
-               /* $.ajax({
-                      data : {'id':id } ,
-                      url : '/preferenciasajax/',
-                      type : 'get',
-                      success : function(data)
-                      {console.log("pillin is yisus"+data)}
-                });*/
-            }
+              }
 
 
 
@@ -164,8 +155,7 @@
             
             
             console.log("le diste seguir a " +  id);
-            //$(this).removeClass( "js-megusta btn-primary" ).addClass( "js-no-megusta btn-danger" );
-
+           
             $.ajax({
 
               data : {'id' : id },
@@ -176,18 +166,46 @@
               bot.removeClass( "js-megusta btn-primary" ).addClass( "js-no-megusta btn-danger" );  
               var no_gusta = "No me Gusta"
               bot.text(no_gusta);
-
-
-
               console.log("el post manda esto :" + data);
-              }
+
+              },
+
+              
             });
 
           });
 
 
 
-            // This function gets cookie with a given name
+          $(".js-no-megusta").click(function(){
+
+            var bot_no_gusta = $(this);
+            var id = $(this).prop("id");
+            console.log("ya no me gusta " +  id);
+
+            $.ajax({
+                  data : {'id':id},
+                  url : '/removepreference/',
+                  type : 'post',
+                  success : function(data){
+
+                  bot_no_gusta.removeClass("js-no-megusta btn-danger").addClass("js-megusta btn-primary");
+                  var gusta = "Me Gusta"
+                  bot_no_gusta.text(gusta);
+
+                }
+
+              }
+
+
+            });
+
+
+
+
+          });
+
+          // This function gets cookie with a given name
             function getCookie(name) {
                 var cookieValue = null;
                 if (document.cookie && document.cookie != '') {
