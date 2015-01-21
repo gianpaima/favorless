@@ -63,7 +63,6 @@ def registrarUsuario(request):
         email = request.POST.get('registro_input_email','')
         unico = ValidarUsuario().validarTodos(nombre, email, password, usuario)
         #VNOmbre...VEmail..VPassword...VUsername
-        print passwordBefore.get('validoE')
         if unico.get('validoN') == "0" and unico.get('validoE') == "0" and unico.get('validoP') == "0" and unico.get('validoU') == "0": 
             try:
                 usuario_create = User.objects.create_user(username= usuario, email= email, password= password, nombreCompleto= nombre)
@@ -198,28 +197,74 @@ def cerrarSesion(request):
     logout(request)
     return  HttpResponseRedirect('/')
 
+@login_required(login_url='/login')
 def preferencias(request):
-    user_p = request.user
-    programas_todas = Programa.objects.all()
+    user_p = request.user.id
+    print "---------------------------------------"
+    print user_p
+    print "--------------------------------------"
+    print "------------------------------------"
     categoria_todas = Categoria.objects.all()
     preferencias = Preferencia.objects.filter(user = user_p)
+    print "xD"
+    #print preferencias.filter("programa")
+    #programas_todas = Programa.objects.exclude(id=preferencias.iterator())
+    programas_todas = Programa.objects.all().exclude(id__in=preferencias.values_list('programa', flat=True))
     template = "inicio2.html"
-    return render_to_response(template, {"programas_dato":programas_todas , "categoria_dato":categoria_todas , "preferencias_por_usuario":preferencias},context_instance=RequestContext(request))
+    return render_to_response(template, {"list_programa_pref":preferencias,"programas_dato":programas_todas , "categoria_dato":categoria_todas},context_instance=RequestContext(request))
+
+
+def removepreference(request):
+    if request.method == 'POST':
+
+        id_post  = request.POST.get('id','')
+        if (id_post.isdigit()):
+
+            try:
+                preferencia = Preferencia.objects.get(pk = id_post)
+                preferencia.estado = False
+                preferencia.save()
+                return HttpResponse("la preferencia se ha actualiza")
+            except:
+                return HttpResponse("ha ocurrido un error")
+        else:
+            return HttpResponse( "el id No existe" )
+
+    else:
+        return HttpResponse ("Anda a casa estas borracho")
 
 
 def addpreference(request):
     if request.method == 'POST':
         id_post  = request.POST.get('id','')
-        if (id_post.isdigit()):
-            programa_p  = Programa.objects.get(pk = id_post)
-            #print programa_p
-            user_p = request.user
-            #print  user_p
 
-            p = Preferencia.objects.create(user = user_p, programa = programa_p)
-            p.save()
-            #print programa_p.nombre
-            return HttpResponse(id_post)
+        if (id_post.isdigit()):
+
+            if(Preferencia.objects.filter(pk=id_post).exists()):
+
+                try:
+                    preferencia = Preferencia.objects.get(pk = id_post)
+                    preferencia.estado = True
+                    preferencia.save()
+                    return HttpResponse("la Preferencia Existe y solo cambiara el estado")
+                except:
+                    return HttpResponse("ha ocurrido un error")
+
+            else:
+                try:        
+                    print "estoy cuando la preferenia no existe"
+                    programa_p  = Programa.objects.get(pk = id_post)
+                    #print programa_p
+                    user_p = request.user
+                    #print  user_p
+                    p = Preferencia.objects.create(user = user_p, programa = programa_p)
+                    p.save()
+                    #print programa_p.nombre
+                    return HttpResponse(id_post)
+                except:
+                    return HttpResponse("ha ocuurido un error")
+
+
         else:
             return HttpResponse( "No Existe" )
 

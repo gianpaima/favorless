@@ -47,6 +47,41 @@
 
 
 
+      {%for programa_fav in list_programa_pref%}
+          <div class="col-xs-6 col-sm-6 col-md-4 programa categ{{programa_fav.programa.tipo_programa.id}}">
+              <div class="thumbnail">
+                <img src="{{MEDIA_URL}}{{programa_fav.programa.logo}} "  style = "width=200px; height:200px" alt="...">
+                <div class="caption">
+                 
+                  <h3>{{programa_fav.programa.nombre}}</h3>
+                  <h4>{{programa_fav.programa.nombre_abreviado}}</h4>
+                  <p>{{programa_fav.programa.tipo_programa}}</p>
+                  
+                  <p>
+
+                    {% if programa_fav.estado == True %}
+
+                     <a href="#" id  = "{{programa_fav.id}}" class="js-no-megusta btn btn-danger"  role="button">
+                     <span>Ya no  me gusta</span></a>
+                      
+                    {% else %}
+
+                    <a href="#" id  = "{{programa_fav.id}}" class="js-megusta btn btn-primary" role="button">
+                    <span>Me gusta</span></a>
+
+                    {% endif%}
+                    
+                  </p>
+                    
+
+                </div>
+              </div>
+          </div>
+     
+      {%endfor%}
+
+
+
 
       {%for programa in programas_dato%}
           <div class="col-xs-6 col-sm-6 col-md-4 programa categ{{programa.tipo_programa.id}}">
@@ -57,31 +92,20 @@
                   <h3>{{programa.nombre}}</h3>
                   <h4>{{programa.nombre_abreviado}}</h4>
                   <p>{{programa.tipo_programa}}</p>
-                  <p><a href="#" id  = "{{programa.id}}" class="js-megusta btn btn-primary"  role="
-
-                  button"><span>Me gusta</span></a></p>
                   
+                  <p>
+                    <a href="#" id  = "{{programa.id}}" class="js-megusta btn btn-primary"  role="button">
+                    <span>Me gusta</span></a>
+                  </p>
+                    
+
                 </div>
               </div>
           </div>
      
       {%endfor%}
 
-<ul>
-      {%for preferencia in  preferencias_por_usuario%}
 
-          
-            <li> 
-
-               {{preferencia.programa.nombre}} <br> {{preferencia.estado}} 
-
-
-            </li>
-          
-
-
-      {%endfor%}
-</ul>
 
 
 
@@ -97,11 +121,11 @@
                todos_programas = $(".programa")
                if( isNaN(id) || id === "0" || id === ""){
 
-                     for(i = 0 ;i<todos_programas.length ;i++){
-                        programa = todos_programas[i]
-                        $(programa).show("slow");
-                      }
+                 for(i = 0 ;i<todos_programas.length ;i++){
+                    programa = todos_programas[i]
+                    $(programa).show("slow");
 
+                    }
                   }
 
                 else{
@@ -110,34 +134,28 @@
 
                     programa = todos_programas[i]
                     valor =   $(programa).hasClass("categ"+id)
+
                         if(valor === false){
                             $(programa).hide("slow");
                           }
+
                         else{
                              $(programa).show("slow");
                          }
             
                     }
-
                   }
-               /* $.ajax({
-                      data : {'id':id } ,
-                      url : '/preferenciasajax/',
-                      type : 'get',
-                      success : function(data)
-                      {console.log("pillin is yisus"+data)}
-                });*/
-            }
+              }
 
 
 
           $(".js-megusta").click(function(){
             var bot=$(this);
             var id = $(this).prop("id");
+            
+            
             console.log("le diste seguir a " +  id);
-            //$(this).removeClass( "js-megusta btn-primary" ).addClass( "js-no-megusta btn-danger" );
-
-
+           
             $.ajax({
 
               data : {'id' : id },
@@ -146,16 +164,48 @@
               success: function(data){
 
               bot.removeClass( "js-megusta btn-primary" ).addClass( "js-no-megusta btn-danger" );  
-
+              var no_gusta = "No me Gusta"
+              bot.text(no_gusta);
               console.log("el post manda esto :" + data);
-              }
+
+              },
+
+              
             });
 
           });
 
 
 
-            // This function gets cookie with a given name
+          $(".js-no-megusta").click(function(){
+
+            var bot_no_gusta = $(this);
+            var id = $(this).prop("id");
+            console.log("ya no me gusta " +  id);
+
+            $.ajax({
+                  data : {'id':id},
+                  url : '/removepreference/',
+                  type : 'post',
+                  success : function(data){
+
+                  bot_no_gusta.removeClass("js-no-megusta btn-danger").addClass("js-megusta btn-primary");
+                  var gusta = "Me Gusta"
+                  bot_no_gusta.text(gusta);
+
+                }
+
+              }
+
+
+            });
+
+
+
+
+          });
+
+          // This function gets cookie with a given name
             function getCookie(name) {
                 var cookieValue = null;
                 if (document.cookie && document.cookie != '') {
@@ -209,75 +259,6 @@
             });
 
           </script>
-
-
-
-          
-
-
-      <!-- <div class="col-xs-6 col-sm-6 col-md-4">
-          <div class="thumbnail">
-            <img src="{% static "static/img/normal.jpg"%}" alt="...">
-            <div class="caption">
-              <h4>The Big Bang Theory</h4>
-              <p>Comedia</p>
-              <p><a href="#" class="btn btn-primary" role="button">Me gusta</a></p>
-            </div>
-          </div>
-        </div>
-
-
-
-
-
-        <div class="col-xs-6 col-sm-6 col-md-4">
-          <div class="thumbnail">
-            <img src="{% static "static/img/normal.jpg"%}" alt="...">
-            <div class="caption">
-              <h4>The Big Bang Theory</h4>
-              <p>Comedia</p>
-              <p><a href="#" class="btn btn-primary" role="button">Me gusta</a></p>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-xs-6 col-sm-6 col-md-4">
-          <div class="thumbnail">
-            <img src="{% static "static/img/normal2.jpg"%}" alt="...">
-            <div class="caption">
-              <h4>The Walking Dead</h4>
-              <p>Terror</p>
-              <p><a href="#" class="btn btn-primary" role="button">Me gusta</a></p>
-            </div>
-          </div>
-        </div>
-
-
-        <div class="col-xs-6 col-sm-6 col-md-4">
-          <div class="thumbnail">
-            <img src="{% static "static/img/normal.jpg"%}" alt="...">
-            <div class="caption">
-              <h4>Supernatural</h4>
-              <p>Ficción</p>
-              <p><a href="#" class="btn btn-primary" role="button">Me gusta</a></p>
-            </div>
-          </div>
-        </div>
-
-
-        <div class="col-xs-6 col-sm-6 col-md-4">
-          <div class="thumbnail">
-            <img src="{% static "static/img/normal2.jpg"%}" alt="...">
-            <div class="caption">
-              <h4>Nikita</h4>
-              <p>Otros</p>
-              <p><a href="#" class="btn btn-primary" role="button">Me gusta</a></p>
-            </div>
-          </div>
-        </div>
-
-      </div>-->
-
     <!-- javascript -->
   
   </body>
