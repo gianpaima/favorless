@@ -63,7 +63,6 @@ def registrarUsuario(request):
         email = request.POST.get('registro_input_email','')
         unico = ValidarUsuario().validarTodos(nombre, email, password, usuario)
         #VNOmbre...VEmail..VPassword...VUsername
-        print passwordBefore.get('validoE')
         if unico.get('validoN') == "0" and unico.get('validoE') == "0" and unico.get('validoP') == "0" and unico.get('validoU') == "0": 
             try:
                 usuario_create = User.objects.create_user(username= usuario, email= email, password= password, nombreCompleto= nombre)
