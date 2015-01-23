@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response, render, redirect 
+from django.shortcuts import render_to_response, render, redirect
 from django.template.context import RequestContext
 from django.http import HttpResponseRedirect,HttpResponse
 # Usuario
@@ -63,12 +63,12 @@ def registrarUsuario(request):
         email = request.POST.get('registro_input_email','')
         unico = ValidarUsuario().validarTodos(nombre, email, password, usuario)
         #VNOmbre...VEmail..VPassword...VUsername
-        if unico.get('validoN') == "0" and unico.get('validoE') == "0" and unico.get('validoP') == "0" and unico.get('validoU') == "0": 
+        if unico.get('validoN') == "0" and unico.get('validoE') == "0" and unico.get('validoP') == "0" and unico.get('validoU') == "0":
             try:
                 usuario_create = User.objects.create_user(username= usuario, email= email, password= password, nombreCompleto= nombre)
                 a=usuario_create.save()
                 user = auth.authenticate(username = email, password= password)
-                
+
                 if user is not None and user.is_active:
                     auth.login(request,user)
                 else:
@@ -81,10 +81,10 @@ def registrarUsuario(request):
             else:
                 return HttpResponse("Se creo el usuario y logueo sin ningun error! Felicitaciones mi amigo!")
 
-        else:   
+        else:
             registrar_usuario = FormRegistrarUsuario(request.POST)
             return render_to_response('registroUsuario.html',{"form_registrar_usuario":registrar_usuario,"errorN":unico.get('validoN'),"errorE":unico.get('validoE'), "errorP":unico.get('validoP'),"errorU":unico.get('validoU')},context_instance=RequestContext(request))
-            #return redirect('/signup/', respuesta = request)            
+            #return redirect('/signup/', respuesta = request)
             #return HttpResponse("Ha ocurrido ciertos errores")
         #Aca no vamos a validar el metodo post o get por que esto sirve solo para capturar datos, puesto por primera vez y ponerlos en el otro html...Menos la contrasena
         #registrar_usuario = FormRegistrarUsuario(request.REQUEST)
@@ -96,13 +96,13 @@ def registrarUsuario(request):
         #return HttpResponseRedirect("/")
 
 @login_required(login_url='/login')
-def configuracionGeneral(request): 
+def configuracionGeneral(request):
     return HttpResponseRedirect("/settings/password/")
 
 
 @login_required(login_url='/login')
 def configuracionPassword(request):
-    #Se debe de agregar la validacion, si el usuario, esta supendido 
+    #Se debe de agregar la validacion, si el usuario, esta supendido
     if request.method == 'POST':
         error = ""
         before = request.POST.get('u_input_pass_before','')
@@ -110,7 +110,7 @@ def configuracionPassword(request):
         again = request.POST.get('u_input_pass_again', '')
 
         if ValidarUsuario().passwordZero(before) and ValidarUsuario().passwordFirst(now) and ValidarUsuario().passwordSecond(now,again):
-            try: 
+            try:
                 if request.user.check_password(before):
                     print request.user.set_password(now)
                     error = "Se actualizo tu contrasena"
@@ -129,7 +129,7 @@ def configuracionPassword(request):
                     if len(now) == 0:
                         error = "Debes introducir una nueva contrasena para poder cambiarla."
                     else:
-                        error= "Tu nueva contrasena debe tener mas de 5 caracteres"   
+                        error= "Tu nueva contrasena debe tener mas de 5 caracteres"
                 else:
                     if now != again:
                         error = "Tu nueva contrasena debe ser confirmada correctamente."
@@ -251,7 +251,7 @@ def addpreference(request):
                     return HttpResponse("ha ocurrido un error")
 
             else:
-                try:        
+                try:
                     print "estoy cuando la preferenia no existe"
                     programa_p  = Programa.objects.get(pk = id_post)
                     #print programa_p
@@ -268,11 +268,5 @@ def addpreference(request):
         else:
             return HttpResponse( "No Existe" )
 
-    else: 
+    else:
         return HttpResponse("anda a casa estas borracho")
-
-
-
-        
-
-
