@@ -280,6 +280,3 @@ def buscarPrograma(request):
         return HttpResponse(json.dumps(list(programa)), content_type="application/json")
     return HttpResponse("")
 
-def test(request):
-    print request
-    return HttpResponse("Kalena (L)")
