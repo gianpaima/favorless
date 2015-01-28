@@ -271,8 +271,21 @@ def addpreference(request):
     else: 
         return HttpResponse("anda a casa estas borracho")
 
+import json
+def buscarPrograma(request):
+    buscar = request.REQUEST.get('search',)
+    if buscar:
+        programa = Programa.objects.filter(nombre__icontains=buscar).values('id', 'nombre','logo')
+        #values_list
+        print programa 
+        return HttpResponse(json.dumps(list(programa)), content_type="application/json")
+    return HttpResponse("")
+
 
 
         
+
+
+
 
 
