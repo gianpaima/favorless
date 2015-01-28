@@ -271,7 +271,6 @@ def addpreference(request):
     else:
         return HttpResponse("anda a casa estas borracho")
 
-import json
 def buscarPrograma(request):
     buscar = request.REQUEST.get('search',)
     if buscar:
@@ -280,3 +279,7 @@ def buscarPrograma(request):
         print programa 
         return HttpResponse(json.dumps(list(programa)), content_type="application/json")
     return HttpResponse("")
+
+def test(request):
+    print request
+    return HttpResponse("Kalena (L)")
