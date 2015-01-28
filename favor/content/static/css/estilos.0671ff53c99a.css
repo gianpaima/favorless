@@ -1,0 +1,123 @@
+/*Modificado*/
+.navbar-default2
+{
+	background-color:#ffffff !important;
+}
+.navbar-collapse2
+{
+	width:100%;
+}
+/*Ocultar el campo de poner nombre de usuario en el registro del mismo*/
+.nombreUsuario
+{
+  display:none;
+}
+@media (min-width: 1200px) {
+  .img-principal-comparar
+  {
+  	height: 502px;
+  }
+}
+@media (max-width: 768px) {
+
+  	.jumbotron h2
+	  {
+	  	font-size: 20px;
+	  }
+	.jumbotron p
+	  {
+	  	font-size: 14px;
+	  }
+	.iconosSecundarios
+	  {
+		display:none;
+	  }
+  }
+
+  /**Parte de GC**/
+
+  .navbar-brand-centered {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    height: 50px;
+    width: 200px;  /* bootstrap has max-width: 200px rule */
+    margin-left: -100px;
+    text-align: center;
+  }
+  @media (min-width: 768px){
+      .principal
+      {
+          display: none;
+      }
+  }
+
+.navbar-icon-checkin-right {
+    position: absolute;
+    top: 0;
+    left: 95%;
+    height: 50px;
+    width: 200px;  /* bootstrap has max-width: 200px rule */
+    margin-left: -100px;
+    margin-top: 8px;
+    text-align: center;
+  }
+
+    @media (max-width: 768px){
+      .checkin
+      {
+          display: none;
+      }
+
+
+      .iconito-xs{
+
+      	font-size: 24px;
+      }
+
+   }
+
+    @media (min-width: 768px){
+      .principal , #link
+      {
+          display: none;
+      }
+
+       .iconito-xs{
+
+      	font-size: 32px;
+      }
+
+   }
+
+#nameInfo.error{
+	background: #c33;
+}
+
+#nameInfo.success {
+	background: #390;
+}
+
+#emailInfo.error {
+	background: #c33;
+}
+
+#emailInfo.success {
+	background: #390;
+}
+
+#pass1Info.error{
+	background: #c33;
+}
+
+#pass1Info.success {
+	background: #390;
+}
+
+#userInfo.error{
+	background: #c33;
+}
+
+#userInfo.success {
+	background: #390;
+}
