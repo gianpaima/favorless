@@ -11,6 +11,7 @@
   <script src="{% static "static/js/respond.min.js"%}"></script>
   <script src="{% static "static/js/jquery-1.8.3.min.js"%}"></script>
   <script src="{% static "static/js/bootstrap.min.js"%}"></script>
+  <script src="{% static "static/js/js-preferencias.js"%}"></script>
 </head>
 
 <body>
@@ -86,13 +87,13 @@
               <div class="thumbnail">
                 <img src="{{MEDIA_URL}}{{programa.logo}} "  style = "width=200px; height:200px" alt="...">
                 <div class="caption">
-                  <h2>{{programa.id}}</h2>
+                  
                   <h3>{{programa.nombre}}</h3>
                   <h4>{{programa.nombre_abreviado}}</h4>
                   <p>{{programa.tipo_programa}}</p>
                   
                   <p>
-                    <a href="" id  = "{{programa.id}}" class="js-megusta btn btn-primary"  role="button">
+                    <a href="#" id  = "{{programa.id}}" class="js-megusta btn btn-primary"  role="button">
                     <span>Me gusta</span></a>
                   </p>
                     
@@ -108,7 +109,7 @@
 
 
 
-      <script>
+       <script>
 
       //-------------------------------
 
@@ -420,7 +421,7 @@
                 }
             });
 
-          </script>
+          </script> 
     <!-- javascript -->
   
   </body>
