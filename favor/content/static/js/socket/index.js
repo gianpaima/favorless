@@ -35,7 +35,7 @@ socket.emit('programa',{ post: 'numero' });
  		else
  		{
  			result.html("No se ha encontrado el elemento buscado");
- 		}	
+ 		}
  	}
  	else if(data == ""){
  		result.html( "buscar elemento");
@@ -50,4 +50,3 @@ socket.emit('programa',{ post: 'numero' });
      // });
 
 });
-
