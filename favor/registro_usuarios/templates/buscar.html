@@ -1,0 +1,227 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Favorless</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--Bootstrap -->
+    {% load static from staticfiles %}
+    <link href="{% static "static/css/bootstrap2.css"%}" rel="stylesheet">
+    <link href="{% static "static/css/estilos.css"%}" rel="stylesheet">
+    <script src="js/respond.min.js"></script>
+</head>
+
+<body>
+
+    <div class="container">
+        <header>
+            <nav class="navbar navbar-default navbar-static-top">
+                <div class="navbar-header">
+                    <div class="navegador">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                    </div>
+
+                    <div>
+                        <a href="#" class="navbar-brand-centered"><img src="{% static "static/img/titulologo.png"%}" alt="favorless logo"></a>
+                    </div>
+
+                    <div>
+                        <a href="#" class="navbar-icon-checkin-right2">
+                            <a href="{% url "logout" %}"><span style="font-size:16px;" class="glyphicon glyphicon-cog"></span> <span class="cog"></span>
+                            </a>
+                        </div>
+
+
+                    </div>
+                    <div class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav">
+                            <li>
+                                <a href="#">
+                                    <span class="glyphicon glyphicon-home">
+                                        <span class="principal">Principal</span>
+                                    </span>
+                                </a>
+                            </li>
+                            <form class="navbar-form" role="search">
+                                <div class="input-group col-lg-3 col-md-3 col-sm-3">
+                                    <input type="text" class="form-control" placeholder="Buscar...">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="button">
+                                            <span class="glyphicon glyphicon-search"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </form>
+                        </ul>
+
+
+
+                    </div>
+                </nav>
+            </header>
+
+            <div class="row">
+                <section class="col-lg-4 col-sm-4 col-md-4 hidden-xs">
+                    <article>
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <img src="{% static "static/img/img2.png"%}" alt="..." class="img-rounded">
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                A quien seguir
+                                <ul class="media-list">
+                                    <li class="media">
+                                        <a class="pull-left" href="#">
+                                            <img class="media-object" src="{% static "static/img/userseguir.png"%}" alt="Usuario">
+                                        </a>
+                                        <div class="media-body">
+                                            <h5 class="media-heading">Nombre Apellido</h5>
+                                            <button type="button" class="btn btn-default btn-xs">
+                                                <span class="glyphicon glyphicon-chevron-right"></span> Seguir
+                                            </button>
+                                        </div>
+                                    </li>
+
+                                    <li class="media">
+                                        <a class="pull-left" href="#">
+                                            <img class="media-object" src="{% static "static/img/userseguir.png"%}" alt="Usuario">
+                                        </a>
+                                        <div class="media-body">
+                                            <h5 class="media-heading">Nombre Apellido</h5>
+                                            <button type="button" class="btn btn-default btn-xs">
+                                                <span class="glyphicon glyphicon-chevron-right"></span> Seguir
+                                            </button>
+                                        </div>
+                                    </li>
+
+                                    <li class="media">
+                                        <a class="pull-left" href="#">
+                                            <img class="media-object" src="{% static "static/img/userseguir.png"%}" alt="Usuario">
+                                        </a>
+                                        <div class="media-body">
+                                            <h5 class="media-heading">Nombre Apellido</h5>
+                                            <button type="button" class="btn btn-default btn-xs">
+                                                <span class="glyphicon glyphicon-chevron-right"></span> Seguir
+                                            </button>
+                                        </div>
+                                    </li>
+
+                                    <li class="media">
+                                        <a class="pull-left" href="#">
+                                            <img class="media-object" src="{% static "static/img/userseguir.png"%}" alt="Usuario">
+                                        </a>
+                                        <div class="media-body">
+                                            <h5 class="media-heading">Nombre Apellido</h5>
+                                            <button type="button" class="btn btn-default btn-xs">
+                                                <span class="glyphicon glyphicon-chevron-right"></span> Seguir
+                                            </button>
+                                        </div>
+                                    </li>
+
+
+                                </ul>
+
+
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                Tendencias
+
+                                <ul class="list-unstyled">
+                                    <li>
+                                        <a href="#">Tendencia 1</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Tendencia 2</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Tendencia 3</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Tendencia 4</a>
+                                    </li>
+                                </ul>
+
+                            </div>
+                        </article>
+                    </section>
+
+                    <section class="col-lg-8 col-sm-8 col-md-8 col-xs-12 ">
+                        <article class="col-lg-12 col-xs-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading"><a href="#">¿Pregunta que se debe realizar para evaluar el versus?</a></div>
+                                <div class="panel-body">
+                                    <div class="col-lg-6 col-xs-6">
+                                        <a href="#" class="thumbnail">
+                                            <img src="{% static "static/img/vs7.jpg"%}" alt="...">
+                                        </a>
+                                    </div>
+
+                                    <div class="col-lg-6 col-xs-6">
+                                        <a href="#" class="thumbnail">
+                                            <img src="{% static "static/img/vs8.jpg"%}" alt="...">
+                                        </a>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="panel panel-default">
+                                <div class="panel-heading">¿Pregunta que se debe realizar para evaluar el versus?</div>
+                                <div class="panel-body">
+                                    <div class="col-lg-6 col-xs-6">
+                                        <a href="#" class="thumbnail">
+                                            <img src="{% static "static/img/imgvs1.png"%}" alt="...">
+                                        </a>
+                                    </div>
+
+                                    <div class="col-lg-6 col-xs-6">
+                                        <a href="#" class="thumbnail">
+                                            <img src="{% static "static/img/imgvs2.png"%}" alt="...">
+                                        </a>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="panel panel-default">
+                                <div class="panel-heading">¿Pregunta que se debe realizar para evaluar el versus?</div>
+                                <div class="panel-body">
+                                    <div class="col-lg-6 col-xs-6">
+                                        <a href="#" class="thumbnail">
+                                            <img src="{% static "static/img/imgvs1.png"%}" alt="...">
+                                        </a>
+                                    </div>
+
+                                    <div class="col-lg-6 col-xs-6">
+                                        <a href="#" class="thumbnail">
+                                            <img src="{% static "static/img/imgvs2.png"%}" alt="...">
+                                        </a>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                </section>
+
+
+            </div>
+        </div> <!--fin container -->
+        <!-- javascript -->
+        <script src="{% static "static/js/jquery-1.8.3.min.js"%}"></script>
+        <script src="{% static "static/js/bootstrap.min.js"%}"></script>
+        <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+        <script src="{% static "static/js/socket/index.js"%}"></script>
+    </body>
+    </html>

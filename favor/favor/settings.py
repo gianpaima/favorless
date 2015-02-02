@@ -112,3 +112,5 @@ AUTHENTICATION_BACKENDS = (
     'registro_usuarios.backendsIniciarSesion.EmailOrUsernameModelBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
+
+

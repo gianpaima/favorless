@@ -8,16 +8,18 @@
 	    {% load static from staticfiles %}
 	    <link href="{% static "static/css/bootstrap2.css"%}" rel="stylesheet">
 	    <link href="{% static "static/css/estilos.css"%}" rel="stylesheet">
-	    <script src="js/respond.min.js"></script>
+	    <script src="{% static "static/js/respond.min.js"%}"></script>
 	</head>
 
 	<body>
-
+<div id="resultados">
+	test
+</div>
 		<div class="container">
 			<header>
 				<nav class="navbar navbar-default navbar-static-top">
 					<div class="navbar-header">
-						<div class="navegador"> 
+						<div class="navegador">
 						    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
 						        <span class="sr-only">Toggle navigation</span>
 							   	<span class="icon-bar"></span>
@@ -39,7 +41,7 @@
 
 						<div>
 							<a href="#" class="navbar-icon-checkin-right2">
-									<a href="{% url "logout" %}"><span style="font-size:16px;" class="glyphicon glyphicon-cog"></span> <span class="cog"></span>												
+									<a href="{% url "logout" %}"><span style="font-size:16px;" class="glyphicon glyphicon-cog"></span> <span class="cog"></span>
 									</a>
 		 				</div>
 
@@ -54,19 +56,19 @@
 						    		</span>
 						    	</a>
 						    </li>
-								<form class="navbar-form" role="search">							    
+								<form class="navbar-form" role="search">
 								    <div class="input-group col-lg-3 col-md-3 col-sm-3">
-									      <input type="text" class="form-control" placeholder="Buscar...">
+									      <input type="text" class="form-control" placeholder="Buscar..." id="search">
 									      <span class="input-group-btn">
 									        <button class="btn btn-default" type="button">
 									        	<span class="glyphicon glyphicon-search"></span>
 									        </button>
 									      </span>
 									 </div>
-								</form>	 
+								</form>
 						</ul>
 
-	
+
 
 					</div>
 				</nav>
@@ -89,7 +91,7 @@
 						  <li class="col-lg-3 col-md-3 text-center"><a href=""><span style="font-size:24px;" class="glyphicon glyphicon-arrow-right"></span></a></li>
 						  <li class="col-lg-3 col-md-3 text-center"><a href="#"><span style="font-size:24px;" class="glyphicon glyphicon-star"></span></a></li>
 						</ul>
-					    
+
 					  </div>
 					</div>
 
@@ -170,9 +172,9 @@
 					    		<a href="#">Tendencia 4</a>
 					    	</li>
 					    </ul>
-					    	
+
 					</div>
-				</article>				
+				</article>
 			</section>
 
 			<section class="col-lg-8 col-sm-8 col-md-8 col-xs-12 ">
@@ -191,7 +193,7 @@
 					      		<img src="{% static "static/img/vs8.jpg"%}" alt="...">
 					    	</a>
 					  	</div>
-		
+
 					   </div>
 					  </div>
 
@@ -209,7 +211,7 @@
 					      		<img src="{% static "static/img/imgvs2.png"%}" alt="...">
 					    	</a>
 					  	</div>
-		
+
 					   </div>
 					  </div>
 
@@ -227,7 +229,7 @@
 					      		<img src="{% static "static/img/imgvs2.png"%}" alt="...">
 					    	</a>
 					  	</div>
-		
+
 					   </div>
 					  </div>
 					</div>
@@ -239,6 +241,8 @@
 	</div> <!--fin container -->
 				<!-- javascript -->
 		   		<script src="{% static "static/js/jquery-1.8.3.min.js"%}"></script>
-    			<script src="{% static "static/js/bootstrap.min.js"%}"></script> 
+    			<script src="{% static "static/js/bootstrap.min.js"%}"></script>
+    			<script src="http://localhost:3000/socket.io/socket.io.js"></script>
+    			<script src="{% static "static/js/socket/index.js"%}"></script>
 	</body>
 </html>

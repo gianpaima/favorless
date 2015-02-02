@@ -9,7 +9,7 @@
   <link href="{% static "static/css/bootstrap2.css"%}" rel="stylesheet">
   <link href="{% static "static/css/estilos.css"%}" rel="stylesheet">
   <script src="{% static "static/js/respond.min.js"%}"></script>
-  <script src="{% static "static/js/jquery-1.10.2.min.js"%}"></script>
+  <script src="{% static "static/js/jquery-1.8.3.min.js"%}"></script>
   <script src="{% static "static/js/bootstrap.min.js"%}"></script>
   <script src="{% static "static/js/js-preferencias.js"%}"></script>
 </head>
@@ -30,7 +30,7 @@
           </div>
 
           <div>
-            <a href="#" class="navbar-brand-centered"><img src="{% static "static/img/titulologo.png"%}" alt="favorless logo"></a>
+            <a href="#" class="navbar-brand-centered"><img src="{% static "static/img/titulologo2.png"%}" alt="favorless logo"></a>
           </div>
         </div>
       </nav>
@@ -87,6 +87,7 @@
               <div class="thumbnail">
                 <img src="{{MEDIA_URL}}{{programa.logo}} "  style = "width=200px; height:200px" alt="...">
                 <div class="caption">
+
                   <h3>{{programa.nombre}}</h3>
                   <h4>{{programa.nombre_abreviado}}</h4>
                   <p>{{programa.tipo_programa}}</p>
@@ -102,6 +103,7 @@
           </div>
      
       {%endfor%}
+
 
 
        <script>
@@ -150,138 +152,7 @@
                   }
               }
 
-       /*  $(".js-megusta").click(function(){
-            var bot= $(this);
-            var id = $(this).prop("id");
-            console.log("le diste me gusta  a " +  id);
-           
-            $.ajax({
 
-              data : {'id' : id },
-              url :'/addpreference/',
-              type : 'post',
-              success: function(data){
-
-              bot.removeClass( "js-megusta btn btn-primary" ).addClass("js-no-megusta btn btn-danger");
-              var no_gusta = "No me Gusta";
-              bot.text(no_gusta);
-              console.log("el post manda esto :" + data);
-
-              },
-
-            });
-
-          });*/
-
-          //-----------------------------------
-
-        /*  $(".js-megusta").bind("click",function(){
-
-            var bot= $(this);
-            var id = $(this).prop("id");
-            console.log("le diste me gusta  a " +  id);
-           
-            $.ajax({
-
-              data : {'id' : id },
-              url :'/addpreference/',
-              type : 'post',
-              success: function(data){
-
-              bot.removeClass( "js-megusta btn btn-primary" ).addClass("js-no-megusta btn btn-danger");
-              var no_gusta = "No me Gusta";
-              bot.text(no_gusta);
-              console.log("el post manda esto :" + data);
-
-              },
-
-            });
-
-          });
-
-          */
-        //....................................................................................
-
-         /* $(".js-no-megusta").click(function(){
-
-           var bot_no_gusta = $(this);
-           var id = $(this).prop("id");
-           console.log("ya no me gusta " +  id);
-           $.ajax({
-                 data : {'id':id},
-                 url : '/removepreference/',
-                 type : 'post',
-                 success : function(data){
-
-                  bot_no_gusta.removeClass("js-no-megusta btn btn-danger").addClass("js-megusta btn btn-primary");
-                  var gusta = "Me Gusta";
-                  bot_no_gusta.text(gusta);
-                 },
-              });
-          }); */
-
-//.................................................................................
-
-        
-      /*   $(".js-no-megusta").bind("click",function(){
-           var bot_no_gusta = $(this);
-           var id = $(this).prop("id");
-           console.log("ya no me gusta " +  id);
-           $.ajax({
-                 data : {'id':id},
-                 url : '/removepreference/',
-                 type : 'post',
-                 success : function(data){
-                  bot_no_gusta.removeClass("js-no-megusta btn btn-danger").addClass("js-megusta btn btn-primary");
-                  var gusta = "Me Gusta";
-                  bot_no_gusta.text(gusta);
-              },
-            });
-          });  */
-
-//------------------------------------------------------------------------------------
-
-
-    /*
-          $( ".js-no-megusta" ).on( "click", function() {
-            console.log( $( this ).text() );
-
-          var bot_no_gusta = $(this);
-          var id = $(this).prop("id");
-          console.log("ya no me gusta " +  id);
-          $.ajax({
-              data : {'id':id},
-              url : '/removepreference/',
-              type : 'post',
-              success : function(data){
-                bot_no_gusta.removeClass("js-no-megusta btn btn-danger").addClass("js-megusta btn btn-primary");
-                var gusta = "Me Gusta";
-                bot_no_gusta.text(gusta);
-              },
-            });
-          });
-
-
-          $( ".js-megusta" ).on( "click", function() {
-            var bot= $(this);
-            var id = $(this).prop("id");
-            console.log("le diste me gusta  a " +  id);
-           
-            $.ajax({
-              data : {'id' : id },
-              url :'/addpreference/',
-              type : 'post',
-              success: function(data){
-                bot.removeClass( "js-megusta btn btn-primary" ).addClass("js-no-megusta btn btn-danger");
-                var no_gusta = "No me Gusta";
-                bot.text(no_gusta);
-                console.log("el post manda esto :" + data);
-              },
-            });
-          });
-
-
-      */
 
         $("body").delegate(".js-megusta","click",function(){
           console.log( $( this ).text() );
