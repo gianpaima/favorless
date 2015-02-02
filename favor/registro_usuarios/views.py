@@ -275,5 +275,23 @@ def addpreference(request):
 
 
         
+def pruebaNode (request):
+    template = "pruebanode.html"
+    return render_to_response(template,context_instance=RequestContext(request))
+
+
+
+from django.views.decorators.csrf import csrf_exempt
+
+
+def pruebarealtime (request):
+    print request
+    print   "------------------"
+    print  "Es mi Dream"
+    print "------------"
+    return  HttpResponse("Murio tu Dream")
+
+
+
 
 
