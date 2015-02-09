@@ -12,9 +12,7 @@
 	</head>
 
 	<body>
-<div id="resultados">
-	test
-</div>
+
 		<div class="container">
 			<header>
 				<nav class="navbar navbar-default navbar-static-top">
@@ -57,8 +55,8 @@
 						    	</a>
 						    </li>
 								<form class="navbar-form" role="search">
-								    <div class="input-group col-lg-3 col-md-3 col-sm-3">
-									      <input type="text" class="form-control" placeholder="Buscar..." id="search">
+								    <div id="the-basics" class="input-group col-lg-3 col-md-3 col-sm-3">
+									      <input type="text" class="form-control typeahead" placeholder="Buscar..." id="search">
 									      <span class="input-group-btn">
 									        <button class="btn btn-default" type="button">
 									        	<span class="glyphicon glyphicon-search"></span>
@@ -244,5 +242,6 @@
     			<script src="{% static "static/js/bootstrap.min.js"%}"></script>
     			<script src="http://localhost:3000/socket.io/socket.io.js"></script>
     			<script src="{% static "static/js/socket/index.js"%}"></script>
+				<script src="{%static "static/js/typeahead.jquery.min.js"%}"></script>
 	</body>
 </html>

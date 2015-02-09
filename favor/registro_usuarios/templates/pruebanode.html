@@ -14,6 +14,7 @@
 
 	 <h2> Has pulsado 0 veces!	</h2>	
 
+    
 	
 
 
@@ -39,13 +40,45 @@
 			 	  console.log("click :(") ; 
 
 			      socket.emit('prueba',{ id: "id" });
+
+                  socket.on('update',function(data){
+                       
+                  switch  (data) {
+                        case "0":
+                            $('#alerta').html("error")
+                            break;
+                        case "1":
+                            bot.removeClass( "js-megusta btn btn-primary" ).addClass("js-no-megusta btn btn-danger");
+                            var no_gusta = "No me Gusta";
+                            bot.text(no_gusta);
+                            console.log("el post manda esto :" + data);
+                            $('#alerta').html("")
+                            break;
+                        case "2":
+                            $('#alerta').html("no existes")
+                            break;
+                        case "3":
+                            $('#alerta').html("error de SERVER")
+                            break;
+                        default:
+                            $('#alerta').html("error")
+                            
+                        }
+                    });
+
+
 			      });
+
+
+                   
 			 
 			    //#5 El servidor nos responde al click con este evento y nos da el número de clicks en el callback.
 			    socket.on('otherClick', function(clicks){
 			      console.log('Clicks: '+clicks);
 			      $('h2').replaceWith('<h2>Has pulsado '+clicks+' veces!');
 			      });
+
+
 
 
 

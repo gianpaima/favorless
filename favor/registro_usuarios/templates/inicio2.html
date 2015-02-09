@@ -9,7 +9,7 @@
   <link href="{% static "static/css/bootstrap2.css"%}" rel="stylesheet">
   <link href="{% static "static/css/estilos.css"%}" rel="stylesheet">
   <script src="{% static "static/js/respond.min.js"%}"></script>
-  <script src="{% static "static/js/jquery-1.8.3.min.js"%}"></script>
+  <script src="{% static "static/js/jquery-1.8.3.js"%}"></script>
   <script src="{% static "static/js/bootstrap.min.js"%}"></script>
   <script src="{% static "static/js/js-preferencias.js"%}"></script>
 </head>
@@ -35,6 +35,8 @@
         </div>
       </nav>
     </header>
+
+    <span id = "alerta"></span>
 
       <div class="row center-block">
               <select class="form-control">
@@ -62,12 +64,12 @@
 
                     {% if programa_fav.estado == True %}
 
-                     <a href="#" id  = "{{programa_fav.id}}" class="js-no-megusta btn btn-danger"  role="button">
+                     <a href="#" id  = "{{programa_fav.programa.id}}" class="js-no-megusta btn btn-danger"  role="button">
                      <span>Ya no  me gusta</span></a>
                       
                     {% else %}
 
-                    <a href="#" id  = "{{programa_fav.id}}" class="js-megusta btn btn-primary" role="button">
+                    <a href="#" id  = "{{programa_fav.programa.id}}" class="js-megusta btn btn-primary" role="button">
                     <span>Me gusta</span></a>
 
                     {% endif%}
@@ -113,6 +115,8 @@
       $("a").click(function(){
             var atributos = $(this).prop("class");
             console.log(atributos);
+
+
           });
       //-------------------------------
 
@@ -157,6 +161,8 @@
         $("body").delegate(".js-megusta","click",function(){
           console.log( $( this ).text() );
           var bot= $(this);
+          console.log(bot);
+
           var id = $(this).prop("id");
           console.log("le diste me gusta  a " +  id);
           $.ajax({
@@ -164,10 +170,29 @@
               url :'/addpreference/',
               type : 'post',
               success: function(data){
-                bot.removeClass( "js-megusta btn btn-primary" ).addClass("js-no-megusta btn btn-danger");
-                var no_gusta = "No me Gusta";
-                bot.text(no_gusta);
-                console.log("el post manda esto :" + data);
+                switch  (data) {
+                  case "0":
+                    $('#alerta').html("error")
+
+                    break;
+                  case "1":
+                        bot.removeClass( "js-megusta btn btn-primary" ).addClass("js-no-megusta btn btn-danger");
+                        var no_gusta = "No me Gusta";
+                        bot.text(no_gusta);
+                        console.log("el post manda esto :" + data);
+                        $('#alerta').html("")
+                    break;
+                  case "2":
+                      $('#alerta').html("no existes")
+                    break;
+                  case "3":
+                      $('#alerta').html("error de SERVER")
+                    break;
+                   default:
+                    $('#alerta').html("error")
+                    
+                }
+               
               },
            });
         });
