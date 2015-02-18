@@ -102,6 +102,9 @@ def configuracionGeneral(request):
 
 @login_required(login_url='/login')
 def configuracionPassword(request):
+    print "usuario: "
+    print request.user
+    print "FIn usuario"
     #Se debe de agregar la validacion, si el usuario, esta supendido
     if request.method == 'POST':
         error = ""
@@ -139,7 +142,7 @@ def configuracionPassword(request):
     else:
         return render_to_response('configuracion.html',context_instance=RequestContext(request))
 
-
+@login_required(login_url='/login')
 def principal(request):
     template = "principal.html"
     return render_to_response(template,context_instance=RequestContext(request))
@@ -150,6 +153,7 @@ def validar(request):
   #  print request.REQUEST.get("objetos")
    # datas = serializers.serialize('json', request.REQUEST.items())
     #print datas
+
     if data!="validarTodos":
         if data == "validarEmail":
             obj = request.REQUEST.get("objetos[email]",'')
@@ -273,6 +277,7 @@ def addpreference(request):
 
 def buscarPrograma(request):
     buscar = request.REQUEST.get('search',)
+    
     if buscar:
         programa = Programa.objects.filter(nombre__icontains=buscar).values('id', 'nombre','logo')
         #values_list
@@ -280,3 +285,8 @@ def buscarPrograma(request):
         return HttpResponse(json.dumps(list(programa)), content_type="application/json")
     return HttpResponse("")
 
+def test(request):
+    print "POR FINNNNNNNn!!!!!"
+    print "xD"
+    print request.POST.get('word')
+    return HttpResponse("Kalena (L)")
