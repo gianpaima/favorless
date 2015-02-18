@@ -7,8 +7,9 @@ var request = require('request');
  });
 
 */
-io.sockets.on('connection', function (socket) 
+io.sockets.on('connection', function (socket)
 {
+    console.log("Cookisssse" +socket.request.headers.cookie)
 
   socket.on('post', function(data){
 request.post();
@@ -40,7 +41,7 @@ request.get('http://127.0.0.1:8000/search?search='+data.text,
     'bearer': 'bearerToken'
   }
 }, function (error, response, body) {
-   
+
    enviar_emit(body);
 }).on('response', function(response) {
 	console.log("respuesta");
@@ -59,7 +60,7 @@ request.get('http://127.0.0.1:8000/search?search='+data.text,
 
   function enviar_emit(data)
   {
-    socket.emit('dataSend',data)    
+    socket.emit('dataSend',data)
   }
 
 

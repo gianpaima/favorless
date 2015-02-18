@@ -1,7 +1,7 @@
 /*Modificado*/
 .navbar-default2
 {
-	background-color:#ffffff !important; 
+	background-color:#ffffff !important;
 }
 .navbar-collapse2
 {
@@ -19,7 +19,7 @@
   }
 }
 @media (max-width: 768px) {
- 
+
   	.jumbotron h2
 	  {
 	  	font-size: 20px;
@@ -27,11 +27,11 @@
 	.jumbotron p
 	  {
 	  	font-size: 14px;
-	  }	
+	  }
 	.iconosSecundarios
 	  {
 		display:none;
-	  } 
+	  }
   }
 
   /**Parte de GC**/
@@ -82,7 +82,7 @@
 
 
       .iconito-xs{
-      
+
       	font-size: 24px;
       }
 
@@ -95,7 +95,7 @@
       }
 
        .iconito-xs{
-      
+
       	font-size: 32px;
       }
 
@@ -135,5 +135,6 @@
 	background: #390;
 }
 
-
-
+.twitter-typeahead{
+	width: 100%;
+}
