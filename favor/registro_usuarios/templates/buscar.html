@@ -6,14 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!--Bootstrap -->
     {% load static from staticfiles %}
+
     <link href="{% static "static/css/bootstrap2.css"%}" rel="stylesheet">
     <link href="{% static "static/css/estilos.css"%}" rel="stylesheet">
     <script src="js/respond.min.js"></script>
+
 </head>
 
 <body>
-
+    <span id = "alerta"></span>
     <div class="container">
+        
         <header>
             <nav class="navbar navbar-default navbar-static-top">
                 <div class="navbar-header">
@@ -70,12 +73,18 @@
                     <article>
                         <div class="panel panel-default">
                             <div class="panel-body">
+
+                                
                                 <h5 class="media-heading">Al fondo hay sitio</h5>
-                                <img src="{% static "static/img/inicio-afhs.jpg"%}" alt="..." class="img-rounded">
+                                <img src="{% static "static/img/img2.png"%}" alt="..." class="img-rounded">
                             </div>
 
                             <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi, et?
                                 Lorem ipsum dolor sit amet.</span>
+
+                           <a href="#" id= "4" class="js-megusta btn btn-primary" role="button">
+                            <span>Me gusta</span>
+                            </a>
                         </div>
 
                 </section>
@@ -143,9 +152,100 @@
             </div>
         </div> <!--fin container -->
         <!-- javascript -->
-        <script src="{% static "static/js/jquery-1.8.3.min.js"%}"></script>
+        <script src="{% static "static/js/jquery-1.8.3.js"%}"></script>
         <script src="{% static "static/js/bootstrap.min.js"%}"></script>
         <script src="http://localhost:3000/socket.io/socket.io.js"></script>
-        <script src="{% static "static/js/socket/index.js"%}"></script>
+        
+        <script>
+
+
+        var socket = io('http://127.0.0.1:3000');
+        socket.on('connected', function () {
+              console.log('Conectado!');
+              
+            });
+
+
+       $("body").delegate(".js-megusta","click",
+
+        function()
+         {  
+
+              var bot  =   $(this);
+            console.log("id:" + $(bot));
+
+            socket.emit('prueba',{ id : bot.prop("id") });
+
+            socket.on('update',function(data){
+                   
+                switch  (data) {
+                    case "0":
+                        $('#alerta').html("error")
+                        break;
+                    case "1":
+                        bot.removeClass( "js-megusta btn btn-primary" ).addClass("js-no-megusta btn btn-danger");
+                        var no_gusta = "No me Gusta";
+                        bot.text(no_gusta);
+
+
+                        console.log("el post manda esto :" + data);
+                        $('#alerta').html("")
+                        break;
+                    case "2":
+                        $('#alerta').html("no existes")
+                        break;
+                    case "3":
+                        $('#alerta').html("error de SERVER")
+                        break;
+                    default:
+                        $('#alerta').html("error")
+                        
+                    }
+                });
+            });
+
+
+
+       $("body").delegate(".js-no-megusta","click",
+
+        function()
+         {  
+
+              var bot  =   $(this);
+            console.log("id:" + $(bot));
+
+            socket.emit('prueba2',{ id : bot.prop("id") });
+
+            socket.on('update',function(data){
+                   
+                switch  (data) {
+                    case "0":
+                        $('#alerta').html("error")
+                        break;
+                    case "1":
+                        bot.removeClass( "js-no-megusta btn btn-danger" ).addClass("js-megusta btn btn-primary");
+                        var gusta = " me Gusta";
+                        bot.text(gusta);
+
+                        
+                        console.log("el post manda esto :" + data);
+                        $('#alerta').html("")
+                        break;
+                    case "2":
+                        $('#alerta').html("no existes")
+                        break;
+                    case "3":
+                        $('#alerta').html("error de SERVER")
+                        break;
+                    default:
+                        $('#alerta').html("error")
+                        
+                    }
+                });
+            });
+
+        </script>
+
+
     </body>
     </html>
