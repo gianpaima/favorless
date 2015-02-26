@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'djangotoolbox',
     'registro_usuarios',
     'votos',
 )
@@ -67,9 +68,16 @@ DATABASES = {
         'PASSWORD': 'postgres',
         'HOST': '127.0.0.1',# Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
         'PORT': '5432',
+    },
+    'mongodb':{
+        'ENGINE': 'django_mongodb_engine',
+        'NAME': 'votofls',#os.path.join(BASE_DIR, 'db.sqlite3'),
+        'HOST': 'localhost',
+        'PORT': 27017,
     }
 }
 
+DATABASE_ROUTERS = [ 'votos.routers.RoutersDataBase',]
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
