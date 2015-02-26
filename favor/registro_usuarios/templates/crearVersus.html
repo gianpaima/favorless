@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title> Crear Versus :) </title>
+
+	 {% load static from staticfiles %}
+</head>
+<body>
+	<div>
+		<form>
+
+			<div>
+				<label>  Pregunta :  </label>
+				<input  type  ="text"  name ="fpregunta"   id ="fpregunta" style = "width :  60%"> </br>
+			</div> </br>
+			<div>
+				<label> Opcion 1 : </label>
+				<input type  ="text" name ="fopc1"  id ="search" > 
+			<!-- dentro del  parametro id debe de estar el id   del programa que es elegido  por defecto lo dejaremos en cero -->
+				<input type  ="file" name ="fImgOpc1"  id ="0" > 
+			</div> </br>
+
+			<div>
+				<label> Opcion 2 :</label>
+				<input type  ="text" name ="fopc2"  id ="search2" > 
+				<input type  ="file" name ="fImgOpc2"  id ="0" > 
+			</div>
+
+		</form>
+
+
+		<div id = "resultados">
+		</div>
+	</div>
+
+
+	  <script src="{% static "static/js/jquery-1.8.3.min.js"%}"></script>
+	  <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+	  <script src="{% static "static/js/index.js"%}"></script>
+</body>
+</html>

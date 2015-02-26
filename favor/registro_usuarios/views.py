@@ -395,3 +395,9 @@ def buscarPrograma(request):
         return HttpResponse(json.dumps(list(programa)), content_type="application/json")
     return HttpResponse("")
 
+
+
+def versus(request):
+    template = "crearVersus.html"
+    return render_to_response(template,context_instance=RequestContext(request))
+
