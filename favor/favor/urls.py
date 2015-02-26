@@ -23,13 +23,17 @@ urlpatterns = patterns('',
     url(r'^logout/$', 'registro_usuarios.views.cerrarSesion', name='logout'),
     url(r'^preferencias/$', 'registro_usuarios.views.preferencias', name='preferencias'),
     url(r'^addpreference/$', 'registro_usuarios.views.addpreference', name='addpreference'),
+    url(r'^pruebaNode/$', 'registro_usuarios.views.pruebaNode', name='pruebaNode'),
+    url(r'^pruebarealtime/$', 'registro_usuarios.views.pruebarealtime', name='pruebarealtime'),
     url(r'^removepreference/$', 'registro_usuarios.views.removepreference', name='removepreference'),
     url(r'^search/$', 'registro_usuarios.views.buscarPrograma', name='search'),
-    url(r'^test/$', 'registro_usuarios.views.test', name='test'),
+    # url(r'^test/$', 'registro_usuarios.views.test', name='test'),
    # url(r'^preferenciasajax/$', 'registro_usuarios.views.preferenciasajax', name='preferenciasajax'),
     url(r'^media/(?P<path>.*)$','django.views.static.serve',
-		{'document_root':settings.MEDIA_ROOT,} 
+		{'document_root':settings.MEDIA_ROOT,}
 		),
+
+    
     url(r'^admin/', include(admin.site.urls)),
 
 )

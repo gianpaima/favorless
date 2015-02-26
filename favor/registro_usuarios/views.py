@@ -13,6 +13,7 @@ from models import *
 from ValidarUsuarios import ValidarUsuario
 import json
 # Create your views here.
+from django.contrib.sessions.models import Session
 
 
 def home(request):
@@ -220,60 +221,169 @@ def preferencias(request):
 
 def removepreference(request):
     if request.method == 'POST':
-
         id_post  = request.POST.get('id','')
-        if (id_post.isdigit()):
 
-            try:
-                preferencia = Preferencia.objects.get(pk = id_post)
-                preferencia.estado = False
-                preferencia.save()
-                return HttpResponse("la preferencia se ha actualiza")
-            except:
-                return HttpResponse("ha ocurrido un error")
-        else:
-            return HttpResponse( "el id No existe" )
-
+        if request.user.is_authenticated():
+            return HttpResponse (vicam2(id_post,request.user))
+        else :
+            if request.POST.get('sessionid'):
+                try:
+                    session = Session.objects.get(session_key=request.POST.get('sessionid'))
+                    user_id = session.get_decoded().get('_auth_user_id')
+                    user = User.objects.get(id=user_id)
+                    return HttpResponse (vicam2(id_post,user))
+                except:
+                    return HttpResponse("ha ocuurido un error")
+            else: 
+                return HttpResponse("Anonimo Total")
     else:
         return HttpResponse ("Anda a casa estas borracho")
+
+
+
+def vicam2(id_post,user_id):
+    if (id_post.isdigit()):
+
+        try:
+           p =  Programa.objects.filter(pk = id_post)
+            
+        except Exception, e:
+            return "3"
+        
+        if p:
+            try:
+                print user_id
+                print id_post
+                a = Preferencia.objects.filter(user=user_id ,programa=id_post)
+                if a :
+                    
+                    preferencia = Preferencia.objects.get(pk = a)
+                    print preferencia
+                    preferencia.estado = False
+                    preferencia.save()
+                    return "1"
+                else: 
+
+                    return "2"
+
+            except:
+                return "2"
+        else:
+            return "2"
+    else:
+        return "0" 
+"""
+cuando el id no es digito == 0
+La preferencia cambia de estado == 1
+la  Preferencia no Existe y se crea == 1
+No existe el programa  o preferencia = = 2 
+ha ocurrido un error  servidor == 3 
+"""
+        
 
 
 def addpreference(request):
     if request.method == 'POST':
         id_post  = request.POST.get('id','')
-
-        if (id_post.isdigit()):
-
-            if(Preferencia.objects.filter(pk=id_post).exists()):
-
+        if request.user.is_authenticated():
+            user = request.user
+     
+            return HttpResponse (vicam(user,id_post))
+        else:
+            if request.POST.get('sessionid'):
                 try:
-                    preferencia = Preferencia.objects.get(pk = id_post)
-                    preferencia.estado = True
-                    preferencia.save()
-                    return HttpResponse("la Preferencia Existe y solo cambiara el estado")
-                except:
-                    return HttpResponse("ha ocurrido un error")
-
-            else:
-                try:
-                    print "estoy cuando la preferenia no existe"
-                    programa_p  = Programa.objects.get(pk = id_post)
-                    #print programa_p
-                    user_p = request.user
-                    #print  user_p
-                    p = Preferencia.objects.create(user = user_p, programa = programa_p)
-                    p.save()
-                    #print programa_p.nombre
-                    return HttpResponse(id_post)
+                    session = Session.objects.get(session_key=request.POST.get('sessionid'))
+                    user_id = session.get_decoded().get('_auth_user_id')
+                    user = User.objects.get(id=user_id)
+                    #print vicam(user,id_post)
+                    return HttpResponse (vicam(user,id_post))
                 except:
                     return HttpResponse("ha ocuurido un error")
-
-
-        else:
-            return HttpResponse( "No Existe" )
-
+            else: 
+                return HttpResponse("Anonimo Total")
     else:
         return HttpResponse("anda a casa estas borracho")
+
+
+
+      
+
+def vicam(user_id,id):
+    if (id.isdigit()):
+        try: 
+            preferencia = Preferencia.objects.filter(user=user_id ,programa=id)[:1]
+            print preferencia
+        except Exception, e:
+            print e
+            print Exception
+            return "3"
+        
+
+        if(preferencia):
+            print "entre al If"
+            try:
+                a = Preferencia.objects.get(pk=preferencia)
+                print "it's"
+                print a
+                
+                a.estado = True
+                a.save()
+                return "1"
+            except :
+                print "error"
+                raise
+                return "3"
+        else:
+            print "Entre al else"
+            try:
+                print "estoy cuando la preferenia no existe"
+                #print programa_p
+                try:
+                    programa_p  = Programa.objects.get(pk = id)
+                except:
+                    print  "noononoono"
+                    return "2"
+
+                p = Preferencia.objects.create(user = user_id, programa = programa_p)
+                p.save  
+                return "1"
+            except :
+                print "error"
+                return "3"
+    else:
+        return "0"
+
+"""
+cuando el id no es digito == 0
+la Preferencia Existe y solo cambiara el estado == 1
+la  Preferencia no Existe y se crea == 1
+cuando el programa no existe == 2
+ha ocurrido un error  servidor == 3
+"""
+
+
+
+        
+def pruebaNode (request):
+    template = "buscar.html"
+    return render_to_response(template,context_instance=RequestContext(request))
+
+
+def pruebarealtime (request):
+    print request.session
+    print   "------------------"
+    print  "Es mi Dream"
+    #session = Session.objects.get(session_key=request.GET.get('sessionid'))
+    print "sesion---"
+    print "session"
+    #user_id = session.get_decoded().get('_auth_user_id')
+    #user = User.objects.get(id=user_id)
+    print "------------"
+    print request.user
+    return  HttpResponse("Murio tu Dream")
+
+
+
 
 def buscarPrograma(request):
     buscar = request.REQUEST.get('search',)
