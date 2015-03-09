@@ -250,6 +250,101 @@ request(options,callback);
 
 });
 
+//-----------------------------------------------------------------------------------------------------
+
+
+socket.on('versus',function(data){
+console.log("xxxxxxxx:",handshakeData.headers.cookie);
+var arreglo = handshakeData.headers.cookie.split(';') || [];
+
+
+    if(arreglo)
+    {
+      var csrfcookie, sessionid;
+      for (var i = 0; i < arreglo.length; i++) {
+        arreglo[i]=arreglo[i].trim();
+        console.log("arreglo",arreglo[i]);
+        if(arreglo[i].toLowerCase().indexOf("csrftoken=")===0)
+        {
+          csrfcookie=arreglo[i].substring(arreglo[i].indexOf("=")+1);
+        }
+        else
+        {
+          if(arreglo[i].toLowerCase().indexOf("sessionid=")===0)
+          {
+            sessionid =arreglo[i].substring(arreglo[i].indexOf("=")+1);
+          }
+        }
+      }
+
+      //Consultar si las variables, estan vacias o undefined
+      if(!csrfcookie)
+      {
+        //Es vacia o undefined...
+        console.log("Devuelve Soctet!!!")
+      }
+
+    }
+else
+{
+  console.log("Devuelve Soctet!!!")
+}
+
+ var values = querystring.stringify({
+            //id: data.id,
+            pregunta:data.pregunta,
+            opc1:data.opc1Id,
+            opc2:data.opc2Id,
+            img1:data.fileOpc1,
+            img2:data.fileOpc2,
+            sessionid: sessionid,
+
+
+        });
+
+var cookieString='csrftoken='+csrfcookie+' , sessionid='+sessionid;
+
+var cookie = request.cookie(cookieString);
+var options = {
+
+        url:'http://127.0.0.1:8000/post_versus/',
+        headers: {
+        'X-CSRFToken': csrfcookie,
+      //'csrftoken=' + arreglo[2].split('csrftoken=')[1]
+        'Cookie':  'csrftoken=' +csrfcookie ,
+        //'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Length': values.length,
+        'processData': false, // Don't process the files
+        'contentType': false, // 
+
+            },
+        method: 'POST',
+        body:values
+           
+          
+        };
+
+function callback(error, response, body) {
+    if (!error && response.statusCode == 200) {
+       // var info = JSON.parse(body);
+       // console.log(info.stargazers_count + " Stars");
+       // console.log(info.forks_count + " Forks");
+       
+       console.log(body);
+       socket.emit("update",body)
+
+
+    }
+    console.log("Error: "+error);
+   // console.log("respose : "+response);
+    console.log('body: '+body);
+}
+
+
+request(options,callback);
+
+});
+
 
 
 

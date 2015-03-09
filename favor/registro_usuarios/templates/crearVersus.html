@@ -7,7 +7,7 @@
 </head>
 <body>
 	<div>
-		<form>
+		<form enctype="multipart/form-data"> 
 
 			<div>
 				<label>  Pregunta :  </label>
@@ -15,21 +15,37 @@
 			</div> </br>
 			<div>
 				<label> Opcion 1 : </label>
-				<input type  ="text" name ="fopc1"  id ="search" > 
+				<input type  ="text" name ="fopc1"  class ="search"  id = "" value = ""> 
 			<!-- dentro del  parametro id debe de estar el id   del programa que es elegido  por defecto lo dejaremos en cero -->
-				<input type  ="file" name ="fImgOpc1"  id ="0" > 
+				<input type  ="file" name ="fImgOpc1"  id ="imgOpc1" > 
 			</div> </br>
 
 			<div>
 				<label> Opcion 2 :</label>
-				<input type  ="text" name ="fopc2"  id ="search2" > 
-				<input type  ="file" name ="fImgOpc2"  id ="0" > 
+				<input type  ="text" name ="fopc2"  class ="search2" id ="" > 
+				<input type  ="file" name ="fImgOpc2"  id ="imgOpc2" > 
 			</div>
 
 		</form>
+		<a  id  = "submit"href="#">Guardar</a>
+
+		<div>
+		
+		<div id = "resultados" style = "float:left;">
+			
+			<label> resultados</label>
+
+		</div>
+		</div>
+
+		<div>
+		
+		<div id = "resultadosPart2" style = "float:left; padding-left:20px;">
+
+			<label> resultados Parte 2</label>
 
 
-		<div id = "resultados">
+		</div>
 		</div>
 	</div>
 
@@ -37,5 +53,103 @@
 	  <script src="{% static "static/js/jquery-1.8.3.min.js"%}"></script>
 	  <script src="http://localhost:3000/socket.io/socket.io.js"></script>
 	  <script src="{% static "static/js/index.js"%}"></script>
+
+	  <script>
+
+	  var socket = io.connect('http://127.0.0.1:3000');
+	 $("#submit").click(function(){
+	 	var opc1Id , opc2Id , pregunta, imgopc1,imgopc2;
+	 	pregunta = $("#fpregunta").val();
+	 	opc1Id = $(".search").prop("id");
+	 	opc2Id = $(".search2").prop("id"); 
+
+	 	var file1 = $("#imgOpc1")[0].files[0];
+	 	var fileName = file1.name;
+        //obtenemos la extensión del archivo
+        fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1);
+        //obtenemos el tamaño del archivo
+        var fileSize = file1.size;
+        //obtenemos el tipo de archivo image/png ejemplo
+        var fileType = file1.type;
+
+	 	console.log(fileName + " " + fileExtension+ " " +fileSize+" "+fileType)
+
+	 	var file2 = $("#imgOpc2")[0].files[0];
+
+	 	console.log(pregunta +" "+ " "+ opc1Id+" "+ " "+opc2Id+" "+ file1 +""+ file2);
+		data = new FormData();
+		data.append('file1', file1);
+		data.append('file2', file2);
+		data.append('pregunta', pregunta);
+		data.append('opc1Id', opc1Id);
+		data.append('opc2Id', opc2Id);
+
+
+        $.ajax({
+                data: data,
+                url:"/post_versus/",
+                type: "post",
+				processData: false,  // tell jQuery not to process the data
+  				contentType: false, 
+            });
+
+	 });
+
+
+
+          // This function gets cookie with a given name
+            function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie != '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = jQuery.trim(cookies[i]);
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+
+            var csrftoken = getCookie('csrftoken');
+            /*
+            The functions below will create a header with csrftoken
+            */
+
+            function csrfSafeMethod(method) {
+                // these HTTP methods do not require CSRF protection
+                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+            }
+
+            function sameOrigin(url) {
+                // test that a given url is a same-origin URL
+                // url could be relative or scheme relative or absolute
+                var host = document.location.host; // host + port
+                var protocol = document.location.protocol;
+                var sr_origin = '//' + host;
+                var origin = protocol + sr_origin;
+                // Allow absolute or scheme relative URLs to same origin
+                return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+                    (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+                    // or any other URL that isn't scheme relative or absolute i.e relative.
+                    !(/^(\/\/|http:|https:).*/.test(url));
+            }
+
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
+                        // Send the token to same-origin, relative URLs only.
+                        // Send the token only if the method warrants CSRF protection
+                        // Using the CSRFToken value acquired earlier
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    }
+                }
+            });
+	  </script>
+
 </body>
 </html>
