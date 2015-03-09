@@ -13,6 +13,10 @@ urlpatterns = patterns('',
     # url(r'^$', 'favor.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
     #url(r'^$', 'registro_usuarios.views.home', name='home'),
+    ##Voting
+    url(r'^votos/$', 'votos.views.home', name='home'),
+    url(r'^votos/elegir$', 'votos.views.votar', name='votar'),
+    ##Fin voting
     url(r'^$', 'registro_usuarios.views.home', name='home'),
     url(r'^login/$', 'registro_usuarios.views.iniciarSesion', name='login'),
     url(r'^principal/$', 'registro_usuarios.views.principal', name='principal'),

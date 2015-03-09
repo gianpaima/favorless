@@ -43,7 +43,7 @@ INSTALLED_APPS = (
     'votos',
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE_CLASSES = ( 
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -72,10 +72,12 @@ DATABASES = {
     'mongodb':{
         'ENGINE': 'django_mongodb_engine',
         'NAME': 'votofls',#os.path.join(BASE_DIR, 'db.sqlite3'),
-        'HOST': 'localhost',
-        'PORT': 27017,
+        'HOST': '127.0.0.1',
+        'PORT': '27017',
     }
 }
+
+
 
 DATABASE_ROUTERS = [ 'votos.routers.RoutersDataBase',]
 # Internationalization

@@ -103,9 +103,6 @@ def configuracionGeneral(request):
 
 @login_required(login_url='/login')
 def configuracionPassword(request):
-    print "usuario: "
-    print request.user
-    print "FIn usuario"
     #Se debe de agregar la validacion, si el usuario, esta supendido
     if request.method == 'POST':
         error = ""
