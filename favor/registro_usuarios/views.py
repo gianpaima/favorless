@@ -16,6 +16,8 @@ import json
 from django.contrib.sessions.models import Session
 from PIL import Image
 
+from django.db.models import Q
+
 def home(request):
     template='inicio.html'
     form_registrar_usuario = FormRegistrarUsuario()
@@ -384,13 +386,26 @@ def pruebarealtime (request):
 
 def buscarPrograma(request):
     buscar = request.REQUEST.get('search',)
-    
     if buscar:
         programa = Programa.objects.filter(nombre__icontains=buscar).values('id', 'nombre','logo')
+        integrante = Integrante.objects.filter(Q(nombres__icontains=buscar) | Q(apellido_paterno__icontains=buscar) | Q(apellido_materno__icontains=buscar) ).values('id', 'nombres','apellido_paterno','apellido_materno','foto_a','programa')
         #values_list
-        print programa 
-        return HttpResponse(json.dumps(list(programa)), content_type="application/json")
-    return HttpResponse("")
+        total= []
+        if programa and integrante:
+            total = list(programa)
+            total.extend(list(integrante))
+        else:
+            if programa:
+                total = list(programa)
+            if integrante:
+                total.extend(list(integrante))
+
+        print "TIPO" 
+        print programa
+        "###################"
+        print integrante
+        return HttpResponse(json.dumps(total), content_type="application/json")
+    return HttpResponse("nada por aqui")
 
 def versus(request):
     print "oh uh oh"
