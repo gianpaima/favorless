@@ -1,6 +1,7 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
+	 <meta charset="UTF-8">
 	<title> Crear Versus :) </title>
 
 	 {% load static from staticfiles %}
@@ -16,7 +17,14 @@
 			<div>
 				<label> Opcion 1 : </label>
 				<input type  ="text" name ="fopc1"  class ="search"  id = "" value = ""> 
-			<!-- dentro del  parametro id debe de estar el id   del programa que es elegido  por defecto lo dejaremos en cero -->
+			<!-- dentro del  parametro id debe de estar el id   del programa que es elegido  por defecto lo dejaremos en cero
+	Si es un programa...
+	Ejm: id ="codigo"
+	Si es un integrante
+	Ejem: id="codigo-codigoprograma"
+
+			 -->
+
 				<input type  ="file" name ="fImgOpc1"  id ="imgOpc1" > 
 			</div> </br>
 
@@ -27,8 +35,9 @@
 			</div>
 
 		</form>
-		<a  id  = "submit"href="#">Guardar</a>
-
+		<a  id  ="submit" href="#">Guardar</a>
+		<div id="respuesta">
+		</div>
 		<div>
 		
 		<div id = "resultados" style = "float:left;">
@@ -52,7 +61,7 @@
 
 	  <script src="{% static "static/js/jquery-1.8.3.min.js"%}"></script>
 	  <script src="http://localhost:3000/socket.io/socket.io.js"></script>
-	  <script src="{% static "static/js/index.js"%}"></script>
+	  <script src="{% static "static/js/indexVersus.js"%}"></script>
 
 	  <script>
 
@@ -90,8 +99,36 @@
                 url:"/post_versus/",
                 type: "post",
 				processData: false,  // tell jQuery not to process the data
-  				contentType: false, 
-            });
+  				contentType: false,
+
+            })
+        .done(function(data,textStatus)
+        {
+        	console.log("ID: "+opc1Id);
+        	if(data=="1")
+        	{
+        		$("#fpregunta").val('');
+        		$(".search").val('');
+        		$(".search2").val('');
+        		$(".search").prop('id','');
+        		$(".search2").prop('id','');
+        		$("#imgOpc1").val('');
+        		$("#imgOpc2").val('');
+        		$("#resultados").html('');
+        		$("#resultadosPart2").html('');
+        		$("#respuesta").html('Se guardo la pregunta correctamente');
+        		console.log("Se guardo la pregunta correctamente");
+        	}
+        	else
+        	{
+        		$("#respuesta").html('Hubo un error');
+        		console.log("Hubo un error");
+        	}
+        	
+        })
+        .fail(function(){
+        	alert("Ha ocurrido un error");
+        })
 
 	 });
 

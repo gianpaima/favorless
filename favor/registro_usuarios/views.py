@@ -14,7 +14,7 @@ from ValidarUsuarios import ValidarUsuario
 import json
 # Create your views here.
 from django.contrib.sessions.models import Session
-from PIL import Image
+
 
 from django.db.models import Q
 
@@ -141,11 +141,6 @@ def configuracionPassword(request):
         return render_to_response('configuracion.html',{'error':error},context_instance=RequestContext(request))
     else:
         return render_to_response('configuracion.html',context_instance=RequestContext(request))
-
-@login_required(login_url='/login')
-def principal(request):
-    template = "principal.html"
-    return render_to_response(template,context_instance=RequestContext(request))
 
 
 def validar(request):
@@ -400,100 +395,13 @@ def buscarPrograma(request):
             if integrante:
                 total.extend(list(integrante))
 
-        print "TIPO" 
-        print programa
-        "###################"
-        print integrante
+        #print "TIPO" 
+        #print programa
+        #"###################"
+        #print integrante
         return HttpResponse(json.dumps(total), content_type="application/json")
     return HttpResponse("nada por aqui")
 
-def versus(request):
-    print "oh uh oh"
-    if request.method == "GET":
-        print ("estoy en GET")
-        template = "crearVersus.html"
-        return render_to_response(template,context_instance=RequestContext(request))
-
-
-def uniimg(img1,img2):
-    #cargar las dos imagenes desde el directorio donde estoy ejecutando el Script
-    # Abrir  img  1 
-    im1 = Image.open(img1)
-    # Abir img 2 
-    im2 = Image.open(img2)
-    # crear una imagen de Fondo que  contiene las dos imagenes
-    salida  =  Image.new ("RGB", (640,480),(0,0,255)) # imagen de 640*480 de fondo blanco
-    # redimensionar cada imagenpng para que ocupe el lugar indicado
-    a = im1.resize((salida.size[0]/2 - 1, salida.size[1]))
-    b = im2.resize((salida.size[0]/2 - 1, salida.size[1]))
-    #Ahora copiar cada imagen a la imagen de salida
-    salida.paste(a,(0,0))
-    salida.paste(b,(a.size[0] + 2,0))
-    #salida.save("prueba.jpg", "JPEG")
-    return salida
-    #salida.save("salida2.jpg",optimize=True)
-
-def manjar_imagen_subida(i):
-    import StringIO
-    from PIL import Image,ImageOps
-    #import os
-    #Sfrom django.core.files import File
-    image_str = ""
-    for c in i.chunks():
-        print i.chunks()
-        image_str += c
-    imagenFile  = StringIO.StringIO(image_str)
-    image = Image.open(imagenFile)
-    return image
-
-def unirlas(a,b):
-    from PIL import Image
-    import os
-    from django.core.files import File
-    salida = Image.new ("RGB", (640,480),(0,0,255)) 
-    out1 = a.resize((salida.size[0]/2 - 1, salida.size[1]),Image.ANTIALIAS)
-    out2 = b.resize((salida.size[0]/2 - 1, salida.size[1]),Image.ANTIALIAS)
-    salida.paste(out1,(0,0))
-    salida.paste(out2,(out1.size[0] + 2,0))
-    #name = 
-    filename = "sandro3.jpg"
-    imagefile = open(os.path.join("/home/sandro/Escritorio/pruebasImagenesDj",filename), 'w')
-    salida.save(imagefile,"JPEG", quality=90)
-    imagefile = open(os.path.join("/home/sandro/Escritorio/pruebasImagenesDj",filename), 'r')
-    content = File(imagefile)
-    print "content"
-    print content
-    print "-------------------------------------"
-    return (salida,content)
-
-
-
-def post_versus(request):
-    if request.method == "POST":
-        print request
-        pregunta = request.POST.get('pregunta')
-        opc1 = request.POST.get('opc1Id')
-        opc2 = request.POST.get('opc2Id')
-        img1=manjar_imagen_subida(request.FILES['file1'])
-        img2= manjar_imagen_subida(request.FILES['file2'])
-        print "--------------"
-        print request.FILES
-        # print pregunta
-        # print opc1
-        print "img 1"
-        print img1
-        print "img 2"
-        print img2
-        #print img2
-        #fs=uniimg(img1,img2)
-        # print opc2
-        #im1 = Image.open(img1)
-        q = unirlas(img1,img2)
-        #print q 
-        print " salida q "
-        print " pregunta: %s  , idOpc: %s  , idOpc2 : %s " % (pregunta,opc1,opc2)
-        return HttpResponse("Look After You  oh uh oh")
-    # return HttpResponse("Look After You  oh uh oh")
 
 
 

@@ -1,9 +1,13 @@
+#from django_mongodb_engine.storage import GridFSStorage
+from django_mongodb_engine.fields import GridFSField
 
 from django.db import models
 #from django.contrib.contenttypes.models import ContentType
 #from djangotoolbox import *
 from djangotoolbox.fields import ListField, EmbeddedModelField,DictField
 from django_mongodb_engine.contrib import MongoDBManager
+
+
 
 #from mongoengine import *
 """
@@ -21,10 +25,17 @@ class MyAppModel(models.Model):
 class Question(models.Model):
 	#ListFields are very useful when used together with Embedded Models to store lists of sub-entities to model 1-to-n relationships:
 	#comments = ListField(EmbeddedModelField('Comment'))
+	objects = MongoDBManager()
+	usuario_creador =models.CharField(max_length=200)
 	asking = models.CharField(max_length=160)
 	fecha_ask = models.DateTimeField(auto_now=True)
+	versus = models.ImageField(upload_to='fusion/',blank=True,null=True)
 	participante = DictField()
 	usuariovotar = DictField()
+	#Para buscar....por usuario y (categoria,integrante,programa)
+	for_search_cip = models.CharField(max_length=200)
+	for_search_user= models.TextField()
+
 #participante debe ser formado:
 #{clave:valor}->{codigo:{opcion:numero,alias:username,estado:activo}}
 #estados_todos = (('Di', 'Disponible'), ('Br', 'Break'),('Ca', 'Cancelado'),)	
