@@ -1,39 +1,19 @@
-<!doctype html>
-<html lang="es">
-<head>
-	<meta charset="UTF-8">
-	<title>Favorless</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<!--Bootstrap -->
-	  {% load static from staticfiles %}
-	   <link href="{% static "static/css/bootstrap2.css"%}" rel="stylesheet">
-	<link rel="stylesheet" href="{% static "static/css/estilos.css"%}">
-    <script src="{% static  "static/js/respond.min.js"%}"></script>
-</head>
-<body>
+{% extends "base.html" %}
 
-<div class="container">
-	<header class="row">
-		<nav class="navbar navbar-default" role="navigation">
-		  <!-- B%}rand and toggle get grouped for better mobile display -->
-		  	<div class="col-lg-12">
-		  		<div class="navbar-header">
-		   		 <a class="navbar-brand" href="#"><img src="{% static "static/img/titulologo2.png"%}" alt=""></a>
-		    	</div>
-		  	</div>
-			
-		</nav>
-	</header>
+{% block title %}
+Favorless
+{% endblock %}
 
-	<div class="row">
-		<!--imagen-->
-		<div class="col-sm-7 col-md-7">
-			
-			<img  src="{% static "static/img/vs10.jpg"%}" alt="vs2" class="img-responsive img-principal-comparar">
-			
-		</div>
+{% block header %}
+	<a href="#" class="navbar-brand-centered"><img src="../static/static/img/titulologo.png" alt="favorless logo"></a>
+{% endblock %}
+
+{% block content %}
+	<!--imagen-->
+	<div class="col-sm-7 col-md-7">
+		<img  src="../static/static/img/vs10.jpg" alt="vs2" class="img-responsive img-principal-comparar">
+	</div>
  <!--Logueo -->
-
  <div class="col-sm-5 col-md-5">
  	<div class="row">
  		<div class="panel panel-default col-sm-12 col-md-12">
@@ -42,19 +22,18 @@
  	 	<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-2">
  	 	 	<span class="sr-only">Toggle navigation</span>
       		<span class="glyphicon glyphicon-registration-mark"></span>
-
     	</button>
     	<a class="navbar2-brand" href="#">Iniciar Sesión</a>
        <div class="collapse navbar-collapse navbar-collapse2" id="bs-example-navbar-collapse-2">
 	       	<div class="navbar-nav">
-	       	<div class="panel-heading"><h1><strong>Iniciar Sesión</strong><small>Credenciales</small></h1></div>	
+	       	<div class="panel-heading"><h1><strong>Iniciar Sesión</strong><small> Credenciales</small></h1></div>
 	 			<div class="panel-body">
 	 				<form method="post" action="login/" class="form-block" role="form">
 	 					{% csrf_token %}
 			  			{% include 'formularioIngresoSesion.html' %}
 					</form>
 	 			</div>
-			    	
+
 			</div>
 		</div>
 		</div>
@@ -63,7 +42,7 @@
  <!--Fin Logueo-->
 		<!--registro-->
 <div class="panel panel-default col-sm-12 col-md-12">
-<div class="navbar-default navbar-default2" role="navigation">		
+<div class="navbar-default navbar-default2" role="navigation">
  <div class="navbar-header">
  	 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
  	 	 <span class="sr-only">Toggle navigation</span>
@@ -73,8 +52,8 @@
      <a class="navbar2-brand" href="#">Registrate Please</a>
        <div class="collapse navbar-collapse navbar-collapse2" id="bs-example-navbar-collapse-1">
        	<div class="navbar-nav">
-		
-			<div class="panel-heading"><h1><strong>Regístrate</strong><small>Vota y elige lo mejor.</small></h1></div>
+
+			<div class="panel-heading"><h1><strong>Regístrate</strong><small> Vota y elige lo mejor.</small></h1></div>
   			<div class="panel-body">
     			<form action="signup/" method="post" class="form-horizontal" role="form">
     				{% csrf_token %}
@@ -82,47 +61,42 @@
 				</form>
   			</div>
   		<!--</div>//panel--></div>
-  	  </div>	
+  	  </div>
   </div>	</div><!--nav -->
   	</div>
-  </div>  </div></div>
+  </div>
+</div>
   			<!--Fin registro-->
 
  <div class="clearfix"></div>
   	<div class="row">
 		<!--Jumbotron-->
 		<div class="jumbotron col-sm-12 col-md-12 col-lg-12">
-		<div class="navbar-default navbar-default2" role="navigation">		
+		<div class="navbar-default navbar-default2" role="navigation">
 		<div class="navbar-header">
-	
+
 		 	 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-3">
 		 	 	 <span class="sr-only">Toggle navigation</span>
 		      <span class="glyphicon glyphicon glyphicon-comment"></span>
 
 		    </button>
-		   <a class="navbar2-brand" href="#">Descubreme</a> 
+		   <a class="navbar2-brand" href="#">Descubreme</a>
 		   		<div class="collapse navbar-collapse navbar-collapse2" id="bs-example-navbar-collapse-3">
        			<div class="navbar-nav">
-	       		 	
+
 					<h2>Descubre a FavorLess</h2>
 					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Natus, iusto, optio temporibus dolorem dignissimos autem aspernatur magni possimus fugit similique ipsa impedit adipisci sint quia dolorum voluptatem nulla maxime sed veniam recusandae harum animi laboriosam? Molestiae, at hic facilis remos. </p>
 				 </div>
 				</div>
 		</div>
-		</div>			 
+		</div>
 		</div>
 
 
 	</div>
+{% endblock %}
 
-	<footer class="row">
-		<p><small>Favorless © ® Inc. 2013</small></p>
-	</footer>
-
-</div>
-
-<!-- javascript -->
-	<script src="{% static "static/js/jquery-1.8.3.min.js"%}"></script>
-    <script src="{% static "static/js/bootstrap.min.js"%}"></script>	
-</body>
-</html>
+{% block footer %}
+<p>Favorless © Inc. 2015</p>
+<a href="#">Back to top</a>
+{% endblock %}
