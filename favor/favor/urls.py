@@ -16,10 +16,12 @@ urlpatterns = patterns('',
     ##Voting
     url(r'^votos/$', 'votos.views.home', name='home'),
     url(r'^votos/elegir$', 'votos.views.votar', name='votar'),
+    url(r'^versus/$', 'votos.views.versus', name='versus'),
+    url(r'^post_versus/$', 'votos.views.post_versus', name='post_versus'),
     ##Fin voting
     url(r'^$', 'registro_usuarios.views.home', name='home'),
     url(r'^login/$', 'registro_usuarios.views.iniciarSesion', name='login'),
-    url(r'^principal/$', 'registro_usuarios.views.principal', name='principal'),
+    url(r'^principal/$', 'votos.views.principal', name='principal'),
     url(r'^signup/$', 'registro_usuarios.views.registrarUsuario', name='signup'),
     url(r'^signup/validar/$', 'registro_usuarios.views.validar', name='validar'),
     url(r'^settings/$', 'registro_usuarios.views.configuracionGeneral', name='settings'),
@@ -31,8 +33,11 @@ urlpatterns = patterns('',
     url(r'^pruebarealtime/$', 'registro_usuarios.views.pruebarealtime', name='pruebarealtime'),
     url(r'^removepreference/$', 'registro_usuarios.views.removepreference', name='removepreference'),
     url(r'^search/$', 'registro_usuarios.views.buscarPrograma', name='search'),
+<<<<<<< HEAD
     url(r'^versus/$', 'votos.views.versus', name='versus'),
     url(r'^post_versus/$', 'votos.views.post_versus', name='post_versus'),
+=======
+>>>>>>> 045eb58743a21d701df80f39057464ae84101728
     # url(r'^test/$', 'registro_usuarios.views.test', name='test'),
    # url(r'^preferenciasajax/$', 'registro_usuarios.views.preferenciasajax', name='preferenciasajax'),
     url(r'^media/(?P<path>.*)$','django.views.static.serve',

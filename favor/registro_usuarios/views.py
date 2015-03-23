@@ -14,7 +14,9 @@ from ValidarUsuarios import ValidarUsuario
 import json
 # Create your views here.
 from django.contrib.sessions.models import Session
-from PIL import Image
+
+
+from django.db.models import Q
 
 def home(request):
     template='inicio.html'
@@ -139,11 +141,6 @@ def configuracionPassword(request):
         return render_to_response('configuracion.html',{'error':error},context_instance=RequestContext(request))
     else:
         return render_to_response('configuracion.html',context_instance=RequestContext(request))
-
-@login_required(login_url='/login')
-def principal(request):
-    template = "principal.html"
-    return render_to_response(template,context_instance=RequestContext(request))
 
 
 def validar(request):
@@ -384,10 +381,11 @@ def pruebarealtime (request):
 
 def buscarPrograma(request):
     buscar = request.REQUEST.get('search',)
-    
     if buscar:
         programa = Programa.objects.filter(nombre__icontains=buscar).values('id', 'nombre','logo')
+        integrante = Integrante.objects.filter(Q(nombres__icontains=buscar) | Q(apellido_paterno__icontains=buscar) | Q(apellido_materno__icontains=buscar) ).values('id', 'nombres','apellido_paterno','apellido_materno','foto_a','programa')
         #values_list
+<<<<<<< HEAD
         print programa 
         return HttpResponse(json.dumps(list(programa)), content_type="application/json")
     return HttpResponse("")
@@ -450,6 +448,25 @@ def post_versus(request):
         print " pregunta: %s  , idOpc: %s  , idOpc2 : %s " % (pregunta,opc1,opc2)
         return HttpResponse("Look After You  oh uh oh")
     # return HttpResponse("Look After You  oh uh oh")
+=======
+        total= []
+        if programa and integrante:
+            total = list(programa)
+            total.extend(list(integrante))
+        else:
+            if programa:
+                total = list(programa)
+            if integrante:
+                total.extend(list(integrante))
+
+        #print "TIPO" 
+        #print programa
+        #"###################"
+        #print integrante
+        return HttpResponse(json.dumps(total), content_type="application/json")
+    return HttpResponse("nada por aqui")
+
+>>>>>>> 045eb58743a21d701df80f39057464ae84101728
 
 
 

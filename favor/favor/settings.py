@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'djangotoolbox',
     'registro_usuarios',
     'votos',
+    'django_extensions',
 )
 
 MIDDLEWARE_CLASSES = ( 
@@ -99,9 +100,9 @@ USE_TZ = True
 
 MEDIA_URL = '/media/'
 im = os.sep.join(os.path.abspath(__file__).split(os.sep)[:-2] + ['registro_usuarios'])
-
 TEMPLATE_DIRS = (
     os.path.join(im,'templates'),
+    
 )
 STATIC_URL = '/static/'
 STATICFILES_FINDERS = (
