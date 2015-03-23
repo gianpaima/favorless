@@ -4,9 +4,10 @@ $(document).ready(function(){
 
 //KeyUp, onblur y click
 var buscar = $('#search');
+var busca2 = $('#search2')
 
 buscar.keyup(enviar_data);
-
+buscar2.keyup(enviar_data);
 
 function enviar_data()
 {

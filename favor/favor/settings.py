@@ -38,11 +38,13 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'djangotoolbox',
     'registro_usuarios',
     'votos',
+    'django_extensions',
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE_CLASSES = ( 
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -67,9 +69,18 @@ DATABASES = {
         'PASSWORD': 'postgres',
         'HOST': '127.0.0.1',# Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
         'PORT': '5432',
+    },
+    'mongodb':{
+        'ENGINE': 'django_mongodb_engine',
+        'NAME': 'votofls',#os.path.join(BASE_DIR, 'db.sqlite3'),
+        'HOST': '127.0.0.1',
+        'PORT': '27017',
     }
 }
 
+
+
+DATABASE_ROUTERS = [ 'votos.routers.RoutersDataBase',]
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
@@ -89,9 +100,9 @@ USE_TZ = True
 
 MEDIA_URL = '/media/'
 im = os.sep.join(os.path.abspath(__file__).split(os.sep)[:-2] + ['registro_usuarios'])
-
 TEMPLATE_DIRS = (
     os.path.join(im,'templates'),
+    
 )
 STATIC_URL = '/static/'
 STATICFILES_FINDERS = (

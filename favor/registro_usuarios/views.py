@@ -13,9 +13,10 @@ from models import *
 from ValidarUsuarios import ValidarUsuario
 import json
 # Create your views here.
-
 from django.contrib.sessions.models import Session
 
+
+from django.db.models import Q
 
 def home(request):
     template='inicio.html'
@@ -142,16 +143,12 @@ def configuracionPassword(request):
         return render_to_response('configuracion.html',context_instance=RequestContext(request))
 
 
-def principal(request):
-    template = "principal.html"
-    return render_to_response(template,context_instance=RequestContext(request))
-
-
 def validar(request):
     data = request.REQUEST.get("tipo","").strip()
   #  print request.REQUEST.get("objetos")
    # datas = serializers.serialize('json', request.REQUEST.items())
     #print datas
+
     if data!="validarTodos":
         if data == "validarEmail":
             obj = request.REQUEST.get("objetos[email]",'')
@@ -366,10 +363,6 @@ def pruebaNode (request):
     return render_to_response(template,context_instance=RequestContext(request))
 
 
-
-from django.views.decorators.csrf import csrf_exempt
-from django.contrib.sessions.models import Session
-
 def pruebarealtime (request):
     print request.session
     print   "------------------"
@@ -390,8 +383,50 @@ def buscarPrograma(request):
     buscar = request.REQUEST.get('search',)
     if buscar:
         programa = Programa.objects.filter(nombre__icontains=buscar).values('id', 'nombre','logo')
+        integrante = Integrante.objects.filter(Q(nombres__icontains=buscar) | Q(apellido_paterno__icontains=buscar) | Q(apellido_materno__icontains=buscar) ).values('id', 'nombres','apellido_paterno','apellido_materno','foto_a','programa')
         #values_list
-        print programa 
-        return HttpResponse(json.dumps(list(programa)), content_type="application/json")
-    return HttpResponse("")
+        total= []
+        if programa and integrante:
+            total = list(programa)
+            total.extend(list(integrante))
+        else:
+            if programa:
+                total = list(programa)
+            if integrante:
+                total.extend(list(integrante))
+
+        #print "TIPO" 
+        #print programa
+        #"###################"
+        #print integrante
+        return HttpResponse(json.dumps(total), content_type="application/json")
+    return HttpResponse("nada por aqui")
+
+
+
+
+    #     print "Estoy en POST"
+    #     # print request
+
+    #     pregunta = request.POST.get("fpregunta")
+    #     print pregunta
+    #     id_op1 = request.POST.get("id")
+    #     print id_op1
+    #     id_op2  = request.POST.get("fopc2")
+    #     print id_op2
+    #     return HttpResponseRedirect("/versus")
+
+    # else:
+    #     return HttpResponse ("NO puedes Hacer nothing")
+
+
+    
+        
+
+
+# def test(request):
+#     print "POR FINNNNNNNn!!!!!"
+#     print "xD"
+#     print request.POST.get('word')
+#     return HttpResponse("Kalena (L)")
 
