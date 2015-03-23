@@ -418,38 +418,7 @@ def uniimg(img1,img2):
     return salida
     #salida.save("salida2.jpg",optimize=True)
 
-def manjar_imagen_subida(i):
-    import StringIO
-    from PIL import Image,ImageOps
-    #import os
-    #Sfrom django.core.files import File
-    image_str = ""
-    for c in i.chunks():
-        print i.chunks()
-        image_str += c
-    imagenFile  = StringIO.StringIO(image_str)
-    image = Image.open(imagenFile)
-    return image
 
-def unirlas(a,b):
-    from PIL import Image
-    import os
-    from django.core.files import File
-    salida = Image.new ("RGB", (640,480),(0,0,255)) 
-    out1 = a.resize((salida.size[0]/2 - 1, salida.size[1]),Image.ANTIALIAS)
-    out2 = b.resize((salida.size[0]/2 - 1, salida.size[1]),Image.ANTIALIAS)
-    salida.paste(out1,(0,0))
-    salida.paste(out2,(out1.size[0] + 2,0))
-    #name = 
-    filename = "sandro3.jpg"
-    imagefile = open(os.path.join("/home/sandro/Escritorio/pruebasImagenesDj",filename), 'w')
-    salida.save(imagefile,"JPEG", quality=90)
-    imagefile = open(os.path.join("/home/sandro/Escritorio/pruebasImagenesDj",filename), 'r')
-    content = File(imagefile)
-    print "content"
-    print content
-    print "-------------------------------------"
-    return (salida,content)
 
 
 
@@ -474,6 +443,8 @@ def post_versus(request):
         # print opc2
         #im1 = Image.open(img1)
         q = unirlas(img1,img2)
+
+        
         #print q 
         print " salida q "
         print " pregunta: %s  , idOpc: %s  , idOpc2 : %s " % (pregunta,opc1,opc2)
