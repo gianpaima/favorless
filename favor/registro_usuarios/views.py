@@ -33,7 +33,6 @@ def iniciarSesion(request):
                 email = iniciar_sesion.cleaned_data['iniciar_input_email']
                 clave = iniciar_sesion.cleaned_data['iniciar_input_password']
                 acceso = authenticate(username=email,password=clave)
-
                 if acceso is not None:
                     if acceso.is_active:
                         login(request,acceso)
@@ -111,7 +110,6 @@ def configuracionPassword(request):
         before = request.POST.get('u_input_pass_before','')
         now = request.POST.get('u_input_pass_now', '')
         again = request.POST.get('u_input_pass_again', '')
-
         if ValidarUsuario().passwordZero(before) and ValidarUsuario().passwordFirst(now) and ValidarUsuario().passwordSecond(now,again):
             try:
                 if request.user.check_password(before):
@@ -145,16 +143,10 @@ def configuracionPassword(request):
 
 def validar(request):
     data = request.REQUEST.get("tipo","").strip()
-  #  print request.REQUEST.get("objetos")
-   # datas = serializers.serialize('json', request.REQUEST.items())
-    #print datas
-
     if data!="validarTodos":
         if data == "validarEmail":
             obj = request.REQUEST.get("objetos[email]",'')
             datos= ValidarUsuario().validarEmail(obj)
-            #data = serializers.serialize('json',ValidarUsuario().validarEmail(obj))
-            #Retornar de forma ajax, en el
             d = json.dumps(datos)
             return HttpResponse(d, content_type='application/json')
             #return HttpResponse(datos)
@@ -175,13 +167,6 @@ def validar(request):
             pass
     else:
         print "hola"
-    #js= serializers.serialize('json',data)
-    """ds=json.dumps(data)
-    print "dataPost"
-    print data['tipo']
-    print "json"
-    print ds
-    """
     #data= serializers.serialize('json',request);
     #url-> Validar
     #Data->Primera Parte:email or username or password or nombre
@@ -385,7 +370,6 @@ def buscarPrograma(request):
         programa = Programa.objects.filter(nombre__icontains=buscar).values('id', 'nombre','logo')
         integrante = Integrante.objects.filter(Q(nombres__icontains=buscar) | Q(apellido_paterno__icontains=buscar) | Q(apellido_materno__icontains=buscar) ).values('id', 'nombres','apellido_paterno','apellido_materno','foto_a','programa')
         #values_list
-<<<<<<< HEAD
         print programa 
         return HttpResponse(json.dumps(list(programa)), content_type="application/json")
     return HttpResponse("")
@@ -416,57 +400,6 @@ def uniimg(img1,img2):
     return salida
     #salida.save("salida2.jpg",optimize=True)
 
-
-
-
-
-def post_versus(request):
-    if request.method == "POST":
-        print request
-        pregunta = request.POST.get('pregunta')
-        opc1 = request.POST.get('opc1Id')
-        opc2 = request.POST.get('opc2Id')
-        img1=manjar_imagen_subida(request.FILES['file1'])
-        img2= manjar_imagen_subida(request.FILES['file2'])
-        print "--------------"
-        print request.FILES
-        # print pregunta
-        # print opc1
-        print "img 1"
-        print img1
-        print "img 2"
-        print img2
-        #print img2
-        #fs=uniimg(img1,img2)
-        # print opc2
-        #im1 = Image.open(img1)
-        q = unirlas(img1,img2)
-
-        
-        #print q 
-        print " salida q "
-        print " pregunta: %s  , idOpc: %s  , idOpc2 : %s " % (pregunta,opc1,opc2)
-        return HttpResponse("Look After You  oh uh oh")
-    # return HttpResponse("Look After You  oh uh oh")
-=======
-        total= []
-        if programa and integrante:
-            total = list(programa)
-            total.extend(list(integrante))
-        else:
-            if programa:
-                total = list(programa)
-            if integrante:
-                total.extend(list(integrante))
-
-        #print "TIPO" 
-        #print programa
-        #"###################"
-        #print integrante
-        return HttpResponse(json.dumps(total), content_type="application/json")
-    return HttpResponse("nada por aqui")
-
->>>>>>> 045eb58743a21d701df80f39057464ae84101728
 
 
 

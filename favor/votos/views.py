@@ -144,10 +144,6 @@ def votar(request):
         
     else:
 		return HttpResponse("Tomate un tiempo")
-<<<<<<< HEAD
-
-	
-=======
     #"""
 def fuente_user(request):
     if request.user.is_authenticated():
@@ -167,17 +163,13 @@ def fuente_user(request):
 
         return None
 
->>>>>>> 045eb58743a21d701df80f39057464ae84101728
+
 def buscarparticipante(diccionario,opcion_participante):
 	for i in diccionario.values():
 		if i.get('opcion') == opcion_participante:
 			return True
 	return False
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 045eb58743a21d701df80f39057464ae84101728
 def versus(request):
     print "oh uh oh"
     if request.method == "GET":
@@ -185,7 +177,7 @@ def versus(request):
         template = "crearVersus.html"
         return render_to_response(template,context_instance=RequestContext(request))
 
-<<<<<<< HEAD
+
 def post_versus(request):
     if request.method == "POST":
         print request
@@ -212,12 +204,6 @@ def post_versus(request):
         print " pregunta: %s  , idOpc: %s  , idOpc2 : %s " % (pregunta,opc1,opc2)
         return HttpResponse("Look After You  oh uh oh")
 
-
-
-=======
-
-
-
 def uniimg(img1,img2):
     #cargar las dos imagenes desde el directorio donde estoy ejecutando el Script
     # Abrir  img  1 
@@ -236,7 +222,6 @@ def uniimg(img1,img2):
     return salida
     #salida.save("salida2.jpg",optimize=True)
 
->>>>>>> 045eb58743a21d701df80f39057464ae84101728
 def manjar_imagen_subida(i):
     import StringIO
     from PIL import Image,ImageOps
@@ -249,8 +234,7 @@ def manjar_imagen_subida(i):
     imagenFile  = StringIO.StringIO(image_str)
     image = Image.open(imagenFile)
     return image
-<<<<<<< HEAD
-=======
+
 def fusion_imagen(img1,img2):
     #print img2
     #fs=uniimg(img1,img2)
@@ -264,7 +248,6 @@ def fusion_imagen(img1,img2):
         return None
         #print q
     return q
->>>>>>> 045eb58743a21d701df80f39057464ae84101728
 
 def unirlas(a,b):
     from PIL import Image
@@ -277,16 +260,6 @@ def unirlas(a,b):
     salida.paste(out2,(out1.size[0] + 2,0))
     #name = 
     filename = "sandro3.jpg"
-<<<<<<< HEAD
-    imagefile = open(os.path.join("/home/sandro/Escritorio/pruebasImagenesDj",filename), 'w')
-    salida.save(imagefile,"JPEG", quality=90)
-    imagefile = open(os.path.join("/home/sandro/Escritorio/pruebasImagenesDj",filename), 'r')
-    content = File(imagefile)
-    print "content"
-    print content
-    print "-------------------------------------"
-    return (salida,content)
-=======
     imagefile = open(os.path.join("/home/userstatic/Documents/Manuel/favorless/pruebasImagenesDj",filename), 'w')
     salida.save(imagefile,"JPEG", quality=90)
     imagefile = open(os.path.join("/home/userstatic/Documents/Manuel/favorless/pruebasImagenesDj",filename), 'r')
@@ -403,4 +376,3 @@ def get_or_none(model, **diccionario):
         print e
         raise
         return None
->>>>>>> 045eb58743a21d701df80f39057464ae84101728
