@@ -72,19 +72,35 @@
                 <section class="col-lg-4 col-sm-4 col-md-4 hidden-xs">
                     <article>
                         <div class="panel panel-default">
+                        {% if pagina.programa %}
                             <div class="panel-body">
 
                                 
-                                <h5 class="media-heading">Al fondo hay sitio</h5>
+                                <h5 class="media-heading">{{pagina.nombres}} {{pagina.apellido_paterno}} {{pagina.apellido_materno}}</h5>
                                 <img src="{% static "static/img/img2.png"%}" alt="..." class="img-rounded">
                             </div>
 
                             <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi, et?
                                 Lorem ipsum dolor sit amet.</span>
 
+                         <!--  <a href="#" id= "4" class="js-megusta btn btn-primary" role="button">
+                            <span>Me gusta</span>
+                            </a>
+                        -->
+                        {% else %}
+                              <div class="panel-body">
+
+                                
+                                <h5 class="media-heading">{{pagina.nombre}} </h5>
+                                <img src="{% static "static/img/img2.png"%}" alt="..." class="img-rounded">
+                            </div>
+
+                            <span>{{pagina.descripcion}}</span>
+
                            <a href="#" id= "4" class="js-megusta btn btn-primary" role="button">
                             <span>Me gusta</span>
                             </a>
+                        {% endif %}    
                         </div>
 
                 </section>

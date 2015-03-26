@@ -18,7 +18,9 @@ urlpatterns = patterns('',
     url(r'^votos/elegir$', 'votos.views.votar', name='votar'),
     url(r'^versus/$', 'votos.views.versus', name='versus'),
     url(r'^post_versus/$', 'votos.views.post_versus', name='post_versus'),
-    ##Fin voting
+    url(r'^pages/(?P<slug>[\w-]+)/$', 'votos.views.static_page'),
+    url(r'^search/results/$', 'votos.views.resultados'),
+    ##Fin voting  -?P<page_alias>.+? (?P<slug>[\w-]+)
     url(r'^$', 'registro_usuarios.views.home', name='home'),
     url(r'^login/$', 'registro_usuarios.views.iniciarSesion', name='login'),
     url(r'^principal/$', 'votos.views.principal', name='principal'),

@@ -21,6 +21,49 @@ from PIL import Image
 import operator
 from django.db.models import Q
 
+def buscarPrograma(buscar):
+    if buscar:
+        total= []
+        try:
+            programa = Programa.objects.filter(nombre__icontains=buscar).values('id', 'nombre','logo')
+            for ask in buscar.split():
+                integrante = Integrante.objects.filter(Q(nombres__icontains = ask) | Q(apellido_paterno__icontains = ask) | Q(apellido_materno__icontains=ask)).values('id', 'nombres','apellido_paterno','apellido_materno','foto_a','programa')
+
+            if programa and integrante:
+                total = list(programa)
+                total.extend(list(integrante))
+            else:
+                if programa:
+                    total = list(programa)
+                if integrante:
+                    total.extend(list(integrante))
+        except Exception, e:
+            print e
+            print "Error buscar Programa o Integrante"
+            total = None
+        print "esta acaaaa"
+        print total
+        return total
+    else:
+        return ""
+
+    return HttpResponse("")
+
+def resultados(request):
+    search = request.REQUEST.get('search')
+    pregunta = buscarPrograma(search)
+    print len(pregunta)
+    return  HttpResponse("KALENAT")
+
+
+def static_page(request,slug=''):
+    a= existe_entidad(slug.split("-",1))
+    template = "buscar.html"
+    if a:
+        print "Si hay"
+    else:
+        print "None"
+    return render_to_response(template,{'pagina':a},context_instance=RequestContext(request))
 #gridfs = GridFSStorage()
 #uploads = GridFSStorage(location='/uploads')
 @login_required(login_url='/login')
@@ -28,13 +71,12 @@ def principal(request):
     template = "principal.html"
     total = []
     lista = lista_preferencia(request.user.id)
-    "PRINCIPAL"
     if lista:
         #data.objects.filter(name__regex=r'(word1|word2|word3)')
         #You can do that using the regex search too, avoiding many Q expressions (which end up using that many where "and" clauses in the SQL, possibly dampening the performance), as follows:
         try:
             query = reduce(operator.or_, (Q(for_search_cip__contains = item) for item in lista ))
-            total = Question.objects.exclude(for_search_user__contains='-%s-' %(str(request.user.id))).filter(query)          
+            total = Question.objects.exclude(for_search_user__contains='-%s-' %(str(request.user.id))).filter(query)
         except Exception, e:
             print e
             total = None
@@ -42,7 +84,7 @@ def principal(request):
     elif lista == []:
         #total = Question.objects.values('usuariovotar').annotate(numero_pregunta=Count('usuariovotar')).order_by('-usuariovotar')
         try:
-            total = Question.objects.exclude(for_search_user__contains='-%s-' %(str(request.user.id))).order_by('-usuariovotar')    
+            total = Question.objects.exclude(for_search_user__contains='-%s-' %(str(request.user.id))).order_by('-usuariovotar')
         except Exception, e:
             total = None
         print len(total)
@@ -51,7 +93,31 @@ def principal(request):
     else:
         total = None
         print "Hubo un problema"
-    return render_to_response(template,{'total':total},context_instance=RequestContext(request))
+
+    try:
+        preferido = Preferencia.objects.filter(user=request.user.id,estado=True).values('programa__tipo_programa__id','id')
+        cuatro_preferencias=[]
+        gustar = []
+        for dato in preferido:
+            gustar.append(dato['id'])
+            if dato['programa__tipo_programa__id'] not in cuatro_preferencias:
+                cuatro_preferencias.append(dato['programa__tipo_programa__id'])
+        if cuatro_preferencias:
+            try:
+                cuatro_preferencias = Programa.objects.exclude(id__in=gustar).filter(tipo_programa__id__in=cuatro_preferencias).values('tipo_programa__id','nombre')[:4]
+            except Exception, e:
+                cuatro_preferencias = None
+        else:
+            try:
+                cuatro_preferencias = Programa.objects.all()[:4]
+            except Exception, e:
+                cuatro_preferencias = None   
+
+    except Exception, e:
+        print e        	
+        cuatro_preferencias = None
+
+    return render_to_response(template,{'total':total,'seguir':cuatro_preferencias},context_instance=RequestContext(request))
 
 def lista_preferencia(id):
     try:
@@ -69,16 +135,6 @@ def home(request):
     template='votos.html'
     return render_to_response(template,{},context_instance=RequestContext(request))
 
-
-##Codigos de las preguntas...
-#"_id" : ObjectId("55074270db01c441d1c51562")
-##Codigos de las participantes....
-#codigo:1
-#codigo:2
-##Posicion de las participantes...
-#numero:1
-#numero:2
-
 #Pasos a votar
 #1.Buscar id pregunta en Mongo
 #2.Insertar numero en la imagen
@@ -94,7 +150,7 @@ def votar(request):
         if usuario:
             print "Existe usuario"
             print usuario.id
-            
+
             try:
                 pr = Question.objects.get(pk=ObjectId(request.POST.get('question','')))
                 opcion = request.POST.get('opcion','')
@@ -104,9 +160,9 @@ def votar(request):
                             now = timezone.now()
                             pr.usuariovotar.update({ str(usuario.id) :{'voto':opcion,'fecha':now,'estado':'activo'}})
                             if pr.for_search_user:
-                                pr.for_search_user +=  str(usuario.id) + '-' 
+                                pr.for_search_user +=  str(usuario.id) + '-'
                             else:
-                                pr.for_search_user += '-'+  str(usuario.id)+'-' 
+                                pr.for_search_user += '-'+  str(usuario.id)+'-'
                             pr.save()
                             print 'Se creo el e-voting...'
                             return HttpResponse('1')
@@ -117,7 +173,7 @@ def votar(request):
                     else:
                         #update
                         opcion_antes = pr.usuariovotar.get(str(usuario.id)).get('voto')
-                        if opcion != opcion_antes :  
+                        if opcion != opcion_antes :
                             try:
                                 pr.usuariovotar.get(str(usuario.id))['voto']=opcion
                                 pr.save()
@@ -127,7 +183,7 @@ def votar(request):
                                 print e
                                 print "ERROR"
                                 print 'Hubo un error en la bd'
-                                return HttpResponse('0')   
+                                return HttpResponse('0')
                         #model.DoesNotExist, ValidationError,ValueError
                 else:
                     print 'No existe esa opcion'
@@ -141,7 +197,7 @@ def votar(request):
         else:
             print "Retornar usuario no auntentificado"
             return HttpResponse('0')
-        
+
     else:
 		return HttpResponse("Tomate un tiempo")
     #"""
@@ -156,11 +212,10 @@ def fuente_user(request):
                 user_id = session.get_decoded().get('_auth_user_id')
                 user = get_or_none(User,**{'id':user_id} )
                 print "Usuario--user"
-                return user  
+                return user
             except Exception,e:
                 print e
                 return None
-
         return None
 
 
@@ -177,38 +232,11 @@ def versus(request):
         template = "crearVersus.html"
         return render_to_response(template,context_instance=RequestContext(request))
 
-
-def post_versus(request):
-    if request.method == "POST":
-        print request
-        pregunta = request.POST.get('pregunta')
-        opc1 = request.POST.get('opc1Id')
-        opc2 = request.POST.get('opc2Id')
-        img1=manjar_imagen_subida(request.FILES['file1'])
-        img2= manjar_imagen_subida(request.FILES['file2'])
-        # print "--------------"
-        # print request.FILES
-        # # print pregunta
-        # # print opc1
-        # print "img 1"
-        # print img1
-        # print "img 2"
-        # print img2
-        #print img2
-        #fs=uniimg(img1,img2)
-        # print opc2
-        #im1 = Image.open(img1)
-        q = unirlas(img1,img2)
-        #print q 
-        print " salida q "
-        print " pregunta: %s  , idOpc: %s  , idOpc2 : %s " % (pregunta,opc1,opc2)
-        return HttpResponse("Look After You  oh uh oh")
-
 def uniimg(img1,img2):
     #cargar las dos imagenes desde el directorio donde estoy ejecutando el Script
-    # Abrir  img  1 
+    # Abrir  img  1
     im1 = Image.open(img1)
-    # Abir img 2 
+    # Abir img 2
     im2 = Image.open(img2)
     # crear una imagen de Fondo que  contiene las dos imagenes
     salida  =  Image.new ("RGB", (640,480),(0,0,255)) # imagen de 640*480 de fondo blanco
@@ -253,17 +281,17 @@ def unirlas(a,b):
     from PIL import Image
     import os
     from django.core.files import File
-    salida = Image.new ("RGB", (640,480),(0,0,255)) 
+    salida = Image.new ("RGB", (640,480),(0,0,255))
     out1 = a.resize((salida.size[0]/2 - 1, salida.size[1]),Image.ANTIALIAS)
     out2 = b.resize((salida.size[0]/2 - 1, salida.size[1]),Image.ANTIALIAS)
     salida.paste(out1,(0,0))
     salida.paste(out2,(out1.size[0] + 2,0))
-    #name = 
+    #name =
     filename = "sandro3.jpg"
     imagefile = open(os.path.join("/home/userstatic/Documents/Manuel/favorless/pruebasImagenesDj",filename), 'w')
     salida.save(imagefile,"JPEG", quality=90)
     imagefile = open(os.path.join("/home/userstatic/Documents/Manuel/favorless/pruebasImagenesDj",filename), 'r')
-       
+
   #  print "IMAGEN file:"
    # print imagefile
     content = File(imagefile)
@@ -347,14 +375,14 @@ def post_versus(request):
                     return HttpResponse("Hubo un error")
 
             else:
-                return HttpResponse("Hubo un error")     
+                return HttpResponse("Hubo un error")
         else:
-            return HttpResponse("Hubo un error")                
-        #print q 
+            return HttpResponse("Hubo un error")
+        #print q
         print " salida q "
         print " pregunta: %s  , idOpc: %s  , idOpc2 : %s " % (pregunta,opc1,opc2)
-        
-        
+
+
         return HttpResponse("Look After You  oh uh oh")
     else:
         return HttpResponse("DONT GET")
@@ -368,11 +396,12 @@ def lista_vacia(args):
     return True
 
 def get_or_none(model, **diccionario):
-    try: 
+    try:
         return model.objects.get(**diccionario)
     except model.DoesNotExist:
+        print "ERROR ENCONTRAR ENTIDAD"
         return None
     except Exception, e:
+        print "ERROR SERVER"
         print e
-        raise
         return None

@@ -1,4 +1,4 @@
-<!--Bootstrap -->
+<!--Bootstrap 
 {% load static from staticfiles %}
 <link href="{% static "static/css/bootstrap2.css"%}" rel="stylesheet">
 <link rel="stylesheet" href="{% static "static/css/estilos.css"%}">
@@ -8,13 +8,14 @@
     display: block;
 }
 </style>
+-->
 <div class="container">
-    <form role="form" action="." method="post" id="customForm">
+    <form role="form" action="/account/create/" method="post" id="customForm">
         {% csrf_token %}
         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="form-group col-lg-6 col-md-6 col-sm-6">
-              <!--  <input type="text" name="registro_input_nombre_completo" class="form-control" id="r_input_name_complete" placeholder="Nombre completo" maxlenght="20">-->
-                {{ form_registrar_usuario.registro_input_nombre_completo }}
+                <input type="text" name="registro_input_nombre_completo" class="form-control" id="r_input_name_complete" placeholder="Nombre completo" maxlenght="20">
+                <!--{{ form_registrar_usuario.registro_input_nombre_completo }}-->
             </div>
             <div class="span-group col-lg-6 col-md-6 col-sm-6">
 {% if  errorN %}
@@ -24,32 +25,26 @@
     {% else %}
        <span id="nameInfo" class="error">¡Se requiere un nombre!
         </span>
-    {% endif %}
-{% else %}
+{% endif %}
+{% elif defecto %}
       <span id="nameInfo">Ingresa tu nombre y apellido.
         </span>
 {% endif %}
+              
+              
+    
             </div>
         </div>
 
         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="form-group col-lg-6 col-md-6 col-sm-6">
-            <!--    <input type="email" class="form-control" name="registro_input_email" id="r_input_email" placeholder="Correo electronico"> -->
-                {{ form_registrar_usuario.registro_input_email }}
+                <input type="email" class="form-control" name="registro_input_email" id="r_input_email" placeholder="Correo electronico">
+                <!--{{ form_registrar_usuario.registro_input_email }}-->
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6">
 
-{% if  errorE %}
-  {%if errorE == '0' %}
-    <span id="emailInfo" class="success">Te enviaremos una confirmación por correo electrónico.</span>
-  {% elif errorE == '1' %}
-    <span id="emailInfo" class="error">Este email ya existe</span>
-
-  {% elif errorE == '3' %}
-    <span id="emailInfo" class="error">No parece ser un correo electrónico valido.</span>
-  {% else %}
-    <span id="emailInfo" class="error">Se requiere un email</span>
-  {% endif %}
+           {% if  errorE %}
+    <p>Welcome to the weekend!</p>
 {% else %}
      <span id="emailInfo">¿Cual es tu dirección de correo electrónico?</span>
 {% endif %}    
@@ -58,40 +53,34 @@
 
         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="form-group col-lg-6 col-md-6 col-sm-6">
-             <!--   <input type="password" class="form-control" name="registro_input_password" id="r_input_password" placeholder="Contraseña" value="{{password}}"> -->
-                {{ form_registrar_usuario.registro_input_password }}
+                <input type="password" class="form-control" name="registro_input_password" id="r_input_password" placeholder="Contraseña" value="{{password}}">
+                <!--{{ form_registrar_usuario.registro_input_password }}-->
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6">
    {% if  errorP %}
-     {% if errorP == '4' %}
-          <span id="pass1Info" class="error">La contraseña debe ser de al menos 6 caracteres.
+     {% if errorN == '0' %}
+         <span id="pass1Info" class="success">Bien Hecho!
         </span>
     {% else %}
-     <span id="pass1Info">6 caracteres o más! Sé ingenioso.
-                </span>
+       <span id="pass1Info" class="error">La contraseña debe ser de al menos 6 caracteres.
+        </span>
     {% endif %}
-{% else %}
+    {% else %}
       <span id="pass1Info">6 caracteres o más! Sé ingenioso.
                 </span>
-{% endif %}    
+    {% endif %}    
                
             </div>
         </div>
 
         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="form-group nombreUsuario col-lg-6 col-md-6 col-sm-6">
-             <!--   <input type="text" class="form-control" name="registro_input_usuario" id="r_input_usuario" placeholder="Nombre de Usuario"> -->
-                {{ form_registrar_usuario.registro_input_usuario }}
+                <input type="text" class="form-control" name="registro_input_usuario" id="r_input_usuario" placeholder="Nombre de Usuario">
+        <!--        {{ form_registrar_usuario.registro_input_usuario }}-->
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6">
 {% if  errorU %}
-    {%if errorU == '0' %}
-    <span id="userInfo" class="success">El nombre se ve genial.</span>
-  {% elif errorU == '1' %}
-    <span id="userInfo" class="error">¡Ese usuario ya existe!</span>
-  {% else %}
-    <span id="userInfo" class="error">¡Se requiere un nombre de usuario!</span>
-  {% endif %}
+    
 {% else %}
       <span id="userInfo">No te preocupes, puedes cambiarlo después.</span>
 {% endif %}           
@@ -100,7 +89,7 @@
 
         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="form-group col-lg-6 col-md-6 col-sm-6">
-                <button type="button" id="registrar" class="btn btn-primary">Regístrate</button>
+                <button type="submit" id="registrar" class="btn btn-primary">Regístrate</button>
             </div>
         </div>
     </form>

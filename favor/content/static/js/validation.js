@@ -1,4 +1,4 @@
-$(document).ready(function(){
+﻿$(document).ready(function(){
     //global vars
 
     var form = $("#customForm");
@@ -24,16 +24,20 @@ $(document).ready(function(){
 
     $('#registrar').click(function()
     {
+        alert("jajajaja");
         
           if(arreglo[name.prop('id')] && arreglo[email.prop('id')] &&
            arreglo[pass1.prop('id')] &&arreglo[username.prop('id')])
         {
             console.log("Submit:"+form.submit())
+            alert("ENVIAR")
             $('form').submit();
+
            // return true;
         }
         else
         {
+            alert("falseee")
             validateEmail();
             validateName();
             validatePass1();
