@@ -1,0 +1,216 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Favorless</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static from staticfiles %}
+    <link href="{% static "static/css/bootstrap2.css"%}" rel="stylesheet">
+    <link href="{% static "static/css/estilos.css"%}" rel="stylesheet">
+    <script src="{% static "static/js/respond.min.js"%}"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav class="navbar navbar-default navbar-static-top">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                    <div>
+                        <a href="#" class="navbar-brand-centered"><img src="{% static "static/img/titulologo.png"%}" alt="favorless logo"></a>
+                    </div>
+                </div>
+
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <form method="get" action="/search/results/" class="navbar-form" role="search">
+                            <div id="the-basics" class="input-group col-lg-3 col-md-3 col-sm-3">
+                                <input type="text" class="form-control typeahead" placeholder="Buscar..." id="search" name="q">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="submit">
+                                        <span class="glyphicon glyphicon-search"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </form>
+                    </ul>
+                </div>
+<div id = "resultadoss">
+
+</div>     
+            </nav>
+        </header>
+
+        <div class="row">
+            <section class="col-lg-6 col-sm-6 col-md-6 col-lg-offset-3">
+                <div class="panel panel-default">
+                        <div class="panel-heading"> Resultados para tu búsqueda</div>
+                        <div class="panel-body">
+                            <ul class="media-list">
+                            {% if total != None and total != ""  %}
+                                {% for t in total %}
+
+                                    {% if t.programa %}
+
+                                        <li class="media">
+                                            <a class="pull-left" href='/pages/{{t.programa}}'>
+                                                <img class="media-object" src="{% static "static/img/userseguir.png"%}" alt="Usuario">
+                                            </a>
+                                            <div class="media-body">
+                                                <h5 class="media-heading">{{t.programa__nombre}}</h5>
+                                                <button id="{{t.programa}}" type="button" class="js-no-megusta btn btn-danger btn-xs">
+                                                    <span class="glyphicon glyphicon-chevron-right"></span> Ya no me gusta
+                                                </button>
+                                            </div>
+                                        </li>
+
+                                        <hr>
+                                    {% elif t.tipo_programa %}
+                                           <li class="media">
+                                            <a class="pull-left" href="/pages/{{t.id}}">
+                                                <img class="media-object" src="{% static "static/img/userseguir.png"%}" alt="Usuario">
+                                            </a>
+                                            <div class="media-body">
+                                                <h5 class="media-heading">{{t.nombre}}</h5>
+                                                <button id="{{t.id}}" type="button" class="js-megusta btn btn-primary btn-xs">
+                                                    <span class="glyphicon glyphicon-chevron-right"></span> Me gusta
+                                                </button>
+                                            </div>
+                                        </li>
+
+                                        <hr>
+                                    {%  else %}
+                                         <li class="media">
+                                            <a class="pull-left" href="/pages/{{t.programa_p}}">
+                                                <img class="media-object" src="{% static "static/img/userseguir.png"%}" alt="Usuario">
+                                            </a>
+                                            <div class="media-body">
+                                                <h5 class="media-heading">{{t.nombres}} {{t.apellido_paterno}} {{t.apellido_materno}}</h5>
+                                            <!--    <button type="button" class="btn btn-danger btn-xs">
+                                                    <span class="glyphicon glyphicon-chevron-right"></span> Seguir
+                                                </button>-->
+                                            </div>
+                                        </li>
+
+                                        <hr>
+                                    {% endif %}
+                                {% empty %}
+                                    <li>No se han encontrado resultados para tu búsqueda.
+                                                Comprueba que el término de búsqueda no contiene errores o busca otro término.</li>
+                                {% endfor %}
+                            {% elif total == None %}
+                                <p>Ha habido un problema...vuelva a interntarlo posteriormente</p>
+                            {% else %}
+                                <p>Escribe una consulta en el cuadro anterior.</p>
+                            {% endif %}     
+                            </ul>
+                        </div>
+                    </div>
+
+                </section>
+        </div>
+
+    </div>
+
+
+
+    <!-- javascript -->
+    <script src="{% static "static/js/jquery-1.8.3.min.js"%}"></script>
+    <script src="{% static "static/js/bootstrap.min.js"%}"></script>
+    <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+    <script src="{% static "static/js/socket/index.js"%}"></script>
+    <script src="{% static "static/js/typeahead.jquery.min.js"%}"></script>
+
+    <script>
+
+
+        var socket = io('http://127.0.0.1:3000');
+        socket.on('connected', function () {
+              console.log('Conectado!');
+              
+            });
+
+
+       $(".panel-default").on("click",".js-megusta",
+
+        function()
+         {  
+            var bot  =   $(this);
+            //alert(bot.prop('id'))
+            //console.log("bot: ",$(this));
+            socket.emit('addPre',{ id : bot.prop("id") });
+            });
+
+
+
+       $(".panel-default").on("click",".js-no-megusta",
+
+        function()
+         {  
+             var bot  = $(this);
+            socket.emit('removePre',{ id : bot.prop("id") });
+        });
+
+
+
+
+       socket.on('update',function(data){
+
+            if(data[0]=="add")
+            {
+                console.log("ADD...")
+                 switch  (data[2]) {
+                    case "0":
+                        $('#alerta').html("error")
+                        break;
+                    case "1":
+                        $('#'+data[1]).removeClass( "js-megusta btn btn-primary" ).addClass("js-no-megusta btn btn-danger");
+                        var no_gusta = "No me Gusta";
+                        $('#'+data[1]).text(no_gusta);
+                        $('#alerta').html("")
+                        break;
+                    case "2":
+                        $('#alerta').html("no existes")
+                        break;
+                    case "3":
+                        $('#alerta').html("error de SERVER")
+                        break;
+                    default:
+                        $('#alerta').html("error")
+                        
+                    }
+            }
+            else
+            {
+                if(data[0]=="rv")
+                {
+                    console.log("rvvv...");
+                     switch  (data[2]) {
+                    case "0":
+                        $('#alerta').html("error")
+                        break;
+                    case "1":
+                        $('#'+data[1]).removeClass( "js-no-megusta btn btn-danger" ).addClass("js-megusta btn btn-primary");
+                        var gusta = " me Gusta";
+                        $('#'+data[1]).text(gusta);
+                        $('#alerta').html("")
+                        break;
+                    case "2":
+                        $('#alerta').html("no existes")
+                        break;
+                    case "3":
+                        $('#alerta').html("error de SERVER")
+                        break;
+                    default:
+                        $('#alerta').html("error")
+                        
+                    }
+                }
+            }
+
+                });
+
+        </script>
+</body>
+</html>
