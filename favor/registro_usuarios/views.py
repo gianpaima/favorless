@@ -385,7 +385,7 @@ def buscarPrograma(request):
         programa = Programa.objects.filter(nombre__icontains=buscar).values('id', 'nombre','logo')
         integrante = Integrante.objects.filter(Q(nombres__icontains=buscar) | Q(apellido_paterno__icontains=buscar) | Q(apellido_materno__icontains=buscar) ).values('id', 'nombres','apellido_paterno','apellido_materno','foto_a','programa')
         #values_list
-<<<<<<< HEAD
+
         print programa 
         return HttpResponse(json.dumps(list(programa)), content_type="application/json")
     return HttpResponse("")
@@ -448,7 +448,7 @@ def post_versus(request):
         print " pregunta: %s  , idOpc: %s  , idOpc2 : %s " % (pregunta,opc1,opc2)
         return HttpResponse("Look After You  oh uh oh")
     # return HttpResponse("Look After You  oh uh oh")
-=======
+
         total= []
         if programa and integrante:
             total = list(programa)
@@ -466,7 +466,7 @@ def post_versus(request):
         return HttpResponse(json.dumps(total), content_type="application/json")
     return HttpResponse("nada por aqui")
 
->>>>>>> 045eb58743a21d701df80f39057464ae84101728
+
 
 
 
