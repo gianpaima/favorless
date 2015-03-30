@@ -21,14 +21,16 @@ from PIL import Image
 import operator
 from django.db.models import Q
 
-def buscarPrograma(buscar):
+def buscarPrograma(buscar,preferencia):
     if buscar:
         total= []
         try:
-            programa = Programa.objects.filter(nombre__icontains=buscar).values('id', 'nombre','logo')
+            if preferencia:
+                programa = Programa.objects.filter(Q(nombre__icontains=buscar) | Q(nombre_abreviado__icontains=buscar)).exclude(id__in=preferencia).values('id', 'nombre','logo','tipo_programa')
+            else:
+                programa = Programa.objects.filter(Q(nombre__icontains=buscar) | Q(nombre_abreviado__icontains=buscar)).values('id', 'nombre','logo','tipo_programa')
             for ask in buscar.split():
-                integrante = Integrante.objects.filter(Q(nombres__icontains = ask) | Q(apellido_paterno__icontains = ask) | Q(apellido_materno__icontains=ask)).values('id', 'nombres','apellido_paterno','apellido_materno','foto_a','programa')
-
+                integrante = Integrante.objects.filter(Q(nombres__icontains = ask) | Q(apellido_paterno__icontains = ask) | Q(apellido_materno__icontains=ask)).values('id', 'nombres','apellido_paterno','apellido_materno','foto_a','programa_p')
             if programa and integrante:
                 total = list(programa)
                 total.extend(list(integrante))
@@ -41,8 +43,6 @@ def buscarPrograma(buscar):
             print e
             print "Error buscar Programa o Integrante"
             total = None
-        print "esta acaaaa"
-        print total
         return total
     else:
         return ""
@@ -50,20 +50,77 @@ def buscarPrograma(buscar):
     return HttpResponse("")
 
 def resultados(request):
-    search = request.REQUEST.get('search')
-    pregunta = buscarPrograma(search)
-    print len(pregunta)
-    return  HttpResponse("KALENAT")
+    search = request.REQUEST.get('q','').strip()
+    lista=[]
+    if search!= "":
+        try:
+            prefer = Preferencia.objects.filter(Q(user=request.user.id),Q(estado=True),(Q(programa__nombre__icontains=search) | Q(programa__nombre_abreviado__icontains=search))).values('id','slug','programa__nombre','programa',)
+            if prefer:
+                lista=lista_id_preferencia(prefer)
+        except Exception, e:
+            print e
+            lista = None 
+        if lista != None:
+            total = buscarPrograma(search,lista)
+            lista = list(prefer)
+            if total!= None and total != []:
+                lista.extend(total)
 
+        else:
+            print "KILL retornar, vuelva a intentarlo otro dia"
+    else:
+        lista =""
+    print "listita"
+    print lista
+    #print "LISTA CON PREFERENCIA o SIN preferencia"
+    template ="buscarprogramas.html"
+    return render_to_response(template,{'total':lista},context_instance=RequestContext(request))
+
+def lista_id_preferencia(preferencia):
+    lista = []
+    #print preferencia
+    for p in preferencia:
+        lista.append(p.get('programa'))
+        #lista.append(str(p.programa))
+    #print lista
+    return lista
 
 def static_page(request,slug=''):
     a= existe_entidad(slug.split("-",1))
     template = "buscar.html"
+    pre = None
+    cip = None
     if a:
-        print "Si hay"
+        if not hasattr(a, 'programa_p'):
+            #Programa
+            try:
+                pre = Preferencia.objects.only('slug').get(user=request.user.id,programa=a.id,estado=True)
+            except Exception, e:
+                pre = None
+                print e
+            try:
+                cip='-cat-'+str(a.tipo_programa.id)+'-pro-'+str(a.id)
+            except Exception, e:
+                print e
+                cip=None
+        else:
+            #Integrante
+            try:
+                cip = '-cat-'+str(a.programa_p.tipo_programa.id)+'-pro-'+str(a.programa_p.id)
+            except Exception, e:
+                print "Error"
+                cip = None
+        if cip:
+            try:
+                cip = Question.objects.exclude(for_search_user__contains='-%s-' %(str(request.user.id))).filter(for_search_cip__icontains=cip)
+            except Exception, e:
+                print e
+                print "Error"
+                cip =None
+
     else:
         print "None"
-    return render_to_response(template,{'pagina':a},context_instance=RequestContext(request))
+    return render_to_response(template,{'pagina':a,'gustar':pre,'total':cip},context_instance=RequestContext(request))
 #gridfs = GridFSStorage()
 #uploads = GridFSStorage(location='/uploads')
 @login_required(login_url='/login')
@@ -80,7 +137,6 @@ def principal(request):
         except Exception, e:
             print e
             total = None
-        print "PREFERENCIA"
     elif lista == []:
         #total = Question.objects.values('usuariovotar').annotate(numero_pregunta=Count('usuariovotar')).order_by('-usuariovotar')
         try:
@@ -323,7 +379,7 @@ def existe_entidad(*args):
         #Entonces es programas
     elif len(*args)==2:
        # print get_or_none(Integrante,**{'id':args[0][0],'programa':args[0][1]})
-        return get_or_none(Integrante,**{'id':args[0][0],'programa':args[0][1]})
+        return get_or_none(Integrante,**{'id':args[0][0],'programa_p':args[0][1]})
         #Entonces es integrantes
     else:
         return None
@@ -402,6 +458,7 @@ def get_or_none(model, **diccionario):
         print "ERROR ENCONTRAR ENTIDAD"
         return None
     except Exception, e:
-        print "ERROR SERVER"
+        print "ERROR SERVER GET_OR_NONE"
+        print diccionario
         print e
         return None

@@ -82,7 +82,7 @@ class Integrante(models.Model):
 	foto_c = models.ImageField(upload_to='fotos/',blank=True,null=True)
 	foto_d = models.ImageField(upload_to='fotos/',blank=True,null=True)
 	foto_e = models.ImageField(upload_to='fotos/',blank=True,null=True)
-	programa = models.ForeignKey(Programa)
+	programa_p = models.ForeignKey(Programa)
 	objects = IntegranteManager()
 	
 

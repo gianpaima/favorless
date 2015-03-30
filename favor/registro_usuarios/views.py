@@ -86,7 +86,7 @@ def registrarUsuario(request):
 
         else:
             registrar_usuario = FormRegistrarUsuario(request.POST)
-            return render_to_response('registroUsuario.html',{"form_registrar_usuario":registrar_usuario,"errorN":unico.get('validoN'),"errorE":unico.get('validoE'), "errorP":unico.get('validoP'),"errorU":unico.get('validoU')},context_instance=RequestContext(request))
+            return render_to_response('registroUsuario.html',{'results':"asdasd","form_registrar_usuario":registrar_usuario,"errorN":unico.get('validoN'),"errorE":unico.get('validoE'), "errorP":unico.get('validoP'),"errorU":unico.get('validoU')},context_instance=RequestContext(request))
             #return redirect('/signup/', respuesta = request)
             #return HttpResponse("Ha ocurrido ciertos errores")
         #Aca no vamos a validar el metodo post o get por que esto sirve solo para capturar datos, puesto por primera vez y ponerlos en el otro html...Menos la contrasena
@@ -269,6 +269,7 @@ def addpreference(request):
 
             return HttpResponse (vicam(user,id_post))
         else:
+            print "ELSE Preferencia"
             if request.POST.get('sessionid'):
                 try:
                     session = Session.objects.get(session_key=request.POST.get('sessionid'))
@@ -365,13 +366,13 @@ def pruebarealtime (request):
 
 
 def buscarPrograma(request):
-    buscar = request.REQUEST.get('search',)
+    buscar = request.REQUEST.get('q',)
     if buscar:
         total= []
         try:
-            programa = Programa.objects.filter(nombre__icontains=buscar).values('id', 'nombre','logo')
+            programa = Programa.objects.filter(Q(nombre__icontains=buscar) | Q(nombre_abreviado__icontains=buscar)).values('id', 'nombre','logo')
             for ask in buscar.split():
-                integrante = Integrante.objects.filter(Q(nombres__icontains = ask) | Q(apellido_paterno__icontains = ask) | Q(apellido_materno__icontains=ask)).values('id', 'nombres','apellido_paterno','apellido_materno','foto_a','programa')
+                integrante = Integrante.objects.filter(Q(nombres__icontains = ask) | Q(apellido_paterno__icontains = ask) | Q(apellido_materno__icontains=ask)).values('id', 'nombres','apellido_paterno','apellido_materno','foto_a','programa_p')
 
             if programa and integrante:
                 total = list(programa)
@@ -385,7 +386,7 @@ def buscarPrograma(request):
             print e
             print "Error buscar Programa o Integrante"
             total = None
-        print "esta acaaaa"
+        print "esta acaa"
         print total
         return HttpResponse(json.dumps(total), content_type="application/json")
 
