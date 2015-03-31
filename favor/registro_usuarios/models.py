@@ -11,6 +11,7 @@ class Categoria(models.Model):
 
 #Ejemplo:Panorama, FA, Yo soy
 class Programa(models.Model):
+
 	nombre = models.CharField(max_length=60)
 	nombre_abreviado = models.CharField(max_length=6)
 	fecha_creacion = models.DateField()
@@ -44,21 +45,32 @@ class Programa(models.Model):
 	descripcion = models.CharField(max_length=200)
 	#LLave Foranea Tipo_Programa
 	tipo_programa=models.ForeignKey(Categoria)
+	
+
 	def __unicode__(self):
+		people = models.Manager()
 		return self.nombre
 		
 
 
 #Preferencias-> Gustos de los usuarios por los programas....
 class Preferencia(models.Model):
+	
     slug = models.CharField(default = 'le gusta', verbose_name='PreferenciaSlug', max_length=100, help_text='Denota el gusto o preferencia del usuario')
     fecha = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(User, verbose_name='Usuario', related_name='Preferencia')
     estado = models.BooleanField(default = True)
     programa = models.ForeignKey(Programa, verbose_name='Programa')
+    objects = models.Manager()
 
     def __unicode__(self):
         return "  %s , %s"%(self.user ,self.programa)
+
+class IntegranteManager(models.Manager):
+    attrs = { 'fullName': "CONCAT(nombres, ' ', apellido_paterno,' ',apellido_materno)" }
+    def get_query_set(self):
+        return super(IntegranteManager, self).get_query_set().extra(select=self.attrs)
+
 
 #Integrantes de los programas
 class Integrante(models.Model):
@@ -71,7 +83,14 @@ class Integrante(models.Model):
 	foto_d = models.ImageField(upload_to='fotos/',blank=True,null=True)
 	foto_e = models.ImageField(upload_to='fotos/',blank=True,null=True)
 	programa = models.ForeignKey(Programa)
+	objects = IntegranteManager()
 	
+
+
+
+
+
+
 
 User.add_to_class('foto', models.ImageField(upload_to='fotos/',blank=True,null=True,default="fotos/default.png"))
 User.add_to_class('nombreCompleto', models.CharField(max_length=20))

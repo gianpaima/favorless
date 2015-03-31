@@ -18,17 +18,21 @@
 
 <div class="navbar-collapse collapse">
 	<ul class="nav navbar-nav">
-		<form class="navbar-form" role="search">
+		<form  method="get" action='/search/results/' class="navbar-form" role="search">
+
 			<div id="the-basics" class="input-group col-lg-3 col-md-3 col-sm-3">
-				<input type="text" class="form-control typeahead" placeholder="Buscar..." id="search">
+				<input type="text" class="form-control typeahead" placeholder="Buscar..." id="search" name="search">
 				<span class="input-group-btn">
-					<button class="btn btn-default" type="button">
+					<button class="btn btn-default" type="submit">
 						<span class="glyphicon glyphicon-search"></span>
 					</button>
 				</span>
 			</div>
 		</form>
 	</ul>
+
+</div>
+<div id = "resultadoss">
 
 </div>
 {% endblock %}
@@ -59,6 +63,30 @@
 			<div class="panel-heading"> Sigue tus programas favoritos</div>
 			<div class="panel-body">
 				<ul class="media-list">
+					{% if seguir != None %}
+						{% if seguir  %}
+							{% for s in seguir %}
+						      	<li class="media">
+									<a class="pull-left" href="#">
+										<img class="media-object" src="../static/static/img/userseguir.png" alt="Usuario">
+									</a>
+									<div class="media-body">
+										<h5 class="media-heading">{{s.nombre}}</h5>
+										<button type="button" class="btn btn-default btn-xs">
+											<span class="glyphicon glyphicon-chevron-right"></span> Seguir
+										</button>
+									</div>
+								</li>
+						    {% endfor %}
+							
+						{% else %}
+						<li>No hay mas programas para seguir.</li>
+						{% endif %}
+					  {% else %}
+					    <li>Disculpe ha sucedido un error, 
+					    	vuelva a intentarlo mas tarde.</li>
+					  {% endif %}
+					<!--
 					<li class="media">
 						<a class="pull-left" href="#">
 							<img class="media-object" src="../static/static/img/userseguir.png" alt="Usuario">
@@ -108,7 +136,7 @@
 						</div>
 					</li>
 
-
+                    -->
 				</ul>
 			</div>
 		</div>

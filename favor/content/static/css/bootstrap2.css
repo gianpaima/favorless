@@ -4408,8 +4408,9 @@ textarea.input-group-sm > .input-group-btn > .btn {
   clear: both;
 }
 
+/*se cambio AUTO por VISIBLE */
 .navbar-collapse.in {
-  overflow-y: auto;
+  overflow-y: visible;
 }
 
 @media (min-width: 768px) {

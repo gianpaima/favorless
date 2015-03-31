@@ -5,16 +5,16 @@ var io = require('socket.io').listen(3000, {
 
      if (data.headers.cookie) {
             data.cookie = cookie_reader.parse(data.headers.cookie);
-            console.log("autoriza");
+            //console.log("autoriza");
             return accept(null, true);
         }
-        console.log("SIN autoriza");
+        //console.log("SIN autoriza");
         return accept('error', false);
 
   }});
 
 io.use(function(socket, next){
- console.log("Socket ssssssssssssssss  xD: ",socket.request.headers.cookie);
+ //console.log("Socket ssssssssssssssss  xD: ",socket.request.headers.cookie);
    if (socket.request.headers.cookie)
     return next();
    next(new Error('Authentication error'));
@@ -46,58 +46,54 @@ var handshakeData = socket.request;
 //3)csrftoken="sdsdsd"
 
 //console.log("Usuario UsessxDdxD:"+handshakeData.headers.cookie);
-socket.on('prueba',function(data){
-console.log("xxxxxxxx:",handshakeData.headers.cookie);
+socket.on('addPre',function(data){
 var arreglo = handshakeData.headers.cookie.split(';') || [];
+arreglo=formatearToken(arreglo);
 
-
- var values = querystring.stringify({
+  if(arreglo && arreglo!= [])
+  {
+     var values = querystring.stringify({
             id: data.id,
-            sessionid: sessionid
+            sessionid: arreglo[1]
         });
-
-var cookieString='csrftoken='+csrfcookie+' , sessionid='+sessionid;
-
-var cookie = request.cookie(cookieString);
-var options = {
+    var cookieString='csrftoken='+arreglo[0]+' , sessionid='+arreglo[1];
+    var cookie = request.cookie(cookieString);
+    var options = {
         url:'http://127.0.0.1:8000/addpreference/',
         headers: {
-        'X-CSRFToken': csrfcookie,
-      //'csrftoken=' + arreglo[2].split('csrftoken=')[1]
-        'Cookie':  'csrftoken=' +csrfcookie ,
+        'X-CSRFToken': arreglo[0],
+        'Cookie':  'csrftoken=' +arreglo[0] ,
         'Content-Type': 'application/x-www-form-urlencoded',
         'Content-Length': values.length
             },
         method: 'POST',
         body:values
-           
-          
         };
 
-function callback(error, response, body) {
-    if (!error && response.statusCode == 200) {
-       // var info = JSON.parse(body);
-       // console.log(info.stargazers_count + " Stars");
-       // console.log(info.forks_count + " Forks");
-       
-       console.log(body);
-       socket.emit("update",body)
+    function callback(error, response, body) {
+        if (!error && response.statusCode == 200) {
+           //socket.emit("update",body)
+           socket.emit("update",["add",data.id,body])
+          }
+            console.log("Error: "+error);
+            console.log('body: '+body);
+        }
+
+     request(options,callback); 
+
+  }
+  else
+  {
+    console.log("False", "Devuelve socket fail");
+  }
 
 
-    }
-    console.log("Error: "+error);
-   // console.log("respose : "+response);
-    console.log('body: '+body);
-}
-
-
-request(options,callback);
 
 });
 //receive emit('poll')
 
 socket.on('poll',function(data){
-console.log('Pools')
+console.log('Polls');
 var arreglo = handshakeData.headers.cookie.split(';') || [];
 console.log("Array",arreglo);
 arreglo = formatearToken(arreglo);
@@ -207,19 +203,6 @@ function formatearToken(arreglo){
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
   socket.on('search', function (data) {
 
 
@@ -259,84 +242,54 @@ request.get('http://127.0.0.1:8000/search?search='+data.text,
 //--------------------------------------------------------------------------------------------
 
 
-socket.on('prueba2',function(data){
-console.log("xxxxxxxx:",handshakeData.headers.cookie);
+socket.on('removePre',function(data){
+
 var arreglo = handshakeData.headers.cookie.split(';') || [];
-
-
-    if(arreglo)
-    {
-      var csrfcookie, sessionid;
-      for (var i = 0; i < arreglo.length; i++) {
-        arreglo[i]=arreglo[i].trim();
-        console.log("arreglo",arreglo[i]);
-        if(arreglo[i].toLowerCase().indexOf("csrftoken=")===0)
-        {
-          csrfcookie=arreglo[i].substring(arreglo[i].indexOf("=")+1);
-        }
-        else
-        {
-          if(arreglo[i].toLowerCase().indexOf("sessionid=")===0)
-          {
-            sessionid =arreglo[i].substring(arreglo[i].indexOf("=")+1);
-          }
-        }
-      }
-
-      //Consultar si las variables, estan vacias o undefined
-      if(!csrfcookie)
-      {
-        //Es vacia o undefined...
-        console.log("Devuelve Soctet!!!")
-      }
-
-    }
-else
-{
-  console.log("Devuelve Soctet!!!")
-}
-
- var values = querystring.stringify({
+arreglo = formatearToken(arreglo);
+  if(arreglo && arreglo != [])
+  {
+     var values = querystring.stringify({
             id: data.id,
-            sessionid: sessionid
+            sessionid: arreglo[1]
         });
-
-var cookieString='csrftoken='+csrfcookie+' , sessionid='+sessionid;
-
-var cookie = request.cookie(cookieString);
-var options = {
+     console.log("ID",data.id);
+     var cookieString='csrftoken='+arreglo[0]+' , sessionid='+arreglo[1];
+     var cookie = request.cookie(cookieString);
+     var options = {
         url:'http://127.0.0.1:8000/removepreference/',
         headers: {
-        'X-CSRFToken': csrfcookie,
+        'X-CSRFToken': arreglo[0],
       //'csrftoken=' + arreglo[2].split('csrftoken=')[1]
-        'Cookie':  'csrftoken=' +csrfcookie ,
+        'Cookie':  'csrftoken=' +arreglo[0] ,
         'Content-Type': 'application/x-www-form-urlencoded',
         'Content-Length': values.length
             },
         method: 'POST',
         body:values
-           
-          
         };
 
-function callback(error, response, body) {
+    function callback(error, response, body) {
     if (!error && response.statusCode == 200) {
        // var info = JSON.parse(body);
        // console.log(info.stargazers_count + " Stars");
        // console.log(info.forks_count + " Forks");
-       
-       console.log(body);
-       socket.emit("update",body)
+             
+             console.log(body);
+             //socket.emit("update",body)
+             socket.emit("update",["rv",data.id,body])
+          }
+          console.log("Error: "+error);
+         // console.log("respose : "+response);
+          console.log('body: '+body);
+      }
 
+    request(options,callback);
+  }
+  else
+  {
+    console.log("false", "Devuelve socket fail");
+  }
 
-    }
-    console.log("Error: "+error);
-   // console.log("respose : "+response);
-    console.log('body: '+body);
-}
-
-
-request(options,callback);
 
 });
 
@@ -430,19 +383,12 @@ function callback(error, response, body) {
     console.log('body: '+body);
 }
 
-
 request(options,callback);
 
 });
 
-
-
-
-
-
-  console.log('Usuario conectado');
+  //console.log('Usuario conectado');
   socket.on('disconnect', function () {
-    console.log('Usuario desconectado');
+    //console.log('Usuario desconectado');
   });
 });
-

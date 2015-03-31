@@ -19,11 +19,14 @@ from django.contrib.sessions.models import Session
 from django.db.models import Q
 
 def home(request):
-    template='inicio.html'
-    form_registrar_usuario = FormRegistrarUsuario()
-    form_iniciar_sesion = FormInciarSesion()
-    return render_to_response(template,{"form_registrar_usuario":form_registrar_usuario,"form_iniciar_sesion":form_iniciar_sesion},context_instance=RequestContext(request))
-
+    if not request.user.is_authenticated():
+        template='inicio.html'
+        form_registrar_usuario = FormRegistrarUsuario()
+        form_iniciar_sesion = FormInciarSesion()
+        return render_to_response(template,{"form_registrar_usuario":form_registrar_usuario,"form_iniciar_sesion":form_iniciar_sesion},context_instance=RequestContext(request))
+    else:
+        #Falta ver si el user esta activo...etc
+        return HttpResponseRedirect("/principal")
 
 def iniciarSesion(request):
     if not request.user.is_authenticated():
@@ -33,7 +36,6 @@ def iniciarSesion(request):
                 email = iniciar_sesion.cleaned_data['iniciar_input_email']
                 clave = iniciar_sesion.cleaned_data['iniciar_input_password']
                 acceso = authenticate(username=email,password=clave)
-
                 if acceso is not None:
                     if acceso.is_active:
                         login(request,acceso)
@@ -55,10 +57,8 @@ def iniciarSesion(request):
     else:
         return HttpResponseRedirect("/principal")
 
-
-
+#@login_required(login_url='/login')
 def registrarUsuario(request):
-
     if request.method== 'POST' and not request.user.is_authenticated():
         password = request.POST.get('registro_input_password','')
         nombre = request.POST.get('registro_input_nombre_completo','')
@@ -82,7 +82,7 @@ def registrarUsuario(request):
                 print "Se tiene que crear un diccionario que direccione el error"
                 raise
             else:
-                return HttpResponse("Se creo el usuario y logueo sin ningun error! Felicitaciones mi amigo!")
+                return HttpResponseRedirect("/preferencias")
 
         else:
             registrar_usuario = FormRegistrarUsuario(request.POST)
@@ -92,11 +92,11 @@ def registrarUsuario(request):
         #Aca no vamos a validar el metodo post o get por que esto sirve solo para capturar datos, puesto por primera vez y ponerlos en el otro html...Menos la contrasena
         #registrar_usuario = FormRegistrarUsuario(request.REQUEST)
       #  return render_to_response('registroUsuario.html',{"form_registrar_usuario":"registrar_usuario"},context_instance=RequestContext(request))
-    else:
-        registrar_usuario = FormRegistrarUsuario()
-        return render_to_response('registroUsuario.html',{"form_registrar_usuario":registrar_usuario},context_instance=RequestContext(request))
-        #aca falta ver si el usuario...esta desactivado...o  reportado
-        #return HttpResponseRedirect("/")
+    elif request.user.is_authenticated():
+        return HttpResponseRedirect('/principal')
+    elif request.path =='/signup/':
+        registrar_usuario = FormRegistrarUsuario(request.POST)
+        return render_to_response('registroUsuario.html',{"form_registrar_usuario":registrar_usuario,'defecto':'1'},context_instance=RequestContext(request))
 
 @login_required(login_url='/login')
 def configuracionGeneral(request):
@@ -111,7 +111,6 @@ def configuracionPassword(request):
         before = request.POST.get('u_input_pass_before','')
         now = request.POST.get('u_input_pass_now', '')
         again = request.POST.get('u_input_pass_again', '')
-
         if ValidarUsuario().passwordZero(before) and ValidarUsuario().passwordFirst(now) and ValidarUsuario().passwordSecond(now,again):
             try:
                 if request.user.check_password(before):
@@ -145,16 +144,10 @@ def configuracionPassword(request):
 
 def validar(request):
     data = request.REQUEST.get("tipo","").strip()
-  #  print request.REQUEST.get("objetos")
-   # datas = serializers.serialize('json', request.REQUEST.items())
-    #print datas
-
     if data!="validarTodos":
         if data == "validarEmail":
             obj = request.REQUEST.get("objetos[email]",'')
             datos= ValidarUsuario().validarEmail(obj)
-            #data = serializers.serialize('json',ValidarUsuario().validarEmail(obj))
-            #Retornar de forma ajax, en el
             d = json.dumps(datos)
             return HttpResponse(d, content_type='application/json')
             #return HttpResponse(datos)
@@ -175,13 +168,6 @@ def validar(request):
             pass
     else:
         print "hola"
-    #js= serializers.serialize('json',data)
-    """ds=json.dumps(data)
-    print "dataPost"
-    print data['tipo']
-    print "json"
-    print ds
-    """
     #data= serializers.serialize('json',request);
     #url-> Validar
     #Data->Primera Parte:email or username or password or nombre
@@ -205,7 +191,6 @@ def preferencias(request):
     print "------------------------------------"
     categoria_todas = Categoria.objects.all()
     preferencias = Preferencia.objects.filter(user = user_p)
-    print "xD"
     #print preferencias.filter("programa")
     #programas_todas = Programa.objects.exclude(id=preferencias.iterator())
     programas_todas = Programa.objects.all().exclude(id__in=preferencias.values_list('programa', flat=True))
@@ -228,7 +213,7 @@ def removepreference(request):
                     return HttpResponse (vicam2(id_post,user))
                 except:
                     return HttpResponse("ha ocuurido un error")
-            else: 
+            else:
                 return HttpResponse("Anonimo Total")
     else:
         return HttpResponse ("Anda a casa estas borracho")
@@ -240,23 +225,23 @@ def vicam2(id_post,user_id):
 
         try:
            p =  Programa.objects.filter(pk = id_post)
-            
+
         except Exception, e:
             return "3"
-        
+
         if p:
             try:
                 print user_id
                 print id_post
                 a = Preferencia.objects.filter(user=user_id ,programa=id_post)
                 if a :
-                    
+
                     preferencia = Preferencia.objects.get(pk = a)
                     print preferencia
                     preferencia.estado = False
                     preferencia.save()
                     return "1"
-                else: 
+                else:
 
                     return "2"
 
@@ -265,15 +250,15 @@ def vicam2(id_post,user_id):
         else:
             return "2"
     else:
-        return "0" 
+        return "0"
 """
 cuando el id no es digito == 0
 La preferencia cambia de estado == 1
 la  Preferencia no Existe y se crea == 1
-No existe el programa  o preferencia = = 2 
-ha ocurrido un error  servidor == 3 
+No existe el programa  o preferencia = = 2
+ha ocurrido un error  servidor == 3
 """
-        
+
 
 
 def addpreference(request):
@@ -281,7 +266,7 @@ def addpreference(request):
         id_post  = request.POST.get('id','')
         if request.user.is_authenticated():
             user = request.user
-     
+
             return HttpResponse (vicam(user,id_post))
         else:
             if request.POST.get('sessionid'):
@@ -293,25 +278,25 @@ def addpreference(request):
                     return HttpResponse (vicam(user,id_post))
                 except:
                     return HttpResponse("ha ocuurido un error")
-            else: 
+            else:
                 return HttpResponse("Anonimo Total")
     else:
         return HttpResponse("anda a casa estas borracho")
 
 
 
-      
+
 
 def vicam(user_id,id):
     if (id.isdigit()):
-        try: 
+        try:
             preferencia = Preferencia.objects.filter(user=user_id ,programa=id)[:1]
             print preferencia
         except Exception, e:
             print e
             print Exception
             return "3"
-        
+
 
         if(preferencia):
             print "entre al If"
@@ -319,7 +304,7 @@ def vicam(user_id,id):
                 a = Preferencia.objects.get(pk=preferencia)
                 print "it's"
                 print a
-                
+
                 a.estado = True
                 a.save()
                 return "1"
@@ -339,7 +324,7 @@ def vicam(user_id,id):
                     return "2"
 
                 p = Preferencia.objects.create(user = user_id, programa = programa_p)
-                p.save  
+                p.save
                 return "1"
             except :
                 print "error"
@@ -357,7 +342,7 @@ ha ocurrido un error  servidor == 3
 
 
 
-        
+
 def pruebaNode (request):
     template = "buscar.html"
     return render_to_response(template,context_instance=RequestContext(request))
@@ -382,12 +367,35 @@ def pruebarealtime (request):
 def buscarPrograma(request):
     buscar = request.REQUEST.get('search',)
     if buscar:
+
         programa = Programa.objects.filter(nombre__icontains=buscar).values('id', 'nombre','logo')
         integrante = Integrante.objects.filter(Q(nombres__icontains=buscar) | Q(apellido_paterno__icontains=buscar) | Q(apellido_materno__icontains=buscar) ).values('id', 'nombres','apellido_paterno','apellido_materno','foto_a','programa')
         #values_list
 
         print programa 
         return HttpResponse(json.dumps(list(programa)), content_type="application/json")
+
+        total= []
+        try:
+            programa = Programa.objects.filter(nombre__icontains=buscar).values('id', 'nombre','logo')
+            for ask in buscar.split():
+                integrante = Integrante.objects.filter(Q(nombres__icontains = ask) | Q(apellido_paterno__icontains = ask) | Q(apellido_materno__icontains=ask)).values('id', 'nombres','apellido_paterno','apellido_materno','foto_a','programa')
+
+            if programa and integrante:
+                total = list(programa)
+                total.extend(list(integrante))
+            else:
+                if programa:
+                    total = list(programa)
+                if integrante:
+                    total.extend(list(integrante))
+        except Exception, e:
+            print e
+            print "Error buscar Programa o Integrante"
+            total = None
+        print "esta acaaaa"
+        print total
+        return HttpResponse(json.dumps(total), content_type="application/json")
     return HttpResponse("")
 
 def versus(request):
@@ -400,9 +408,9 @@ def versus(request):
 
 def uniimg(img1,img2):
     #cargar las dos imagenes desde el directorio donde estoy ejecutando el Script
-    # Abrir  img  1 
+    # Abrir  img  1
     im1 = Image.open(img1)
-    # Abir img 2 
+    # Abir img 2
     im2 = Image.open(img2)
     # crear una imagen de Fondo que  contiene las dos imagenes
     salida  =  Image.new ("RGB", (640,480),(0,0,255)) # imagen de 640*480 de fondo blanco
@@ -415,7 +423,6 @@ def uniimg(img1,img2):
     #salida.save("prueba.jpg", "JPEG")
     return salida
     #salida.save("salida2.jpg",optimize=True)
-
 
 
 
@@ -467,9 +474,6 @@ def post_versus(request):
     return HttpResponse("nada por aqui")
 
 
-
-
-
     #     print "Estoy en POST"
     #     # print request
 
@@ -484,14 +488,4 @@ def post_versus(request):
     # else:
     #     return HttpResponse ("NO puedes Hacer nothing")
 
-
-    
-        
-
-
-# def test(request):
-#     print "POR FINNNNNNNn!!!!!"
-#     print "xD"
-#     print request.POST.get('word')
-#     return HttpResponse("Kalena (L)")
 
