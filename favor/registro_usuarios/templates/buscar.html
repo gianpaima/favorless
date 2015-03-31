@@ -273,8 +273,6 @@
         <script src="{% static "static/js/socket/index.js"%}"></script>
         
         <script>
-
-
         var socket = io('http://127.0.0.1:3000');
         socket.on('connected', function () {
               console.log('Conectado!');
@@ -288,31 +286,7 @@
          {  
             var bot  =   $(this);
             socket.emit('addPre',{ id : bot.prop("id") });
-
-      /*      socket.on('update',function(data){
-            console.log("BOTON  GUSTA:",bot)              
-                switch  (data) {
-                    case "0":
-                        $('#alerta').html("error")
-                        break;
-                    case "1":
-                        bot.removeClass( "js-megusta btn btn-primary" ).addClass("js-no-megusta btn btn-danger");
-                        var no_gusta = "No me Gusta";
-                        bot.text(no_gusta);
-                        $('#alerta').html("")
-                        break;
-                    case "2":
-                        $('#alerta').html("no existes")
-                        break;
-                    case "3":
-                        $('#alerta').html("error de SERVER")
-                        break;
-                    default:
-                        $('#alerta').html("error")
-                        
-                    }
-                }); */
-            });
+         });
 
 
 
@@ -322,17 +296,23 @@
          {  
              var bot  = $(this);
             socket.emit('removePre',{ id : bot.prop("id") });
+        });
 
-         /*   socket.on('update',function(data){
-                   console.log("NO gusta: ", bot)
-                switch  (data) {
+
+
+       socket.on('update',function(data){
+
+            if(data[0]=="add")
+            {
+                console.log("ADD...")
+                 switch  (data[2]) {
                     case "0":
                         $('#alerta').html("error")
                         break;
                     case "1":
-                        bot.removeClass( "js-no-megusta btn btn-danger" ).addClass("js-megusta btn btn-primary");
-                        var gusta = " me Gusta";
-                        bot.text(gusta);
+                        $('#'+data[1]).removeClass( "js-megusta btn btn-primary" ).addClass("js-no-megusta btn btn-danger");
+                        var no_gusta = "No me Gusta";
+                        $('#'+data[1]).text(no_gusta);
                         $('#alerta').html("")
                         break;
                     case "2":
@@ -345,9 +325,36 @@
                         $('#alerta').html("error")
                         
                     }
-                }); */
-            });
+            }
+            else
+            {
+                if(data[0]=="rv")
+                {
+                    console.log("rvvv...");
+                     switch  (data[2]) {
+                    case "0":
+                        $('#alerta').html("error")
+                        break;
+                    case "1":
+                        $('#'+data[1]).removeClass( "js-no-megusta btn btn-danger" ).addClass("js-megusta btn btn-primary");
+                        var gusta = " me Gusta";
+                        $('#'+data[1]).text(gusta);
+                        $('#alerta').html("")
+                        break;
+                    case "2":
+                        $('#alerta').html("no existes")
+                        break;
+                    case "3":
+                        $('#alerta').html("error de SERVER")
+                        break;
+                    default:
+                        $('#alerta').html("error")
+                        
+                    }
+                }
+            }
 
+                });
         </script>
 
 
