@@ -80,13 +80,18 @@ def registrarUsuario(request):
             except:
                 print "Hubo un error en la creacion del usuario"
                 print "Se tiene que crear un diccionario que direccione el error"
-                raise
             else:
-                return HttpResponseRedirect("/preferencias")
+
+                response = HttpResponseRedirect("/preferencias")
+                eliminarCookie(response)
+                return response
 
         else:
             registrar_usuario = FormRegistrarUsuario(request.POST)
-            return render_to_response('registroUsuario.html',{"form_registrar_usuario":registrar_usuario,"errorN":unico.get('validoN'),"errorE":unico.get('validoE'), "errorP":unico.get('validoP'),"errorU":unico.get('validoU')},context_instance=RequestContext(request))
+            response = render_to_response('registroUsuario.html',{"form_registrar_usuario":registrar_usuario,"errorN":unico.get('validoN'),"errorE":unico.get('validoE'), "errorP":unico.get('validoP'),"errorU":unico.get('validoU')},context_instance=RequestContext(request))
+            #response.set_cookie('arreglo',unico)
+            seleccionarCookie(response,unico)
+            return response
             #return redirect('/signup/', respuesta = request)
             #return HttpResponse("Ha ocurrido ciertos errores")
         #Aca no vamos a validar el metodo post o get por que esto sirve solo para capturar datos, puesto por primera vez y ponerlos en el otro html...Menos la contrasena
@@ -96,7 +101,18 @@ def registrarUsuario(request):
         return HttpResponseRedirect('/principal')
     elif request.path =='/signup/':
         registrar_usuario = FormRegistrarUsuario(request.POST)
-        return render_to_response('registroUsuario.html',{"form_registrar_usuario":registrar_usuario,'defecto':'1'},context_instance=RequestContext(request))
+        response = render_to_response('registroUsuario.html',{"form_registrar_usuario":registrar_usuario,'defecto':'1', 'results':'sas'},context_instance=RequestContext(request))
+        eliminarCookie(response)
+        return response
+
+def eliminarCookie(response):
+    response.delete_cookie('user')
+    response.delete_cookie('email')
+    response.delete_cookie('name')
+def seleccionarCookie(response,arreglo):
+    response.set_cookie('user',True if arreglo.get('validoU')=='0' else False)
+    response.set_cookie('email',True if arreglo.get('validoE')=='0' else False)
+    response.set_cookie('name',True if arreglo.get('validoN')=='0' else False)
 
 @login_required(login_url='/login')
 def configuracionGeneral(request):
@@ -185,17 +201,16 @@ def cerrarSesion(request):
 @login_required(login_url='/login')
 def preferencias(request):
     user_p = request.user.id
-    print "---------------------------------------"
-    print user_p
-    print "--------------------------------------"
-    print "------------------------------------"
     categoria_todas = Categoria.objects.all()
     preferencias = Preferencia.objects.filter(user = user_p)
     #print preferencias.filter("programa")
     #programas_todas = Programa.objects.exclude(id=preferencias.iterator())
+    cantidad = cantidadpreferencia(user_p)
     programas_todas = Programa.objects.all().exclude(id__in=preferencias.values_list('programa', flat=True))
-    template = "inicio2.html"
-    return render_to_response(template, {"list_programa_pref":preferencias,"programas_dato":programas_todas , "categoria_dato":categoria_todas},context_instance=RequestContext(request))
+    template = "preferencias.html"
+    return render_to_response(template, {"cantidad":cantidad,"list_programa_pref":preferencias,"programas_dato":programas_todas , "categoria_dato":categoria_todas},context_instance=RequestContext(request))
+
+
 
 
 def removepreference(request):
@@ -203,7 +218,7 @@ def removepreference(request):
         id_post  = request.POST.get('id','')
 
         if request.user.is_authenticated():
-            return HttpResponse (vicam2(id_post,request.user))
+            return HttpResponse (json.dumps([vicam2(id_post,request.user), cantidadpreferencia(request.user)]))
         else :
             if request.POST.get('sessionid'):
                 try:
@@ -259,7 +274,15 @@ No existe el programa  o preferencia = = 2
 ha ocurrido un error  servidor == 3
 """
 
-
+def cantidadpreferencia(user_p):
+    cantidad = 0
+    try:
+        cantidad = Preferencia.objects.filter(user=user_p,estado=True).count()
+    except Exception, e:
+        print "ERROR en cantidad de preferencias"
+        cantidad = None
+    finally:
+        return cantidad
 
 def addpreference(request):
     if request.method == 'POST':
@@ -267,8 +290,9 @@ def addpreference(request):
         if request.user.is_authenticated():
             user = request.user
 
-            return HttpResponse (vicam(user,id_post))
+            return HttpResponse (json.dumps([vicam(user,id_post), cantidadpreferencia(user)]))
         else:
+            print "ELSE Preferencia"
             if request.POST.get('sessionid'):
                 try:
                     session = Session.objects.get(session_key=request.POST.get('sessionid'))
@@ -365,7 +389,7 @@ def pruebarealtime (request):
 
 
 def buscarPrograma(request):
-    buscar = request.REQUEST.get('search',)
+    buscar = request.REQUEST.get('q',)
     if buscar:
 
         programa = Programa.objects.filter(nombre__icontains=buscar).values('id', 'nombre','logo')
@@ -377,9 +401,9 @@ def buscarPrograma(request):
 
         total= []
         try:
-            programa = Programa.objects.filter(nombre__icontains=buscar).values('id', 'nombre','logo')
+            programa = Programa.objects.filter(Q(nombre__icontains=buscar) | Q(nombre_abreviado__icontains=buscar)).values('id', 'nombre','logo')
             for ask in buscar.split():
-                integrante = Integrante.objects.filter(Q(nombres__icontains = ask) | Q(apellido_paterno__icontains = ask) | Q(apellido_materno__icontains=ask)).values('id', 'nombres','apellido_paterno','apellido_materno','foto_a','programa')
+                integrante = Integrante.objects.filter(Q(nombres__icontains = ask) | Q(apellido_paterno__icontains = ask) | Q(apellido_materno__icontains=ask)).values('id', 'nombres','apellido_paterno','apellido_materno','foto_a','programa_p')
 
             if programa and integrante:
                 total = list(programa)
@@ -393,7 +417,7 @@ def buscarPrograma(request):
             print e
             print "Error buscar Programa o Integrante"
             total = None
-        print "esta acaaaa"
+        print "esta acaa"
         print total
         return HttpResponse(json.dumps(total), content_type="application/json")
     return HttpResponse("")

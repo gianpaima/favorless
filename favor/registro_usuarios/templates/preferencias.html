@@ -1,0 +1,128 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Favorless</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--Bootstrap -->
+  {% load static from staticfiles %}
+  <link href="{% static "static/css/bootstrap2.css"%}" rel="stylesheet">
+  <link href="{% static "static/css/estilos.css"%}" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <div class="container">
+    <header>
+      <nav class="navbar navbar-default navbar-static-top">
+        <div class="navbar-header">
+          <div class="navegador">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+
+          <div>
+            <a href="#" class="navbar-brand-centered"><img src="{% static "static/img/titulologo2.png"%}" alt="favorless logo"></a>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <form action="/principal/" method="post">
+      <span id="alerta"></span>
+      {% csrf_token %}
+      {% if cantidad != None %}
+            {% if cantidad >= 5  %}
+
+              <span id = "informacion">Usted ha seleccionado el minimo de programas requeridos</span>
+             <button type="submit" id="siguiente"  class="btn btn-primary">Siguiente...</button>
+            {% else %}
+             <span id = "informacion">Usted debe seleccionar 5 programas como minimo</span>
+             <button type="submit" id="siguiente" disabled="disabled" class="btn btn-primary">Siguiente...</button>
+            {% endif %}
+      {% else %}
+           <span id = "alerta">Ha ocurrido un error</span>
+
+              <span id = "informacion"></span>
+             <button type="submit"  id="siguiente" disabled  class="btn btn-primary">Siguiente...</button>
+      {% endif %}
+</form>
+
+      <div class="row center-block">
+              <select class="form-control">
+                  <option value  = "0" selected = "true"> Todo </option>
+
+                {%for categoria in categoria_dato %}
+                  <option value = "{{categoria.id}}">{{categoria.titulo}}</option>
+
+                {%endfor%} 
+              </select>
+
+
+
+      {%for programa_fav in list_programa_pref%}
+          <div class="col-xs-6 col-sm-6 col-md-4 programa categ{{programa_fav.programa.tipo_programa.id}}">
+              <div class="thumbnail">
+                <img src="{{MEDIA_URL}}{{programa_fav.programa.logo}} "  style = "width=200px; height:200px" alt="...">
+                <div class="caption">
+                 
+                  <h3>{{programa_fav.programa.nombre}}</h3>
+                  <h4>{{programa_fav.programa.nombre_abreviado}}</h4>
+                  <p>{{programa_fav.programa.tipo_programa}}</p>
+                  
+                  <p>
+
+                    {% if programa_fav.estado == True %}
+
+                     <a href="#" id  = "{{programa_fav.programa.id}}" class="js-no-megusta btn btn-danger"  role="button">
+                     <span>Ya no  me gusta</span></a>
+                      
+                    {% else %}
+
+                    <a href="#" id  = "{{programa_fav.programa.id}}" class="js-megusta btn btn-primary" role="button">
+                    <span>Me gusta</span></a>
+
+                    {% endif%}
+                    
+                  </p>
+                </div>
+              </div>
+          </div>
+     
+      {%endfor%}
+
+
+
+
+      {%for programa in programas_dato%}
+          <div class="col-xs-6 col-sm-6 col-md-4 programa categ{{programa.tipo_programa.id}}">
+              <div class="thumbnail">
+                <img src="{{MEDIA_URL}}{{programa.logo}} "  style = "width=200px; height:200px" alt="...">
+                <div class="caption">
+
+                  <h3>{{programa.nombre}}</h3>
+                  <h4>{{programa.nombre_abreviado}}</h4>
+                  <p>{{programa.tipo_programa}}</p>
+                  
+                  <p>
+                    <a href="#" id  = "{{programa.id}}" class="js-megusta btn btn-primary"  role="button">
+                    <span>Me gusta</span></a>
+                  </p>
+                    
+
+                </div>
+              </div>
+          </div>
+     
+      {%endfor%}
+    <script src="{% static "static/js/respond.min.js"%}"></script>
+  <script src="{% static "static/js/jquery-1.8.3.min.js"%}"></script>
+  <script src="{% static "static/js/bootstrap.min.js"%}"></script>
+  <script src="{% static "static/js/js-preferencias.js"%}"></script>
+  </body>
+  </html>

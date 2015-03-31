@@ -9,7 +9,7 @@
 
     <link href="{% static "static/css/bootstrap2.css"%}" rel="stylesheet">
     <link href="{% static "static/css/estilos.css"%}" rel="stylesheet">
-    <script src="js/respond.min.js"></script>
+    
 
 </head>
 
@@ -50,11 +50,11 @@
                                     </span>
                                 </a>
                             </li>
-                            <form class="navbar-form" role="search">
+                            <form method="get" action="/search/results/" class="navbar-form" role="search">
                                 <div class="input-group col-lg-3 col-md-3 col-sm-3">
-                                    <input type="text" class="form-control" placeholder="Buscar...">
+                                    <input name="q" type="text" class="form-control" placeholder="Buscar..." id="search">
                                     <span class="input-group-btn">
-                                        <button class="btn btn-default" type="button">
+                                        <button class="btn btn-default" type="submit">
                                             <span class="glyphicon glyphicon-search"></span>
                                         </button>
                                     </span>
@@ -65,6 +65,9 @@
 
 
                     </div>
+        <div id = "resultadoss">
+
+</div>
                 </nav>
             </header>
 
@@ -72,7 +75,7 @@
                 <section class="col-lg-4 col-sm-4 col-md-4 hidden-xs">
                     <article>
                         <div class="panel panel-default">
-                        {% if pagina.programa %}
+                        {% if pagina.programa_p %}
                             <div class="panel-body">
 
                                 
@@ -96,17 +99,109 @@
                             </div>
 
                             <span>{{pagina.descripcion}}</span>
+                            {% if gustar != None %}
+                               <a href="#" id= "{{pagina.id}}" class="js-no-megusta btn btn-danger" role="button">
+                                <span>No me gusta</span>
+                                </a>
+                            {% else %}
+                                 <a href="#" id= "{{pagina.id}}" class="js-megusta btn btn-primary" role="button">
+                                <span>Me gusta</span>
+                                </a>
+                            {% endif %}
 
-                           <a href="#" id= "4" class="js-megusta btn btn-primary" role="button">
-                            <span>Me gusta</span>
-                            </a>
                         {% endif %}    
                         </div>
 
                 </section>
 
                     <section class="col-lg-8 col-sm-8 col-md-8 col-xs-12 ">
-                        <article class="col-lg-12 col-xs-12">
+                    {% if total != None  %}
+                         {% for t in total %}
+                         <article class="col-lg-12 col-xs-12">
+                    
+
+                    <div class="panel panel-default">
+                         <div class="panel-heading"><a href="#" >{{t.asking}}</a>
+                         </div>
+
+                        <!-- <div class="col-lg-12 col-xs-12">   
+                            <div  id = "cajafuera">
+
+                                <ul  class  = "nav nav-pills">
+                                    <li class = "cajaun"> 
+                                        <a href="#"  id  ="izquierda" class  ="abc"> 
+                                            <span>222222</span>
+                                        </a>
+                                    </li>
+                            
+                                
+                                    <li  class = "cajaun">  
+                                        <a href="#" id = "derecha" class = " abc "><span>222222</span></a>
+
+                                        <div id = "resultados">
+
+                                        </div>
+                                    </li>
+                                </ul>
+
+                            </div>
+                        </div> -->
+
+                        <div class="panel-body">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div  id = "cajafuera">
+
+                                <ul  class  = "nav nav-pills ul-pers">
+                                    <li class ="cajaun" data-choice="1" data-poll="{{t.id}}"> 
+                                        <a href="#"  id  ="izquierda" class  ="abc"> 
+                                            <span></span>
+                                        </a>
+                                    </li>
+                            
+                                
+                                    <li  class = "cajaun" data-choice="2" data-poll="{{t.id}}">     
+                                        <a href="#" id = "derecha" class = "abc"><span></span></a>
+
+                                        <div id = "resultados">
+
+                                        </div>
+                                    </li>
+                                </ul>
+
+                                </div>
+
+                                <div>
+
+                                    <div>
+                                        <ul class = "nav nav-pills xyz">
+                            
+                                                <li class ="opt left">{{t.participante.items.0.1.alias}}</li>
+                                            <li class = "center">0</li>
+                                            <li class = "opt right" data-choice="2">{{t.participante.items.1.1.alias}}</li>
+                                        
+                                            
+                                        </ul>
+                                    </div>
+
+                                    <a href="#" class="thumbnail">
+                                        <img src="{{t.versus.url}}" alt="...">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>  
+
+                    </div>
+
+                </article>
+
+                {% empty %}
+                    <li>Disculpa, no tienes mas preguntas en la lista.</li>
+                {% endfor %}
+
+            {% else %}
+                <p>Ha habido un problema...vuelva a interntarlo posteriormente</p>
+            {% endif %}         
+                     <!--   <article class="col-lg-12 col-xs-12">
                             <div class="panel panel-default">
                                 <div class="panel-heading"><a href="#">¿Pregunta que se debe realizar para evaluar el versus?</a></div>
                                 <div class="panel-body">
@@ -161,20 +256,23 @@
                                 </div>
                             </div>
                         </div>
-                    </article>
+                    </article>-->
                 </section>
 
 
             </div>
         </div> <!--fin container -->
         <!-- javascript -->
-        <script src="{% static "static/js/jquery-1.8.3.js"%}"></script>
+        <script src="{% static "static/js/jquery-1.8.3.min.js"%}"></script>
         <script src="{% static "static/js/bootstrap.min.js"%}"></script>
+        <script src="{% static "static/js/respond.min.js"%}"></script>
+        <script src="{% static "static/js/typeahead.jquery.min.js"%}"></script>
+        
         <script src="http://localhost:3000/socket.io/socket.io.js"></script>
         
+        <script src="{% static "static/js/socket/index.js"%}"></script>
+        
         <script>
-
-
         var socket = io('http://127.0.0.1:3000');
         socket.on('connected', function () {
               console.log('Conectado!');
@@ -182,29 +280,39 @@
             });
 
 
-       $("body").delegate(".js-megusta","click",
-
+       //$("body").delegate(".js-megusta","click",
+        $('.panel-default').on("click", ".js-megusta",
         function()
          {  
+            var bot  =   $(this);
+            socket.emit('addPre',{ id : bot.prop("id") });
+         });
 
-              var bot  =   $(this);
-            console.log("id:" + $(bot));
 
-            socket.emit('prueba',{ id : bot.prop("id") });
 
-            socket.on('update',function(data){
-                   
-                switch  (data) {
+       //$("body").delegate(".js-no-megusta","click",
+         $('.panel-default').on("click", ".js-no-megusta",
+        function()
+         {  
+             var bot  = $(this);
+            socket.emit('removePre',{ id : bot.prop("id") });
+        });
+
+
+
+       socket.on('update',function(data){
+
+            if(data[0]=="add")
+            {
+                console.log("ADD...")
+                 switch  (data[2]) {
                     case "0":
                         $('#alerta').html("error")
                         break;
                     case "1":
-                        bot.removeClass( "js-megusta btn btn-primary" ).addClass("js-no-megusta btn btn-danger");
+                        $('#'+data[1]).removeClass( "js-megusta btn btn-primary" ).addClass("js-no-megusta btn btn-danger");
                         var no_gusta = "No me Gusta";
-                        bot.text(no_gusta);
-
-
-                        console.log("el post manda esto :" + data);
+                        $('#'+data[1]).text(no_gusta);
                         $('#alerta').html("")
                         break;
                     case "2":
@@ -217,34 +325,20 @@
                         $('#alerta').html("error")
                         
                     }
-                });
-            });
-
-
-
-       $("body").delegate(".js-no-megusta","click",
-
-        function()
-         {  
-
-              var bot  =   $(this);
-            console.log("id:" + $(bot));
-
-            socket.emit('prueba2',{ id : bot.prop("id") });
-
-            socket.on('update',function(data){
-                   
-                switch  (data) {
+            }
+            else
+            {
+                if(data[0]=="rv")
+                {
+                    console.log("rvvv...");
+                     switch  (data[2]) {
                     case "0":
                         $('#alerta').html("error")
                         break;
                     case "1":
-                        bot.removeClass( "js-no-megusta btn btn-danger" ).addClass("js-megusta btn btn-primary");
+                        $('#'+data[1]).removeClass( "js-no-megusta btn btn-danger" ).addClass("js-megusta btn btn-primary");
                         var gusta = " me Gusta";
-                        bot.text(gusta);
-
-                        
-                        console.log("el post manda esto :" + data);
+                        $('#'+data[1]).text(gusta);
                         $('#alerta').html("")
                         break;
                     case "2":
@@ -257,9 +351,10 @@
                         $('#alerta').html("error")
                         
                     }
-                });
-            });
+                }
+            }
 
+                });
         </script>
 
 
