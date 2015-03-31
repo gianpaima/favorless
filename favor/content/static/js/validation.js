@@ -11,6 +11,22 @@
     var username = $("#r_input_usuario");
     var userInfo = $("#userInfo");
     var arreglo=[];
+
+    function validar()
+    {
+       //r_input_password: true, r_input_usuario: true, 
+       //r_input_email: true, r_input_name_complete: true
+       arreglo['r_input_usuario']=(getCookie('user')=="True" ) ? true:false;
+       arreglo['r_input_email'] = (getCookie('email') == "True" )? true:false;
+       arreglo['r_input_name_complete'] = (getCookie('name') == "True") ? true:false;
+    }
+    
+    function getCookie(key) 
+    {
+            var keyValue = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
+            return keyValue ? keyValue[2] : null;
+    }
+
     //On blur
     name.blur(validateName);
     email.blur(validateEmail);
@@ -20,32 +36,26 @@
     name.keyup(validateName);
     username.keyup(validateUserName)
     pass1.keyup(validatePass1);
-
-
-    $('#registrar').click(function()
+    validar()
+    $('#registrar').click(function(event)
     {
-        alert("jajajaja");
-        
+
+            event.preventDefault();
           if(arreglo[name.prop('id')] && arreglo[email.prop('id')] &&
            arreglo[pass1.prop('id')] &&arreglo[username.prop('id')])
         {
-            console.log("Submit:"+form.submit())
-            alert("ENVIAR")
+
             $('form').submit();
 
            // return true;
         }
         else
-        {
-            alert("falseee")
-            validateEmail();
-            validateName();
-            validatePass1();
-            validateUserName();
-                alert("false");
-                console.log("false");
+        {       
+                console.log("false",arreglo);
                 return false;
         }
+
+        console.log("arreglo out",arreglo);
     });
     //On Submitting
  /*
@@ -75,11 +85,11 @@
         //if it's valid email
         if(filter.test(a))
         {
-            
             var total={"tipo":"validarEmail","objetos":{"email":a}};
-            jqxhrPost('validar/',total,$(this));
+            jqxhrPost('validar/',total,email);
         }
         else
+        {
             arreglo[email.prop('id')]=false;
             emailInfo.removeClass("sucess");
             email.addClass("error");
@@ -92,8 +102,10 @@
             {
                 emailInfo.text("¡Se requiere un email!");
             }
-            
             return false;
+        }
+            
+            
         }
     
     function validateName(){
@@ -112,7 +124,7 @@
 
         var total={"tipo":"validarNombre","objetos":{"nombre":name.val()}};
             
-            jqxhrPost('validar/',total,$(this));
+            jqxhrPost('validar/',total,name);
             
         }
     }
@@ -130,7 +142,7 @@
         //it's valid
         else{
             var total={"tipo":"validarPassword","objetos":{"password":pass1.val()}};
-            jqxhrPost('validar/',total,$(this));
+            jqxhrPost('validar/',total,pass1);
         }
     }
 
@@ -149,7 +161,7 @@
         else{
 
             var total={"tipo":"validarUsername","objetos":{"username":username.val()}};
-            jqxhrPost('validar/',total,$(this));
+            jqxhrPost('validar/',total,username);
             
         }
     }
@@ -159,7 +171,6 @@
     {          
         jqxhr=$.post( url , data, "json")
               .done(function(datas) {
-               
                 switch ($(obj).prop('id'))
                  {
                     case name.prop('id'):
@@ -182,7 +193,6 @@
                             nameInfo.addClass("error");   
                         }
                         
-                        console.log("VIVA CHESPIRITO!");
                         break; 
                     case email.prop('id'):
                         if(datas.valido == "0")
@@ -202,9 +212,10 @@
                              emailInfo.addClass("error");
                             if(datas.valido=="3")
                             {
-                                emailInfo.text("No parece ser un correo electrónico valido.");
+                                emailInfo.text("No parece ser un correo electrónico valido."+datas);
                             }
                             else
+                            {
                                 if(datas.valido=="1")
                                 {
                                     emailInfo.text("Este email ya existe");
@@ -214,6 +225,7 @@
                                     console.log("Data email:"+datas.valido);
                                     emailInfo.text("Se requiere un email");
                                 }
+                            }
                         }
                         break;
                     case pass1.prop('id'):
@@ -236,7 +248,6 @@
                             pass1Info.addClass("error"); 
                         }
                          
-                        console.log("VIVA CHESPIRITO!!!");
                         break; 
                     case username.prop('id'):
                         if(datas.valido == "0")
@@ -264,17 +275,15 @@
                                     userInfo.text("¡Se requiere un nombre de usuario!");
                                 }
                            }
-                        console.log("VIVA CHESPIRITO!!!!"+datas.valido);
                         break;      
                     default: 
-                        console.log("siempre");
-                        
-                 }
+                        console.log("siempre");     
+                 } 
               })
               .fail(function() {
                 arreglo[$(obj).prop('id')]=false;
                 console.log("fail->"+arreglo[$(obj).prop('id')]);
-              });
+              })
     }
 // This function gets cookie with a given name
 function getCookie(name) {

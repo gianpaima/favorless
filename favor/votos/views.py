@@ -151,6 +151,7 @@ def principal(request):
         print "Hubo un problema"
 
     try:
+        #aca esta el error
         preferido = Preferencia.objects.filter(user=request.user.id,estado=True).values('programa__tipo_programa__id','id')
         cuatro_preferencias=[]
         gustar = []

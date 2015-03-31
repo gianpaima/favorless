@@ -33,7 +33,25 @@
       </nav>
     </header>
 
-    <span id = "alerta"></span>
+    <form action="/principal/" method="post">
+      <span id="alerta"></span>
+      {% csrf_token %}
+      {% if cantidad != None %}
+            {% if cantidad >= 5  %}
+
+              <span id = "informacion">Usted ha seleccionado el minimo de programas requeridos</span>
+             <button type="submit" id="siguiente"  class="btn btn-primary">Siguiente...</button>
+            {% else %}
+             <span id = "informacion">Usted debe seleccionar 5 programas como minimo</span>
+             <button type="submit" id="siguiente" disabled="disabled" class="btn btn-primary">Siguiente...</button>
+            {% endif %}
+      {% else %}
+           <span id = "alerta">Ha ocurrido un error</span>
+
+              <span id = "informacion"></span>
+             <button type="submit"  id="siguiente" disabled  class="btn btn-primary">Siguiente...</button>
+      {% endif %}
+</form>
 
       <div class="row center-block">
               <select class="form-control">

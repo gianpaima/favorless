@@ -10,7 +10,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
 
     # Examples:
-    # url(r'^$', 'favor.views.home', name='home'),
+    # url(r'^$', 'favor.views.hoHaving said that, you can put this kind of substitution into your javascriptme', name='home'),
     # url(r'^blog/', include('blog.urls')),
     #url(r'^$', 'registro_usuarios.views.home', name='home'),
     ##Voting

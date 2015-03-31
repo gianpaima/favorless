@@ -84,7 +84,6 @@ buscar.keyup(enviar_data);
 
 function enviar_data()
 {
-    
 	 socket.emit('search', { text: buscar.val()});
 }
 
@@ -92,7 +91,8 @@ socket.emit('programa',{ post: 'numero' });
 
  socket.on('dataSend',function(data)
  {
- 	var result = $('#resultados');
+ 	var result = $('#resultadoss');
+   console.log("DATA",data);
  	if(data !="0" && data !="")
  	{
  		var lista = $.parseJSON(data);
@@ -102,13 +102,13 @@ socket.emit('programa',{ post: 'numero' });
 
  			$.each(lista, function(clave,valor){
                 
-                if(valor.programa)
+                if(valor.programa_p)
                 {
-                    pr+='<li><a href="#">'+valor.nombres+' '+valor.apellido_paterno+' '+valor.apellido_materno+'</a></li>';
+                    pr+='<li><a href="/pages/'+valor.id+'-'+valor.programa_p+'">'+valor.nombres+' '+valor.apellido_paterno+' '+valor.apellido_materno+'</a></li>';
                 }
                 else
                 {
-                    pr+='<li><a href="#">'+valor.nombre+'</a></li>';
+                    pr+='<li><a href="/pages/'+valor.id+'">'+valor.nombre+'</a></li>';
                 }
  				
  			});
