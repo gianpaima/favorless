@@ -257,6 +257,7 @@ def votar(request):
 
     else:
 		return HttpResponse("Tomate un tiempo")
+
     #"""
 def fuente_user(request):
     if request.user.is_authenticated():
@@ -292,6 +293,37 @@ def versus(request):
         print ("estoy en GET")
         template = "crearVersus.html"
         return render_to_response(template,context_instance=RequestContext(request))
+
+
+
+def post_versus(request):
+    if request.method == "POST":
+        print request
+        pregunta = request.POST.get('pregunta')
+        opc1 = request.POST.get('opc1Id')
+        opc2 = request.POST.get('opc2Id')
+        img1=manjar_imagen_subida(request.FILES['file1'])
+        img2= manjar_imagen_subida(request.FILES['file2'])
+        # print "--------------"
+        # print request.FILES
+        # # print pregunta
+        # # print opc1
+        # print "img 1"
+        # print img1
+        # print "img 2"
+        # print img2
+        #print img2
+        #fs=uniimg(img1,img2)
+        # print opc2
+        #im1 = Image.open(img1)
+        q = unirlas(img1,img2)
+        #print q 
+        print " salida q "
+        print " pregunta: %s  , idOpc: %s  , idOpc2 : %s " % (pregunta,opc1,opc2)
+        return HttpResponse("Look After You  oh uh oh")
+
+
+
 
 def uniimg(img1,img2):
     #cargar las dos imagenes desde el directorio donde estoy ejecutando el Script
@@ -349,9 +381,26 @@ def unirlas(a,b):
     salida.paste(out2,(out1.size[0] + 2,0))
     #name =
     filename = "sandro3.jpg"
+
+# <<<<<<< HEAD
+#     imagefile = open(os.path.join("/home/sandro/Escritorio/pruebasImagenesDj",filename), 'w')
+#     salida.save(imagefile,"JPEG", quality=90)
+#     imagefile = open(os.path.join("/home/sandro/Escritorio/pruebasImagenesDj",filename), 'r')
+#     content = File(imagefile)
+#     print "content"
+#     print content
+#     print "-------------------------------------"
+#     return (salida,content)
+# =======
+    imagefile = open(os.path.join("/home/sandro/Escritorio/pruebasImagenesDj",filename), 'w')
+    salida.save(imagefile,"JPEG", quality=90)
+    imagefile = open(os.path.join("/home/sandro/Escritorio/pruebasImagenesDj",filename), 'r')
+       
+
     imagefile = open(os.path.join("/home/userstatic/Documents/Manuel/favorless/pruebasImagenesDj",filename), 'w')
     salida.save(imagefile,"JPEG", quality=90)
     imagefile = open(os.path.join("/home/userstatic/Documents/Manuel/favorless/pruebasImagenesDj",filename), 'r')
+
 
   #  print "IMAGEN file:"
    # print imagefile

@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+
+{% block title %}
+	Favorless
+{% endblock %}
+
+{% block header %}
+<div class="navbar-header">
+	<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+		<span class="glyphicon glyphicon-search"></span>
+	</button>
+	<div>
+		<a href="#" class="navbar-brand-centered"><img src="../static/static/img/titulologo.png" alt="favorless logo"></a>
+	</div>
+</div>
+
+<div class="navbar-collapse collapse">
+	<ul class="nav navbar-nav">
+		<form class="navbar-form" role="search">
+			<div id="the-basics" class="input-group col-lg-3 col-md-3 col-sm-3">
+				<input type="text" class="form-control typeahead" placeholder="Buscar..." id="search">
+				<span class="input-group-btn">
+					<button class="btn btn-default" type="button">
+						<span class="glyphicon glyphicon-search"></span>
+					</button>
+				</span>
+			</div>
+		</form>
+	</ul>
+</div>
+{% endblock %}
+
+{% block content %}
+<section class="col-lg-4 col-sm-4 col-md-4 hidden-xs">
+	<article>
+		<div class="panel panel-default">
+			<div class="panel-heading">Mi Perfil</div>
+			<div class="panel-body">
+				<div class="col-lg-12 text-center">
+					<img src="../static/static/img/userseguir.png" alt="Usuario">
+				</div>
+				<div class="col-lg-12 text-center">
+					<span class="text-center"><a href="#">{{ user.username }}</a></span>
+				</div>
+				<ul class="list-inline col-lg-12 col-md-12">
+					<li class="col-lg-3 col-md-3 text-center"><a href="#"><span style="font-size:24px;" class="glyphicon glyphicon-check"></span></a></li>
+					<li class="col-lg-3 col-md-3 text-center"><a href=""><span style="font-size:24px;" class="glyphicon glyphicon-arrow-left"></span></a></li>
+					<li class="col-lg-3 col-md-3 text-center"><a href=""><span style="font-size:24px;" class="glyphicon glyphicon-arrow-right"></span></a></li>
+					<li class="col-lg-3 col-md-3 text-center"><a href="#"><span style="font-size:24px;" class="glyphicon glyphicon-star"></span></a></li>
+				</ul>
+
+			</div>
+		</div>
+
+		<div class="panel panel-default">
+			<div class="panel-heading"> Sigue tus programas favoritos</div>
+			<div class="panel-body">
+				<ul class="media-list">
+					<li class="media">
+						<a class="pull-left" href="#">
+							<img class="media-object" src="../static/static/img/userseguir.png" alt="Usuario">
+						</a>
+						<div class="media-body">
+							<h5 class="media-heading">America Noticias</h5>
+							<button type="button" class="btn btn-default btn-xs">
+								<span class="glyphicon glyphicon-chevron-right"></span> Seguir
+							</button>
+						</div>
+					</li>
+
+					<li class="media">
+						<a class="pull-left" href="#">
+							<img class="media-object" src="../static/static/img/userseguir.png" alt="Usuario">
+						</a>
+						<div class="media-body">
+							<h5 class="media-heading">90 Segundos</h5>
+							<button type="button" class="btn btn-default btn-xs">
+								<span class="glyphicon glyphicon-chevron-right"></span> Seguir
+							</button>
+						</div>
+					</li>
+
+					<li class="media">
+						<a class="pull-left" href="#">
+							<img class="media-object" src="../static/static/img/userseguir.png" alt="Usuario">
+						</a>
+						<div class="media-body">
+							<h5 class="media-heading">Fabrica De Sueños</h5>
+							<button type="button" class="btn btn-default btn-xs">
+								<span class="glyphicon glyphicon-chevron-right"></span> Seguir
+							</button>
+						</div>
+					</li>
+
+					<li class="media">
+						<a class="pull-left" href="#">
+							<img class="media-object" src="../static/static/img/userseguir.png" alt="Usuario">
+						</a>
+						<div class="media-body">
+							<h5 class="media-heading">Yo Soy</h5>
+							<button type="button" class="btn btn-default btn-xs">
+								<span class="glyphicon glyphicon-chevron-right"></span> Seguir
+							</button>
+						</div>
+					</li>
+
+
+				</ul>
+			</div>
+		</div>
+
+	</section>
+
+	<section class="col-lg-8 col-sm-8 col-md-8 col-xs-12 ">
+		<article class="col-lg-12 col-xs-12">
+			<div class="panel panel-default">
+				<div class="panel-heading"><a href="#">¿Pregunta que se debe realizar para evaluar el versus?</a></div>
+				<div class="panel-body">
+					<div class="col-lg-6 col-xs-6">
+						<a href="#" class="thumbnail">
+							<img src="../static/static/img/vs7.jpg" alt="...">
+						</a>
+					</div>
+
+					<div class="col-lg-6 col-xs-6">
+						<a href="#" class="thumbnail">
+							<img src="../static/static/img/vs8.jpg" alt="...">
+						</a>
+					</div>
+
+				</div>
+			</div>
+
+			<div class="panel panel-default">
+				<div class="panel-heading">¿Pregunta que se debe realizar para evaluar el versus?</div>
+				<div class="panel-body">
+					<div class="col-lg-6 col-xs-6">
+						<a href="#" class="thumbnail">
+							<img src="../static/static/img/imgvs1.png" alt="...">
+						</a>
+					</div>
+
+					<div class="col-lg-6 col-xs-6">
+						<a href="#" class="thumbnail">
+							<img src="../static/static/img/imgvs2.png" alt="...">
+						</a>
+					</div>
+
+				</div>
+			</div>
+
+			<div class="panel panel-default">
+				<div class="panel-heading">¿Pregunta que se debe realizar para evaluar el versus?</div>
+				<div class="panel-body">
+					<div class="col-lg-6 col-xs-6">
+						<a href="#" class="thumbnail">
+							<img src="../static/static/img/imgvs1.png" alt="...">
+						</a>
+					</div>
+
+					<div class="col-lg-6 col-xs-6">
+						<a href="#" class="thumbnail">
+							<img src="../static/static/img/imgvs2.png" alt="...">
+						</a>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</article>
+</section>
+{% endblock %}
+
+{% block footer %}
+<p>Favorless © Inc. 2015</p>
+	<a href="#">Back to top</a>
+{% endblock %}

@@ -398,6 +398,14 @@ def pruebarealtime (request):
 def buscarPrograma(request):
     buscar = request.REQUEST.get('q',)
     if buscar:
+
+        programa = Programa.objects.filter(nombre__icontains=buscar).values('id', 'nombre','logo')
+        integrante = Integrante.objects.filter(Q(nombres__icontains=buscar) | Q(apellido_paterno__icontains=buscar) | Q(apellido_materno__icontains=buscar) ).values('id', 'nombres','apellido_paterno','apellido_materno','foto_a','programa')
+        #values_list
+
+        print programa 
+        return HttpResponse(json.dumps(list(programa)), content_type="application/json")
+
         total= []
         try:
             programa = Programa.objects.filter(Q(nombre__icontains=buscar) | Q(nombre_abreviado__icontains=buscar)).values('id', 'nombre','logo')
@@ -419,7 +427,6 @@ def buscarPrograma(request):
         print "esta acaa"
         print total
         return HttpResponse(json.dumps(total), content_type="application/json")
-
     return HttpResponse("")
 
 def versus(request):
@@ -449,6 +456,53 @@ def uniimg(img1,img2):
     #salida.save("salida2.jpg",optimize=True)
 
 
+
+
+def post_versus(request):
+    if request.method == "POST":
+        print request
+        pregunta = request.POST.get('pregunta')
+        opc1 = request.POST.get('opc1Id')
+        opc2 = request.POST.get('opc2Id')
+        img1=manjar_imagen_subida(request.FILES['file1'])
+        img2= manjar_imagen_subida(request.FILES['file2'])
+        print "--------------"
+        print request.FILES
+        # print pregunta
+        # print opc1
+        print "img 1"
+        print img1
+        print "img 2"
+        print img2
+        #print img2
+        #fs=uniimg(img1,img2)
+        # print opc2
+        #im1 = Image.open(img1)
+        q = unirlas(img1,img2)
+
+        
+        #print q 
+        print " salida q "
+        print " pregunta: %s  , idOpc: %s  , idOpc2 : %s " % (pregunta,opc1,opc2)
+        return HttpResponse("Look After You  oh uh oh")
+    # return HttpResponse("Look After You  oh uh oh")
+
+        total= []
+        if programa and integrante:
+            total = list(programa)
+            total.extend(list(integrante))
+        else:
+            if programa:
+                total = list(programa)
+            if integrante:
+                total.extend(list(integrante))
+
+        #print "TIPO" 
+        #print programa
+        #"###################"
+        #print integrante
+        return HttpResponse(json.dumps(total), content_type="application/json")
+    return HttpResponse("nada por aqui")
 
 
     #     print "Estoy en POST"

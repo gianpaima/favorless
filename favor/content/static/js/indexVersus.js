@@ -58,9 +58,15 @@ function enviar_data()
 
  			$.each(lista, function(clave,valor){
 
+<<<<<<< HEAD
                 if(valor.programa_p)
                 {
                     pr+='<li><a class="target" id="'+valor.id+'-'+valor.programa_p+'" href="#">'+valor.nombres+' '+valor.apellido_paterno+' '+valor.apellido_materno+'</a></li>';
+=======
+                if(valor.programa)
+                {
+                    pr+='<li><a class="target" id="'+valor.id+'-'+valor.programa+'" href="#">'+valor.nombres+' '+valor.apellido_paterno+' '+valor.apellido_materno+'</a></li>';
+>>>>>>> 47c5084d275da9e1a9c31541981746dce5e7e91e
                 }
                 else
                 {
@@ -78,7 +84,11 @@ function enviar_data()
  		}
  	}
  	else if(data == ""){
+<<<<<<< HEAD
  		result.html( "No se ha encontrado ninguna coincidencia");
+=======
+ 		result.html( "buscar elemento");
+>>>>>>> 47c5084d275da9e1a9c31541981746dce5e7e91e
 
  	}
  	else{
