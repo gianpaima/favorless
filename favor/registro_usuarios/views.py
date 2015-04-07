@@ -14,10 +14,10 @@ from ValidarUsuarios import ValidarUsuario
 import json
 # Create your views here.
 from django.contrib.sessions.models import Session
-
+from django.core.exceptions import ValidationError, FieldError  
 
 from django.db.models import Q
-
+from django.db.utils import DatabaseError
 def home(request):
     if not request.user.is_authenticated():
         template='inicio.html'
@@ -33,8 +33,8 @@ def iniciarSesion(request):
         if request.method == "POST":
             iniciar_sesion = FormInciarSesion(request.POST)
             if iniciar_sesion.is_valid():
-                email = iniciar_sesion.cleaned_data['iniciar_input_email']
-                clave = iniciar_sesion.cleaned_data['iniciar_input_password']
+                email = iniciar_sesion.cleaned_data['username'] #iniciar_sesion.cleaned_data['iniciar_input_email']
+                clave = iniciar_sesion.cleaned_data['password']#iniciar_sesion.cleaned_data['iniciar_input_password']
                 acceso = authenticate(username=email,password=clave)
                 if acceso is not None:
                     if acceso.is_active:
@@ -77,9 +77,16 @@ def registrarUsuario(request):
                 else:
                     print "Ocurrio un Error"
                     return HttpResponse("Algo paso mal!")
-            except:
-                print "Hubo un error en la creacion del usuario"
+            except DatabaseError,e:
+                if str(e).startswith("value too long for type character"):
+                    return HttpResponse("No exceda el la cantidad de caracteres")
+
+                return HttpResponse("Error en el servidor")
+            except Exception,e:
+                print e
+                print "Hubo un error en la creacion del usuarioOOHHH"
                 print "Se tiene que crear un diccionario que direccione el error"
+                return HttpResponse("Error en el servidor")
             else:
 
                 response = HttpResponseRedirect("/preferencias")

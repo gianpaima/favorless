@@ -59,7 +59,7 @@ def resultados(request):
                 lista=lista_id_preferencia(prefer)
         except Exception, e:
             print e
-            lista = None 
+            lista = None
         if lista != None:
             total = buscarPrograma(search,lista)
             lista = list(prefer)
@@ -168,7 +168,7 @@ def principal(request):
             try:
                 cuatro_preferencias = Programa.objects.all()[:4]
             except Exception, e:
-                cuatro_preferencias = None   
+                cuatro_preferencias = None
 
     except Exception, e:
         print e        	
@@ -276,9 +276,13 @@ def fuente_user(request):
         return None
 
 
-def buscarparticipante(diccionario,opcion_participante):
-	for i in diccionario.values():
-		if i.get('opcion') == opcion_participante:
+def buscarparticipante(lista,opcion_participante):
+    for diccionario in lista:
+        print "Buscando el participante"
+        print diccionario
+        print "Fin de busqueda de participante"
+        for i in diccionario.values():
+		  if i.get('opcion') == opcion_participante:
 			return True
 	return False
 
@@ -366,7 +370,7 @@ def formar_participante(opc,modelo,numero):
     # p1 = {opc1:{'opcion':'1','alias':}}
     if len(opc)==2:
         #Es integrante
-        return ({opc[0]+'-'+opc[1]:{'opcion': numero,'alias':'%s %s %s' %(modelo.nombres,modelo.apellido_paterno,modelo.apellido_materno),'estado':''}},'-cat-%s-pro-%s-int-%s-' %(modelo.programa.tipo_programa.id, modelo.programa.id,modelo.id) )
+        return ({opc[0]+'-'+opc[1]:{'opcion': numero,'alias':'%s %s %s' %(modelo.nombres,modelo.apellido_paterno,modelo.apellido_materno),'estado':''}},'-cat-%s-pro-%s-int-%s-' %(modelo.programa_p.tipo_programa.id, modelo.programa_p.id,modelo.id) )
     else:
         #Es programa
         ##Si solo es 1
@@ -414,15 +418,16 @@ def post_versus(request):
             if participante_1 and participante_2:
                 fusion = fusion_imagen(img1,img2)
                 #print fusion.getvalue()
-                print "participante_1"
-                #print fusion
-                print participante_1
                 p1 = formar_participante(opc1,participante_1,'1')
                 p2 = formar_participante(opc2,participante_2,'2')
-                p1[0].update(p2[0])
+                #p1[0].update(p2[0])
+                total = [p1[0],p2[0]]
                 #total.update(formar_participante(opc2,participante_2,'2'))
+                print "vamos a ver resultadossssss"
+                print p1
+                print "FIN DE RESULTADOSSSSSS"
                 try:
-                    Question.objects.create(usuario_creador=str(request.user.id),asking=pregunta,participante=p1[0],versus=fusion,for_search_cip='%s%s' %(p1[1],p2[1])).save()
+                    Question.objects.create(for_result_vote=[0,0],usuario_creador=str(request.user.id),asking=pregunta,participante=total,versus=fusion,for_search_cip='%s%s' %(p1[1],p2[1])).save()
                     print "VIENE QUESTION"
                     return HttpResponse("1")
                 except Exception, e:

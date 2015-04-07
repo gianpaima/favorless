@@ -9,6 +9,7 @@ class FormRegistrarUsuario(forms.Form):
 	registro_input_usuario = forms.CharField(max_length=15,widget=forms.TextInput(attrs={'class':'form-control','id':'r_input_usuario','placeholder':'Nombre de Usuario'}))	
 
 class FormInciarSesion(forms.Form):
-	iniciar_input_email  = forms.CharField(max_length=20,widget=forms.TextInput(attrs={'class':'form-control','id':'s_input_email','placeholder':'Correo Electronico'}))
-	iniciar_input_password = forms.CharField(widget= forms.PasswordInput(attrs={'class':'form-control','id':'s_input_password','placeholder':'Contrasena'}))
-
+	username = forms.CharField(max_length=20,widget=forms.TextInput(attrs={'class':'form-control','id':'s_input_email','placeholder':'Correo Electronico'}))
+	password = forms.CharField(widget= forms.PasswordInput(attrs={'class':'form-control','id':'s_input_password','placeholder':'Contrasena'}))
+#iniciar_input_email
+#iniciar_input_password

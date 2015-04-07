@@ -91,6 +91,7 @@ class Integrante(models.Model):
 
 
 
-
+User._meta.get_field_by_name('email')[0]._unique = True
+User._meta.get_field_by_name('username')[0]._unique = True    
 User.add_to_class('foto', models.ImageField(upload_to='fotos/',blank=True,null=True,default="fotos/default.png"))
 User.add_to_class('nombreCompleto', models.CharField(max_length=60))

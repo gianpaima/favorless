@@ -30,11 +30,12 @@ class Question(models.Model):
 	asking = models.CharField(max_length=160)
 	fecha_ask = models.DateTimeField(auto_now=True)
 	versus = models.ImageField(upload_to='fusion/',blank=True,null=True)
-	participante = DictField()
+	participante = ListField(DictField())
 	usuariovotar = DictField()
 	#Para buscar....por usuario y (categoria,integrante,programa)
 	for_search_cip = models.CharField(max_length=200)
 	for_search_user= models.TextField()
+	for_result_vote= ListField(models.IntegerField())
 
 #participante debe ser formado:
 #{clave:valor}->{codigo:{opcion:numero,alias:username,estado:activo}}
