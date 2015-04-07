@@ -152,11 +152,11 @@ def principal(request):
 
     try:
         #aca esta el error
-        preferido = Preferencia.objects.filter(user=request.user.id,estado=True).values('programa__tipo_programa__id','id')
+        preferido = Preferencia.objects.filter(user=request.user.id,estado=True).values('programa__tipo_programa__id','programa__id')
         cuatro_preferencias=[]
         gustar = []
         for dato in preferido:
-            gustar.append(dato['id'])
+            gustar.append(dato['programa__id'])
             if dato['programa__tipo_programa__id'] not in cuatro_preferencias:
                 cuatro_preferencias.append(dato['programa__tipo_programa__id'])
         if cuatro_preferencias:
