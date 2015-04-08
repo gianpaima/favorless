@@ -389,16 +389,10 @@ def pruebarealtime (request):
 
 
 def buscarPrograma(request):
-    buscar = request.REQUEST.get('q',)
+    buscar = request.REQUEST.get('q','')
+    print "buscar"
+    print buscar
     if buscar:
-
-        programa = Programa.objects.filter(nombre__icontains=buscar).values('id', 'nombre','logo')
-        integrante = Integrante.objects.filter(Q(nombres__icontains=buscar) | Q(apellido_paterno__icontains=buscar) | Q(apellido_materno__icontains=buscar) ).values('id', 'nombres','apellido_paterno','apellido_materno','foto_a','programa')
-        #values_list
-
-        print programa 
-        return HttpResponse(json.dumps(list(programa)), content_type="application/json")
-
         total= []
         try:
             programa = Programa.objects.filter(Q(nombre__icontains=buscar) | Q(nombre_abreviado__icontains=buscar)).values('id', 'nombre','logo')
@@ -420,6 +414,7 @@ def buscarPrograma(request):
         print "esta acaa"
         print total
         return HttpResponse(json.dumps(total), content_type="application/json")
+
     return HttpResponse("")
 
 def versus(request):

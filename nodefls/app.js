@@ -207,7 +207,7 @@ function formatearToken(arreglo){
 
 
 console.log("Dato: "+data.text);
-request.get('http://127.0.0.1:8000/search?search='+data.text,
+request.get('http://127.0.0.1:8000/search?q='+data.text,
  {headers:
   {
         'User-Agent': 'request'
@@ -217,7 +217,7 @@ request.get('http://127.0.0.1:8000/search?search='+data.text,
     'bearer': 'bearerToken'
   }
 }, function (error, response, body) {
-   
+   console.log(body);
    enviar_emit(body);
 }).on('response', function(response) {
   console.log("respuesta");

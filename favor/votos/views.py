@@ -173,7 +173,6 @@ def principal(request):
     except Exception, e:
         print e        	
         cuatro_preferencias = None
-
     return render_to_response(template,{'total':total,'seguir':cuatro_preferencias},context_instance=RequestContext(request))
 
 def lista_preferencia(id):
@@ -292,31 +291,31 @@ def versus(request):
 
 
 
-def post_versus(request):
-    if request.method == "POST":
-        print request
-        pregunta = request.POST.get('pregunta')
-        opc1 = request.POST.get('opc1Id')
-        opc2 = request.POST.get('opc2Id')
-        img1=manjar_imagen_subida(request.FILES['file1'])
-        img2= manjar_imagen_subida(request.FILES['file2'])
-        # print "--------------"
-        # print request.FILES
-        # # print pregunta
-        # # print opc1
-        # print "img 1"
-        # print img1
-        # print "img 2"
-        # print img2
-        #print img2
-        #fs=uniimg(img1,img2)
-        # print opc2
-        #im1 = Image.open(img1)
-        q = unirlas(img1,img2)
-        #print q 
-        print " salida q "
-        print " pregunta: %s  , idOpc: %s  , idOpc2 : %s " % (pregunta,opc1,opc2)
-        return HttpResponse("Look After You  oh uh oh")
+# def post_versus(request):
+#     if request.method == "POST":
+#         print request
+#         pregunta = request.POST.get('pregunta')
+#         opc1 = request.POST.get('opc1Id')
+#         opc2 = request.POST.get('opc2Id')
+#         img1=manjar_imagen_subida(request.FILES['file1'])
+#         img2= manjar_imagen_subida(request.FILES['file2'])
+#         # print "--------------"
+#         # print request.FILES
+#         # # print pregunta
+#         # # print opc1
+#         # print "img 1"
+#         # print img1
+#         # print "img 2"
+#         # print img2
+#         #print img2
+#         #fs=uniimg(img1,img2)
+#         # print opc2
+#         #im1 = Image.open(img1)
+#         q = unirlas(img1,img2)
+#         #print q 
+#         print " salida q "
+#         print " pregunta: %s  , idOpc: %s  , idOpc2 : %s " % (pregunta,opc1,opc2)
+#         return HttpResponse("Look After You  oh uh oh")
 
 
 
@@ -393,9 +392,9 @@ def unirlas(a,b):
     imagefile = open(os.path.join("/home/sandro/Escritorio/pruebasImagenesDj",filename), 'r')
        
 
-    imagefile = open(os.path.join("/home/userstatic/Documents/Manuel/favorless/pruebasImagenesDj",filename), 'w')
-    salida.save(imagefile,"JPEG", quality=90)
-    imagefile = open(os.path.join("/home/userstatic/Documents/Manuel/favorless/pruebasImagenesDj",filename), 'r')
+    # imagefile = open(os.path.join("/home/sandro/Escritorio/pruebasImagenesDj",filename), 'w')
+    # salida.save(imagefile,"JPEG", quality=90)
+    # imagefile = open(os.path.join("/home/sandro/Escritorio/pruebasImagenesDj",filename), 'r')
 
 
   #  print "IMAGEN file:"
