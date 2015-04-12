@@ -137,8 +137,12 @@ def configuracionPassword(request):
         if ValidarUsuario().passwordZero(before) and ValidarUsuario().passwordFirst(now) and ValidarUsuario().passwordSecond(now,again):
             try:
                 if request.user.check_password(before):
-                    print request.user.set_password(now)
-                    error = "Se actualizo tu contrasena"
+                    if before != now:
+                        request.user.set_password(now)
+                        request.user.save()
+                        error = "Se actualizo tu contrasena"
+                    else:
+                        error = "Su contrasena actual debe de ser diferente a la nueva"
                 else:
                     error = "La contrasena que has ingresado es incorrecta. Por favor ingresa una contrasena diferente."
             except:
@@ -199,7 +203,9 @@ def validar(request):
 
 
 
-
+def restaurar(request):
+    template = "OlvidarPassword.html"
+    return render_to_response(template, {},context_instance=RequestContext(request))
 @login_required(login_url='/login')
 def cerrarSesion(request):
     logout(request)
@@ -400,12 +406,8 @@ def buscarPrograma(request):
     if buscar:
 
         programa = Programa.objects.filter(nombre__icontains=buscar).values('id', 'nombre','logo')
-        integrante = Integrante.objects.filter(Q(nombres__icontains=buscar) | Q(apellido_paterno__icontains=buscar) | Q(apellido_materno__icontains=buscar) ).values('id', 'nombres','apellido_paterno','apellido_materno','foto_a','programa')
+        integrante = Integrante.objects.filter(Q(nombres__icontains=buscar) | Q(apellido_paterno__icontains=buscar) | Q(apellido_materno__icontains=buscar) ).values('id', 'nombres','apellido_paterno','apellido_materno','foto_a','programa_p')
         #values_list
-
-        print programa 
-        return HttpResponse(json.dumps(list(programa)), content_type="application/json")
-
         total= []
         try:
             programa = Programa.objects.filter(Q(nombre__icontains=buscar) | Q(nombre_abreviado__icontains=buscar)).values('id', 'nombre','logo')
@@ -503,8 +505,6 @@ def post_versus(request):
         #print integrante
         return HttpResponse(json.dumps(total), content_type="application/json")
     return HttpResponse("nada por aqui")
-
-
     #     print "Estoy en POST"
     #     # print request
 
@@ -519,4 +519,16 @@ def post_versus(request):
     # else:
     #     return HttpResponse ("NO puedes Hacer nothing")
 
+
+def Error404(request):
+    response = render_to_response('404.html',{},context_instance=RequestContext(request))
+    response.status_code = 404
+    return response
+
+def Error500(request):
+    response = render_to_response('500.html',{},context_instance=RequestContext(request))
+    response.status_code = 500
+    return response
+
+   
 

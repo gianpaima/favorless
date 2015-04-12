@@ -1,0 +1,38 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Favorless</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     {% load static from staticfiles %}
+    <link href="{% static "static/css/bootstrap2.css"%}" rel="stylesheet">
+    <link href="{% static "static/css/estilosError.css"%}" rel="stylesheet">
+    <script src="{% static "static/js/respond.min.js"%}"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="boxtotal">
+            <div class="base">
+                <div class="eye left"></div>
+                <div class="eye right"></div>
+                <div class="flab">
+                    <div class="outer"></div>
+                    <div class="mouth"></div>
+                    <div class="middle left"></div>
+                    <div class="middle right"></div>
+                    <div class="inner left"></div>
+                    <div class="inner right"></div>
+                </div>
+                <div class="nose"></div>
+            </div>
+            <h1>Error <strong>404</strong></h1>
+            <h2>Página no encontrada</h2>
+        </div>
+    </div>
+
+    <!-- javascript -->
+    <script src="{% static "static/js/jquery-1.8.3.min.js"%}"></script>
+    <script src="{% static "static/js/bootstrap.min.js"%}"></script>
+    <script src="{% static "static/js/socket/index.js"%}"></script>
+    <script src="{% static "static/js/typeahead.jquery.min.js"%}"></script>
+</body>
+</html>

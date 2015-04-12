@@ -8,7 +8,7 @@
      {% load static from staticfiles %}
 </head>
 <body>
-<<<<<<< HEAD
+
     <div>
         <form enctype="multipart/form-data"> 
 
@@ -62,76 +62,6 @@
 
       <script src="{% static "static/js/jquery-1.8.3.min.js"%}"></script>
       <script src="http://localhost:3000/socket.io/socket.io.js"></script>
-
-      // <script src="{% static "static/js/index.js"%}"></script>
-
-      <script src="{% static "static/js/indexVersus.js"%}"></script>
-
-
-      <script>
-      var socket = io.connect('http://127.0.0.1:3000');
-     $("#submit").click(function(){
-        var opc1Id , opc2Id , pregunta, imgopc1,imgopc2;
-        pregunta = $("#fpregunta").val();
-        opc1Id = $(".search").prop("id");
-        opc2Id = $(".search2").prop("id"); 
-        var file1 = $("#imgOpc1")[0].files[0];
-        var fileName = file1.name;
-=======
-	<div>
-		<form enctype="multipart/form-data"> 
-
-			<div>
-				<label>  Pregunta :  </label>
-				<input  type  ="text"  name ="fpregunta"   id ="fpregunta" style = "width :  60%"> </br>
-			</div> </br>
-			<div>
-				<label> Opcion 1 : </label>
-				<input type  ="text" name ="fopc1"  class ="search"  id = "" value = ""> 
-			<!-- dentro del  parametro id debe de estar el id   del programa que es elegido  por defecto lo dejaremos en cero
-	Si es un programa...
-	Ejm: id ="codigo"
-	Si es un integrante
-	Ejem: id="codigo-codigoprograma"
-
-			 -->
-
-				<input type  ="file" name ="fImgOpc1"  id ="imgOpc1" > 
-			</div> </br>
-
-			<div>
-				<label> Opcion 2 :</label>
-				<input type  ="text" name ="fopc2"  class ="search2" id ="" > 
-				<input type  ="file" name ="fImgOpc2"  id ="imgOpc2" > 
-			</div>
-
-		</form>
-		<a  id  ="submit" href="#">Guardar</a>
-		<div id="respuesta">
-		</div>
-		<div>
-		
-		<div id = "resultados" style = "float:left;">
-			
-			<label> resultados</label>
-
-		</div>
-		</div>
-
-		<div>
-		
-		<div id = "resultadosPart2" style = "float:left; padding-left:20px;">
-
-			<label> resultados Parte 2</label>
-
-
-		</div>
-		</div>
-	</div>
-
-
-	  <script src="{% static "static/js/jquery-1.8.3.min.js"%}"></script>
-	  <script src="http://localhost:3000/socket.io/socket.io.js"></script>
 	  <script src="{% static "static/js/indexVersus.js"%}"></script>
 	  <script>
 
@@ -144,7 +74,7 @@
 
 	 	var file1 = $("#imgOpc1")[0].files[0];
 	 	var fileName = file1.name;
->>>>>>> 3c3b7df1875d1da479bf9bd16cfbc273fee71bc2
+
         //obtenemos la extensión del archivo
         fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1);
         //obtenemos el tamaño del archivo
