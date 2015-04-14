@@ -14,6 +14,9 @@ from registro_usuarios.models import Integrante,Programa,Preferencia
 from bson.objectid import ObjectId
 from bson.errors import InvalidId
 from django.utils import timezone
+#transaction
+from django.db import IntegrityError, transaction
+
 
 #Imagenes
 from PIL import Image
@@ -59,7 +62,7 @@ def resultados(request):
                 lista=lista_id_preferencia(prefer)
         except Exception, e:
             print e
-            lista = None 
+            lista = None
         if lista != None:
             total = buscarPrograma(search,lista)
             lista = list(prefer)
@@ -104,7 +107,7 @@ def static_page(request,slug=''):
                 print e
                 cip=None
         else:
-            #Integrante
+            #Integranteprincipal
             try:
                 cip = '-cat-'+str(a.programa_p.tipo_programa.id)+'-pro-'+str(a.programa_p.id)
             except Exception, e:
@@ -152,11 +155,11 @@ def principal(request):
 
     try:
         #aca esta el error
-        preferido = Preferencia.objects.filter(user=request.user.id,estado=True).values('programa__tipo_programa__id','id')
+        preferido = Preferencia.objects.filter(user=request.user.id,estado=True).values('programa__tipo_programa__id','programa__id')
         cuatro_preferencias=[]
         gustar = []
         for dato in preferido:
-            gustar.append(dato['id'])
+            gustar.append(dato['programa__id'])
             if dato['programa__tipo_programa__id'] not in cuatro_preferencias:
                 cuatro_preferencias.append(dato['programa__tipo_programa__id'])
         if cuatro_preferencias:
@@ -168,7 +171,7 @@ def principal(request):
             try:
                 cuatro_preferencias = Programa.objects.all()[:4]
             except Exception, e:
-                cuatro_preferencias = None   
+                cuatro_preferencias = None
 
     except Exception, e:
         print e        	
@@ -199,6 +202,8 @@ def home(request):
 
 #@login_required(login_url='/login')
 #ver lo de decoradores con nodejs
+
+@transaction.atomic
 def votar(request):
     if request.method== 'POST':
 	#Necesita usuario y voto,opcion participante....
@@ -208,22 +213,44 @@ def votar(request):
             print usuario.id
 
             try:
+
                 pr = Question.objects.get(pk=ObjectId(request.POST.get('question','')))
                 opcion = request.POST.get('opcion','')
+                print "sandro paso por aca"
+                print pr.participante
                 if buscarparticipante(pr.participante,opcion):
                     if not pr.usuariovotar.has_key(str(usuario.id)):
                         try:
-                            now = timezone.now()
-                            pr.usuariovotar.update({ str(usuario.id) :{'voto':opcion,'fecha':now,'estado':'activo'}})
-                            if pr.for_search_user:
-                                pr.for_search_user +=  str(usuario.id) + '-'
-                            else:
-                                pr.for_search_user += '-'+  str(usuario.id)+'-'
-                            pr.save()
-                            print 'Se creo el e-voting...'
-                            return HttpResponse('1')
-                        except Exception, e:
-                            print e
+                            with transaction.atomic():
+                                now = timezone.now()
+                                pr.usuariovotar.update({ str(usuario.id) :{'voto':opcion,'fecha':now,'estado':'activo'}})
+                                #desde aca ver el result_vote
+
+                                print " Manejo de  for_result_vote"
+                                print pr.for_result_vote
+                                print "Opcion que ha elegido"
+                                print opcion
+                                print "opcion para coger la opcion "
+                                opc_actual = int(opcion)-1
+                                print opc_actual
+                                print pr.for_result_vote[opc_actual]
+                                pr.for_result_vote[opc_actual] +=1
+                                print pr.for_result_vote[opc_actual]
+                                print "---------------------------Pruebas------------------------"
+                                print pr.for_result_vote
+                                print pr.for_result_vote[0]
+                                print pr.for_result_vote[1]
+                                print "a ver que pasa"
+
+                                if pr.for_search_user:
+                                    pr.for_search_user +=  str(usuario.id) + '-'
+                                else:
+                                    pr.for_search_user += '-'+  str(usuario.id)+'-'
+                                pr.save()
+                                print 'Se creo el e-voting...'
+                                return HttpResponse('1')
+                        except IntegrityError:
+                            print IntegrityError
                             print 'Hubo un error en la bd'
                             return HttpResponse('0')
                     else:
@@ -231,15 +258,27 @@ def votar(request):
                         opcion_antes = pr.usuariovotar.get(str(usuario.id)).get('voto')
                         if opcion != opcion_antes :
                             try:
-                                pr.usuariovotar.get(str(usuario.id))['voto']=opcion
-                                pr.save()
-                                print "Se actualizo el voto"
-                                return HttpResponse('1')
-                            except Exception, e:
-                                print e
+                                with transaction.atomic():
+                                    pr.usuariovotar.get(str(usuario.id))['voto']=opcion
+                                    opc_aux = int(opcion_antes)-1
+                                    print pr.for_result_vote[opc_aux]
+                                    pr.for_result_vote[opc_aux] -= 1
+                                    opc_actual = int(opcion)-1
+                                    pr.for_result_vote[opc_actual] += 1 
+                                    #pr.for_result_vote[]
+                                    pr.save()
+                                    print "Se actualizo el voto"
+                                    return HttpResponse('1')
+                           # except Exception, e:
+                            except IntegrityError:
+                                print IntegrityError
                                 print "ERROR"
                                 print 'Hubo un error en la bd'
                                 return HttpResponse('0')
+
+                        else:
+                            print "Su voto ya ha sido Registrado "
+                            return HttpResponse ('2')
                         #model.DoesNotExist, ValidationError,ValueError
                 else:
                     print 'No existe esa opcion'
@@ -276,11 +315,15 @@ def fuente_user(request):
         return None
 
 
-def buscarparticipante(diccionario,opcion_participante):
-	for i in diccionario.values():
-		if i.get('opcion') == opcion_participante:
-			return True
-	return False
+def buscarparticipante(lista,opcion_participante):
+    for diccionario in lista:
+        print "Buscando el participante"
+        print diccionario
+        print "Fin de busqueda de participante"
+        for i in diccionario.values():
+          if i.get('opcion') == opcion_participante:
+            return True
+    return False
 
 def versus(request):
     print "oh uh oh"
@@ -414,7 +457,7 @@ def formar_participante(opc,modelo,numero):
     # p1 = {opc1:{'opcion':'1','alias':}}
     if len(opc)==2:
         #Es integrante
-        return ({opc[0]+'-'+opc[1]:{'opcion': numero,'alias':'%s %s %s' %(modelo.nombres,modelo.apellido_paterno,modelo.apellido_materno),'estado':''}},'-cat-%s-pro-%s-int-%s-' %(modelo.programa.tipo_programa.id, modelo.programa.id,modelo.id) )
+        return ({opc[0]+'-'+opc[1]:{'opcion': numero,'alias':'%s %s %s' %(modelo.nombres,modelo.apellido_paterno,modelo.apellido_materno),'estado':''}},'-cat-%s-pro-%s-int-%s-' %(modelo.programa_p.tipo_programa.id, modelo.programa_p.id,modelo.id) )
     else:
         #Es programa
         ##Si solo es 1
@@ -462,15 +505,16 @@ def post_versus(request):
             if participante_1 and participante_2:
                 fusion = fusion_imagen(img1,img2)
                 #print fusion.getvalue()
-                print "participante_1"
-                #print fusion
-                print participante_1
                 p1 = formar_participante(opc1,participante_1,'1')
                 p2 = formar_participante(opc2,participante_2,'2')
-                p1[0].update(p2[0])
+                #p1[0].update(p2[0])
+                total = [p1[0],p2[0]]
                 #total.update(formar_participante(opc2,participante_2,'2'))
+                print "vamos a ver resultadossssss"
+                print p1
+                print "FIN DE RESULTADOSSSSSS"
                 try:
-                    Question.objects.create(usuario_creador=str(request.user.id),asking=pregunta,participante=p1[0],versus=fusion,for_search_cip='%s%s' %(p1[1],p2[1])).save()
+                    Question.objects.create(for_result_vote=[0,0],usuario_creador=str(request.user.id),asking=pregunta,participante=total,versus=fusion,for_search_cip='%s%s' %(p1[1],p2[1])).save()
                     print "VIENE QUESTION"
                     return HttpResponse("1")
                 except Exception, e:

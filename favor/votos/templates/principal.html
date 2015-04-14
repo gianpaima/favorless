@@ -186,13 +186,13 @@
 						  		<ul  class  = "nav nav-pills ul-pers">
 						  			<li class ="cajaun" data-choice="1" data-poll="{{t.id}}"> 
 						  				<a href="#"  id  ="izquierda" class  ="abc"> 
-						  					<span></span>
+						  					<span class= "sizq">{{t.for_result_vote.0}}</span>
 						  				</a>
 						  			</li>
 						  	
 						  		
 						  			<li  class = "cajaun" data-choice="2" data-poll="{{t.id}}"> 	
-						  				<a href="#" id = "derecha" class = "abc"><span></span></a>
+						  				<a href="#" id = "derecha" class = "abc"><span class="sder"> {{t.for_result_vote.1}}</span></a>
 
 						  				<div id = "resultados">
 
@@ -206,10 +206,10 @@
 
 						  			<div>
 								  		<ul class = "nav nav-pills xyz">
-							
-											    <li class ="opt left">{{t.participante.items.0.1.alias}}</li>
+														<!--  -  -->
+											    <li class ="opt left">{{t.participante.0.items.0.1.alias}}</li>
 								  			<li class = "center">0</li>
-								  			<li class = "opt right" data-choice="2">{{t.participante.items.1.1.alias}}</li>
+								  			<li class = "opt right" data-choice="2">{{t.participante.1.items.0.1.alias}}</li>
 										
 								  			
 								  		</ul>
