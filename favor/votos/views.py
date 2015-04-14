@@ -90,7 +90,7 @@ def lista_id_preferencia(preferencia):
     return lista
 
 def static_page(request,slug=''):
-    a= existe_entidad(slug.split("-",1))
+    a = existe_entidad(slug.split("-",1))
     template = "buscar.html"
     pre = None
     cip = None
@@ -179,14 +179,6 @@ def principal(request):
     except Exception, e:
         print e        	
         cuatro_preferencias = None
-<<<<<<< HEAD
-=======
-    print "TOTALLLLL"
-    for t in total:
-        print t.asking
-        print t.id
-    print "FIN TOTAL"
->>>>>>> ab2a5a9b4e912b392362d423e9358369380721cf
     return render_to_response(template,{'total':total,'seguir':cuatro_preferencias},context_instance=RequestContext(request))
 
 def lista_preferencia(id):
@@ -302,6 +294,7 @@ def votar(request):
                 return HttpResponse("0")
         else:
             print "Retornar usuario no auntentificado"
+            print "esta aqui...."
             return HttpResponse('0')
 
     else:
@@ -316,9 +309,13 @@ def fuente_user(request):
         if request.POST.get('sessionid'):
             try:
                 session = Session.objects.get(session_key=request.POST.get('sessionid'))
+
                 user_id = session.get_decoded().get('_auth_user_id')
+                print "USER_ID"
+                print user_id
                 user = get_or_none(User,**{'id':user_id} )
                 print "Usuario--user"
+                print user
                 return user
             except Exception,e:
                 print e
@@ -430,33 +427,10 @@ def unirlas(a,b):
     salida.paste(out2,(out1.size[0] + 2,0))
     #name =
     filename = "sandro3.jpg"
-<<<<<<< HEAD
 
-# <<<<<<< HEAD
-#     imagefile = open(os.path.join("/home/sandro/Escritorio/pruebasImagenesDj",filename), 'w')
-#     salida.save(imagefile,"JPEG", quality=90)
-#     imagefile = open(os.path.join("/home/sandro/Escritorio/pruebasImagenesDj",filename), 'r')
-#     content = File(imagefile)
-#     print "content"
-#     print content
-#     print "-------------------------------------"
-#     return (salida,content)
-# =======
-    imagefile = open(os.path.join("/home/sandro/Escritorio/pruebasImagenesDj",filename), 'w')
-    salida.save(imagefile,"JPEG", quality=90)
-    imagefile = open(os.path.join("/home/sandro/Escritorio/pruebasImagenesDj",filename), 'r')
-       
-
-    # imagefile = open(os.path.join("/home/sandro/Escritorio/pruebasImagenesDj",filename), 'w')
-    # salida.save(imagefile,"JPEG", quality=90)
-    # imagefile = open(os.path.join("/home/sandro/Escritorio/pruebasImagenesDj",filename), 'r')
-=======
     imagefile = open(os.path.join("/home/userstatic/Documents/Manuel/favorless/pruebasImagenesDj",filename), 'w')
     salida.save(imagefile,"JPEG", quality=90)
     imagefile = open(os.path.join("/home/userstatic/Documents/Manuel/favorless/pruebasImagenesDj",filename), 'r')
->>>>>>> ab2a5a9b4e912b392362d423e9358369380721cf
-
-
   #  print "IMAGEN file:"
    # print imagefile
     content = File(imagefile)
@@ -563,7 +537,7 @@ def lista_vacia(args):
 
 def get_or_none(model, **diccionario):
     try:
-        if diccionario.get('id').isdigit():
+        if str(diccionario.get('id')).isdigit():
             return model.objects.get(**diccionario)
         else:
             return []
@@ -572,6 +546,6 @@ def get_or_none(model, **diccionario):
         return []
     except Exception, e:
         print "ERROR SERVER GET_OR_NONE"
-        print diccionario
+        print diccionario.get('id')
         print e
         return None
