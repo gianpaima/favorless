@@ -23,7 +23,8 @@ from PIL import Image
 #Reduce search
 import operator
 from django.db.models import Q
-
+#Errores
+from registro_usuarios.views import Error404,Error500
 def buscarPrograma(buscar,preferencia):
     if buscar:
         total= []
@@ -121,8 +122,10 @@ def static_page(request,slug=''):
                 print "Error"
                 cip =None
 
-    else:
-        print "None"
+    elif a == []:
+        #retornar error 404
+        return Error404(request)        
+    #None    a pre cip
     return render_to_response(template,{'pagina':a,'gustar':pre,'total':cip},context_instance=RequestContext(request))
 #gridfs = GridFSStorage()
 #uploads = GridFSStorage(location='/uploads')
@@ -176,6 +179,14 @@ def principal(request):
     except Exception, e:
         print e        	
         cuatro_preferencias = None
+<<<<<<< HEAD
+=======
+    print "TOTALLLLL"
+    for t in total:
+        print t.asking
+        print t.id
+    print "FIN TOTAL"
+>>>>>>> ab2a5a9b4e912b392362d423e9358369380721cf
     return render_to_response(template,{'total':total,'seguir':cuatro_preferencias},context_instance=RequestContext(request))
 
 def lista_preferencia(id):
@@ -419,6 +430,7 @@ def unirlas(a,b):
     salida.paste(out2,(out1.size[0] + 2,0))
     #name =
     filename = "sandro3.jpg"
+<<<<<<< HEAD
 
 # <<<<<<< HEAD
 #     imagefile = open(os.path.join("/home/sandro/Escritorio/pruebasImagenesDj",filename), 'w')
@@ -438,6 +450,11 @@ def unirlas(a,b):
     # imagefile = open(os.path.join("/home/sandro/Escritorio/pruebasImagenesDj",filename), 'w')
     # salida.save(imagefile,"JPEG", quality=90)
     # imagefile = open(os.path.join("/home/sandro/Escritorio/pruebasImagenesDj",filename), 'r')
+=======
+    imagefile = open(os.path.join("/home/userstatic/Documents/Manuel/favorless/pruebasImagenesDj",filename), 'w')
+    salida.save(imagefile,"JPEG", quality=90)
+    imagefile = open(os.path.join("/home/userstatic/Documents/Manuel/favorless/pruebasImagenesDj",filename), 'r')
+>>>>>>> ab2a5a9b4e912b392362d423e9358369380721cf
 
 
   #  print "IMAGEN file:"
@@ -546,10 +563,13 @@ def lista_vacia(args):
 
 def get_or_none(model, **diccionario):
     try:
-        return model.objects.get(**diccionario)
+        if diccionario.get('id').isdigit():
+            return model.objects.get(**diccionario)
+        else:
+            return []
     except model.DoesNotExist:
         print "ERROR ENCONTRAR ENTIDAD"
-        return None
+        return []
     except Exception, e:
         print "ERROR SERVER GET_OR_NONE"
         print diccionario

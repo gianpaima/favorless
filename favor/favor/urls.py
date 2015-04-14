@@ -4,9 +4,13 @@ from django.conf import settings
 #finSetting
 from django.contrib import admin
 
-
+#from registro_usuarios import views
+#from votos import views
 admin.autodiscover()
 
+handler404 = 'registro_usuarios.views.Error404'
+handler500 = 'registro_usuarios.views.Error500'
+"""
 urlpatterns = patterns('',
 
     # Examples:
@@ -23,6 +27,7 @@ urlpatterns = patterns('',
     ##Fin voting  -?P<page_alias>.+? (?P<slug>[\w-]+)
     url(r'^$', 'registro_usuarios.views.home', name='home'),
     url(r'^login/$', 'registro_usuarios.views.iniciarSesion', name='login'),
+    url(r'^restaurar/$', 'registro_usuarios.views.restaurar', name='login'),
     url(r'^principal/$', 'votos.views.principal', name='principal'),
     url(r'^signup/$', 'registro_usuarios.views.registrarUsuario', name='signup'),
     url(r'^signup/validar/$', 'registro_usuarios.views.validar', name='validar'),
@@ -48,5 +53,39 @@ urlpatterns = patterns('',
 
     
     url(r'^admin/', include(admin.site.urls)),
+
+)
+"""
+urlpatterns = patterns('',
+    url(r'^media/(?P<path>.*)$','django.views.static.serve',
+        {'document_root':settings.MEDIA_ROOT,}
+        ),
+    url(r'^admin/', include(admin.site.urls)),
+    )
+urlpatterns += patterns('registro_usuarios.views',
+    url(r'^$', 'home', name='home'),
+    url(r'^login/$', 'iniciarSesion', name='login'),
+    url(r'^restaurar/$', 'restaurar', name='login'),
+    url(r'^signup/$', 'registrarUsuario', name='signup'),
+    url(r'^signup/validar/$', 'validar', name='validar'),
+    url(r'^settings/$', 'configuracionGeneral', name='settings'),
+    url(r'^settings/password/$', 'configuracionPassword', name='settings/password'),
+    url(r'^logout/$', 'cerrarSesion', name='logout'),
+    url(r'^preferencias/$', 'preferencias', name='preferencias'),
+    url(r'^addpreference/$', 'addpreference', name='addpreference'),
+    url(r'^pruebaNode/$', 'pruebaNode', name='pruebaNode'),
+    url(r'^pruebarealtime/$', 'pruebarealtime', name='pruebarealtime'),
+    url(r'^removepreference/$', 'removepreference', name='removepreference'),
+    url(r'^search/$', 'buscarPrograma', name='search'),
+)
+
+urlpatterns += patterns('votos.views',
+    url(r'^principal/$', 'principal', name='principal'),
+    url(r'^votos/$', 'home', name='home'),
+    url(r'^votos/elegir$', 'votar', name='votar'),
+    url(r'^versus/$', 'versus', name='versus'),
+    url(r'^post_versus/$', 'post_versus', name='post_versus'),
+    url(r'^pages/(?P<slug>[\w-]+)/$', 'static_page'),
+    url(r'^search/results/$', 'resultados'),
 
 )
