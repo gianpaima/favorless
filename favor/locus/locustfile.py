@@ -20,9 +20,11 @@ def index(l):
 def profile(l):
     l.client.get("/principal")
     #l.client.get("/")
+def preferencias(l):
+    l.cliente.get("/preferencias")
 class UserBehavior(TaskSet):
     #tasks = {index:2, profile:1}
-    tasks = {index:1, profile:1}
+    tasks = {index:1, profile:1,preferencias:1}
 
     def on_start(self):
         login(self)

@@ -406,12 +406,10 @@ def buscarPrograma(request):
     print "buscar"
     print buscar
     if buscar:
-
-
         programa = Programa.objects.filter(nombre__icontains=buscar).values('id', 'nombre','logo')
         integrante = Integrante.objects.filter(Q(nombres__icontains=buscar) | Q(apellido_paterno__icontains=buscar) | Q(apellido_materno__icontains=buscar) ).values('id', 'nombres','apellido_paterno','apellido_materno','foto_a','programa_p')
-        #values_list
-
+        programa = Programa.objects.filter(nombre__icontains=buscar).values('id', 'nombre','logo')
+        integrante = Integrante.objects.filter(Q(nombres__icontains=buscar) | Q(apellido_paterno__icontains=buscar) | Q(apellido_materno__icontains=buscar) ).values('id', 'nombres','apellido_paterno','apellido_materno','foto_a','programa_p')
         total= []
         try:
             programa = Programa.objects.filter(Q(nombre__icontains=buscar) | Q(nombre_abreviado__icontains=buscar)).values('id', 'nombre','logo')

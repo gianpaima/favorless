@@ -14,6 +14,7 @@ from registro_usuarios.models import Integrante,Programa,Preferencia
 from bson.objectid import ObjectId
 from bson.errors import InvalidId
 from django.utils import timezone
+import json
 #transaction
 from django.db import IntegrityError, transaction
 
@@ -25,6 +26,7 @@ import operator
 from django.db.models import Q
 #Errores
 from registro_usuarios.views import Error404,Error500
+
 def buscarPrograma(buscar,preferencia):
     if buscar:
         total= []
@@ -90,7 +92,7 @@ def lista_id_preferencia(preferencia):
     return lista
 
 def static_page(request,slug=''):
-    a= existe_entidad(slug.split("-",1))
+    a = existe_entidad(slug.split("-",1))
     template = "buscar.html"
     pre = None
     cip = None
@@ -180,11 +182,6 @@ def principal(request):
         print e        	
         cuatro_preferencias = None
 
-    print "TOTALLLLL"
-    for t in total:
-        print t.asking
-        print t.id
-    print "FIN TOTAL"
     return render_to_response(template,{'total':total,'seguir':cuatro_preferencias},context_instance=RequestContext(request))
 
 def lista_preferencia(id):
@@ -222,8 +219,8 @@ def votar(request):
             print usuario.id
 
             try:
-
-                pr = Question.objects.get(pk=ObjectId(request.POST.get('question','')))
+                id_q = request.POST.get('question','')
+                pr = Question.objects.get(pk=ObjectId(id_q))
                 opcion = request.POST.get('opcion','')
                 print "sandro paso por aca"
                 print pr.participante
@@ -256,8 +253,11 @@ def votar(request):
                                 else:
                                     pr.for_search_user += '-'+  str(usuario.id)+'-'
                                 pr.save()
+                                print "PR_For_result_vote"
+                                print pr.for_result_vote
                                 print 'Se creo el e-voting...'
-                                return HttpResponse('1')
+
+                                return HttpResponse(json.dumps(['1',pr.for_result_vote,id_q ]))
                         except IntegrityError:
                             print IntegrityError
                             print 'Hubo un error en la bd'
@@ -277,7 +277,10 @@ def votar(request):
                                     #pr.for_result_vote[]
                                     pr.save()
                                     print "Se actualizo el voto"
-                                    return HttpResponse('1')
+                                    print "PR_For_result_vote"
+                                    print pr.for_result_vote
+
+                                    return HttpResponse(json.dumps(['1',pr.for_result_vote,id_q ]))
                            # except Exception, e:
                             except IntegrityError:
                                 print IntegrityError
@@ -287,7 +290,7 @@ def votar(request):
 
                         else:
                             print "Su voto ya ha sido Registrado "
-                            return HttpResponse ('2')
+                            return HttpResponse(json.dumps(['2',pr.for_result_vote]))
                         #model.DoesNotExist, ValidationError,ValueError
                 else:
                     print 'No existe esa opcion'
@@ -300,12 +303,13 @@ def votar(request):
                 return HttpResponse("0")
         else:
             print "Retornar usuario no auntentificado"
+            print "esta aqui...."
             return HttpResponse('0')
 
     else:
 		return HttpResponse("Tomate un tiempo")
 
-    #"""
+    
 def fuente_user(request):
     if request.user.is_authenticated():
             user = request.user
@@ -314,9 +318,13 @@ def fuente_user(request):
         if request.POST.get('sessionid'):
             try:
                 session = Session.objects.get(session_key=request.POST.get('sessionid'))
+
                 user_id = session.get_decoded().get('_auth_user_id')
+                print "USER_ID"
+                print user_id
                 user = get_or_none(User,**{'id':user_id} )
                 print "Usuario--user"
+                print user
                 return user
             except Exception,e:
                 print e
@@ -340,36 +348,6 @@ def versus(request):
         print ("estoy en GET")
         template = "crearVersus.html"
         return render_to_response(template,context_instance=RequestContext(request))
-
-
-
-# def post_versus(request):
-#     if request.method == "POST":
-#         print request
-#         pregunta = request.POST.get('pregunta')
-#         opc1 = request.POST.get('opc1Id')
-#         opc2 = request.POST.get('opc2Id')
-#         img1=manjar_imagen_subida(request.FILES['file1'])
-#         img2= manjar_imagen_subida(request.FILES['file2'])
-#         # print "--------------"
-#         # print request.FILES
-#         # # print pregunta
-#         # # print opc1
-#         # print "img 1"
-#         # print img1
-#         # print "img 2"
-#         # print img2
-#         #print img2
-#         #fs=uniimg(img1,img2)
-#         # print opc2
-#         #im1 = Image.open(img1)
-#         q = unirlas(img1,img2)
-#         #print q 
-#         print " salida q "
-#         print " pregunta: %s  , idOpc: %s  , idOpc2 : %s " % (pregunta,opc1,opc2)
-#         return HttpResponse("Look After You  oh uh oh")
-
-
 
 
 def uniimg(img1,img2):
@@ -404,17 +382,12 @@ def manjar_imagen_subida(i):
     return image
 
 def fusion_imagen(img1,img2):
-    #print img2
-    #fs=uniimg(img1,img2)
-    # print opc2
-    #im1 = Image.open(img1)
     try:
         q = unirlas(img1,img2)
     except Exception, e:
         print "ERRR"
         print e
         return None
-        #print q
     return q
 
 def unirlas(a,b):
@@ -426,46 +399,12 @@ def unirlas(a,b):
     out2 = b.resize((salida.size[0]/2 - 1, salida.size[1]),Image.ANTIALIAS)
     salida.paste(out1,(0,0))
     salida.paste(out2,(out1.size[0] + 2,0))
-    #name =
     filename = "sandro3.jpg"
-
-
-# <<<<<<< HEAD
-#     imagefile = open(os.path.join("/home/sandro/Escritorio/pruebasImagenesDj",filename), 'w')
-#     salida.save(imagefile,"JPEG", quality=90)
-#     imagefile = open(os.path.join("/home/sandro/Escritorio/pruebasImagenesDj",filename), 'r')
-#     content = File(imagefile)
-#     print "content"
-#     print content
-#     print "-------------------------------------"
-#     return (salida,content)
-# =======
     imagefile = open(os.path.join("/home/sandro/Escritorio/pruebasImagenesDj",filename), 'w')
     salida.save(imagefile,"JPEG", quality=90)
     imagefile = open(os.path.join("/home/sandro/Escritorio/pruebasImagenesDj",filename), 'r')
-       
-
-    # imagefile = open(os.path.join("/home/sandro/Escritorio/pruebasImagenesDj",filename), 'w')
-    # salida.save(imagefile,"JPEG", quality=90)
-    # imagefile = open(os.path.join("/home/sandro/Escritorio/pruebasImagenesDj",filename), 'r')
-# =======
-#     imagefile = open(os.path.join("/home/userstatic/Documents/Manuel/favorless/pruebasImagenesDj",filename), 'w')
-#     salida.save(imagefile,"JPEG", quality=90)
-#     imagefile = open(os.path.join("/home/userstatic/Documents/Manuel/favorless/pruebasImagenesDj",filename), 'r')
-# >>>>>>> ab2a5a9b4e912b392362d423e9358369380721cf
-
-
-  #  print "IMAGEN file:"
-   # print imagefile
     content = File(imagefile)
-    #print "content"
-    #print content
-    #print "-------------------------------------"
-    #print "SALIDA"
-    #print "-------------------------------------"
-    #print salida
     return content
-    #return (salida,content)
 
 def formar_participante(opc,modelo,numero):
     #{codigo:{opcion:numero,alias:username,estado:activo}}
@@ -561,7 +500,7 @@ def lista_vacia(args):
 
 def get_or_none(model, **diccionario):
     try:
-        if diccionario.get('id').isdigit():
+        if str(diccionario.get('id')).isdigit():
             return model.objects.get(**diccionario)
         else:
             return []
@@ -570,6 +509,6 @@ def get_or_none(model, **diccionario):
         return []
     except Exception, e:
         print "ERROR SERVER GET_OR_NONE"
-        print diccionario
+        print diccionario.get('id')
         print e
         return None

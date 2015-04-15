@@ -7,10 +7,6 @@
      {% load static from staticfiles %}
 </head>
 <body>
-<<<<<<< HEAD
-=======
-
->>>>>>> ab2a5a9b4e912b392362d423e9358369380721cf
     <div>
         <form enctype="multipart/form-data"> 
 
@@ -65,20 +61,7 @@
 
       <script src="{% static "static/js/jquery-1.8.3.min.js"%}"></script>
       <script src="http://localhost:3000/socket.io/socket.io.js"></script>
-<<<<<<< HEAD
-      <script src="{% static "static/js/indexVersus.js"%}"></script>
-      <script>
 
-      var socket = io.connect('http://127.0.0.1:3000');
-     $("#submit").click(function(){
-        var opc1Id , opc2Id , pregunta, imgopc1,imgopc2;
-        pregunta = $("#fpregunta").val();
-        opc1Id = $(".search").prop("id");
-        opc2Id = $(".search2").prop("id"); 
-
-        var file1 = $("#imgOpc1")[0].files[0];
-        var fileName = file1.name;
-=======
 	  <script src="{% static "static/js/indexVersus.js"%}"></script>
 	  <script>
 
@@ -91,8 +74,6 @@
 
 	 	var file1 = $("#imgOpc1")[0].files[0];
 	 	var fileName = file1.name;
-
->>>>>>> ab2a5a9b4e912b392362d423e9358369380721cf
         //obtenemos la extensión del archivo
         fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1);
         //obtenemos el tamaño del archivo
@@ -148,8 +129,6 @@
         })
 
      });
-
-
 
         // This function gets cookie with a given name
             function getCookie(name) {
