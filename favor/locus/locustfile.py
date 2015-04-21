@@ -3,7 +3,7 @@ from locust import HttpLocust, TaskSet
 def login(self):
 
     #a=self.client.post("/login", {"username":"static", "password":"static"})
-    response = self.client.get("/login/")
+    response = self.client.get("/login")
     csrftoken = response.cookies['csrftoken']
     #print "csrftoken"
     #print csrftoken
@@ -21,7 +21,8 @@ def profile(l):
     l.client.get("/principal")
     #l.client.get("/")
 def preferencias(l):
-    l.cliente.get("/preferencias")
+    l.client.get("/preferencias")
+
 class UserBehavior(TaskSet):
     #tasks = {index:2, profile:1}
     tasks = {index:1, profile:1,preferencias:1}

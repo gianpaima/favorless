@@ -181,7 +181,6 @@ def principal(request):
     except Exception, e:
         print e        	
         cuatro_preferencias = None
-
     return render_to_response(template,{'total':total,'seguir':cuatro_preferencias},context_instance=RequestContext(request))
 
 def lista_preferencia(id):
@@ -384,6 +383,8 @@ def manjar_imagen_subida(i):
 def fusion_imagen(img1,img2):
     try:
         q = unirlas(img1,img2)
+        print q
+        print "QQQQ"
     except Exception, e:
         print "ERRR"
         print e
@@ -400,9 +401,9 @@ def unirlas(a,b):
     salida.paste(out1,(0,0))
     salida.paste(out2,(out1.size[0] + 2,0))
     filename = "sandro3.jpg"
-    imagefile = open(os.path.join("/home/sandro/Escritorio/pruebasImagenesDj",filename), 'w')
+    imagefile = open(os.path.join("/home/userstatic/Documents/Manuel/favorless/pruebasImagenesDj",filename), 'w')
     salida.save(imagefile,"JPEG", quality=90)
-    imagefile = open(os.path.join("/home/sandro/Escritorio/pruebasImagenesDj",filename), 'r')
+    imagefile = open(os.path.join("/home/userstatic/Documents/Manuel/favorless/pruebasImagenesDj",filename), 'r')
     content = File(imagefile)
     return content
 
