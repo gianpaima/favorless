@@ -97,7 +97,12 @@
 			<section class="col-lg-8 col-sm-8 col-md-8 col-xs-12 ">
 
 			{% if total != None  %}
-				{% for t in total|dictsortreversed:"votos"%}
+				{% if total.votos %}
+					{% with total=total|dictsortreversed:"votos" %}
+					{%endwith%}
+				{% endif %}
+				{% for t in total %}
+
 				    
 					<article class="col-lg-12 col-xs-12">
 					
@@ -159,6 +164,7 @@
 				{% empty %}
 				    <li>Disculpa, no tienes mas preguntas en la lista.</li>
 				{% endfor %}
+				
 
 			{% else %}
 			    <p>Ha habido un problema...vuelva a interntarlo posteriormente</p>

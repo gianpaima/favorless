@@ -175,6 +175,8 @@ def principal(request):
         #total = Question.objects.values('usuariovotar').annotate(numero_pregunta=Count('usuariovotar')).order_by('-usuariovotar')
         try:
             total = Question.objects.exclude(for_search_user__contains='-%s-' %(str(request.user.id))).order_by('-usuariovotar')
+            for pregunta in total:
+                pregunta.votos = pregunta.for_result_vote[0] + pregunta.for_result_vote[1]
         except Exception, e:
             total = None
         print len(total)
@@ -184,10 +186,8 @@ def principal(request):
         total = None
         print "Hubo un problema"
 
-
-    for pregunta in total:
-        pregunta.votos = pregunta.for_result_vote[0] + pregunta.for_result_vote[1]
-
+    print "total"
+    print total
     # try:
     #     #aca esta el error
     #     preferido = Preferencia.objects.filter(user=request.user.id,estado=True).values('programa__tipo_programa__id','programa__id')
