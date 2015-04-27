@@ -142,6 +142,9 @@ def misVotaciones(request):
     except Exception ,e :
         print e
 
+    for pregunta in questions:
+        pregunta.votos = pregunta.for_result_vote[0] + pregunta.for_result_vote[1]
+
     cuatro_preferencias = cuatroPrefe(request.user.id)
     return render_to_response(template,{'total':questions,'seguir':cuatro_preferencias},context_instance=RequestContext(request))
 
@@ -180,6 +183,10 @@ def principal(request):
     else:
         total = None
         print "Hubo un problema"
+
+
+    for pregunta in total:
+        pregunta.votos = pregunta.for_result_vote[0] + pregunta.for_result_vote[1]
 
     # try:
     #     #aca esta el error

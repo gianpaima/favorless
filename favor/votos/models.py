@@ -36,7 +36,6 @@ class Question(models.Model):
 	for_search_cip = models.CharField(max_length=200)
 	for_search_user= models.TextField()
 	for_result_vote= ListField(models.IntegerField())
-
 #participante debe ser formado:
 #{clave:valor}->{codigo:{opcion:numero,alias:username,estado:activo}}
 #estados_todos = (('Di', 'Disponible'), ('Br', 'Break'),('Ca', 'Cancelado'),)	

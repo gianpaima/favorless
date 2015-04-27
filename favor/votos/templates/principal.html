@@ -97,7 +97,7 @@
 			<section class="col-lg-8 col-sm-8 col-md-8 col-xs-12 ">
 
 			{% if total != None  %}
-				{% for t in total %}
+				{% for t in total|dictsortreversed:"votos"%}
 				    
 					<article class="col-lg-12 col-xs-12">
 					
@@ -122,6 +122,8 @@
 						  				<a href="#" id = "derecha" class = "abc"><span class="sder rd{{t.id}}"> {{t.for_result_vote.1}}</span></a>
 
 						  				<div id = "resultados">
+
+						  				CANTIDAD DE VOTOS : ---------->		{{t.votos}}
 
 						  				</div>
 						  			</li>
@@ -150,6 +152,7 @@
 					   	</div>	
 
 					</div>
+
 
 				</article>
 
