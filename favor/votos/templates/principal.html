@@ -9,17 +9,16 @@
 		<span class="sr-only">Toggle navigation</span>
 		<span class="glyphicon glyphicon-search"></span>
 	</button>
-	<div>
-		<a href="#" class="navbar-brand-centered"><img src="../static/static/img/titulologo.png" alt="favorless logo"></a>
-	</div>
+	<a href="#" class="navbar-brand-centered"><img src="../static/static/img/titulologo2.png" alt="favorless logo"></a>
+</div>
 
-
+<div>
+	<a class="pull-right" href="{% url "logout" %}"><span style="font-size:16px;" class="glyphicon glyphicon-cog"></span></a>
 </div>
 
 <div class="navbar-collapse collapse">
 	<ul class="nav navbar-nav">
 		<form  method="get" action='/search/results/' class="navbar-form" role="search">
-
 			<div id="the-basics" class="input-group col-lg-3 col-md-3 col-sm-3">
 				<input type="text" class="form-control typeahead" placeholder="Buscar..." id="search" name="q">
 				<span class="input-group-btn">
@@ -30,7 +29,6 @@
 			</div>
 		</form>
 	</ul>
-
 </div>
 <div id = "resultadoss">
 
@@ -78,15 +76,15 @@
 									</div>
 								</li>
 						    {% endfor %}
-							
+
 						{% else %}
 						<li>No hay mas programas para seguir.</li>
 						{% endif %}
 					  {% else %}
-					    <li>Disculpe ha sucedido un error, 
+					    <li>Disculpe ha sucedido un error,
 					    	vuelva a intentarlo mas tarde.</li>
 					  {% endif %}
-					
+
 				</ul>
 			</div>
 		</div>
@@ -97,10 +95,18 @@
 			<section class="col-lg-8 col-sm-8 col-md-8 col-xs-12 ">
 
 			{% if total != None  %}
+				{% if total.votos %}
+					{% with total=total|dictsortreversed:"votos" %}
+					{%endwith%}
+				{% endif %}
 				{% for t in total %}
+
+<<<<<<< HEAD
+=======
 				    
+>>>>>>> c0570536b53e645884ea08aefc714a8c3ef452ef
 					<article class="col-lg-12 col-xs-12">
-					
+
 
 					<div class="panel panel-default">
 					 	 <div class="panel-heading"><a href="#" >{{t.asking}}</a>
@@ -111,17 +117,19 @@
 					   			<div  id = "cajafuera">
 
 						  		<ul  class  = "nav nav-pills ul-pers">
-						  			<li class ="cajaun" data-choice="1" data-poll="{{t.id}}"> 
-						  				<a href="#"  id  ="izquierda" class  ="abc"> 
+						  			<li class ="cajaun" data-choice="1" data-poll="{{t.id}}">
+						  				<a href="#"  id  ="izquierda" class  ="abc">
 						  					<span class= "sizq ri{{t.id}} ">{{t.for_result_vote.0}}</span>
 						  				</a>
 						  			</li>
-						  	
-						  		
-						  			<li  class = "cajaun" data-choice="2" data-poll="{{t.id}}"> 	
+
+
+						  			<li  class = "cajaun" data-choice="2" data-poll="{{t.id}}">
 						  				<a href="#" id = "derecha" class = "abc"><span class="sder rd{{t.id}}"> {{t.for_result_vote.1}}</span></a>
 
 						  				<div id = "resultados">
+
+						  				CANTIDAD DE VOTOS : ---------->		{{t.votos}}
 
 						  				</div>
 						  			</li>
@@ -137,8 +145,8 @@
 											    <li class ="opt left">{{t.participante.0.items.0.1.alias}}</li>
 								  			<li class = "center">0</li>
 								  			<li class = "opt right" data-choice="2">{{t.participante.1.items.0.1.alias}}</li>
-										
-								  			
+
+
 								  		</ul>
 							  		</div>
 
@@ -147,23 +155,25 @@
 						    		</a>
 					    		</div>
 					  		</div>
-					   	</div>	
+					   	</div>
 
 					</div>
+
 
 				</article>
 
 				{% empty %}
 				    <li>Disculpa, no tienes mas preguntas en la lista.</li>
 				{% endfor %}
+				
 
 			{% else %}
 			    <p>Ha habido un problema...vuelva a interntarlo posteriormente</p>
-			{% endif %}		
+			{% endif %}
 		</section>
 
 
-				
+
 	</article>
 
 
@@ -171,11 +181,11 @@
 {% endblock %}
 
 {% block footer %}
-<p><a href="http://getbootstrap.com">Favorless</a> desarrollado por <a href="https://twitter.com/FLS">@MGS</a>.</p>
+<p>
+	<a href="http://getbootstrap.com">Favorless</a> desarrollado por <a href="https://twitter.com/FLS">@MGS</a>
+</p>
+
 <p>
 	<a href="#">Back to top</a>
 </p>
-
 {% endblock %}
-
-
