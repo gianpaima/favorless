@@ -17,8 +17,6 @@ from django.utils import timezone
 import json
 #transaction
 from django.db import IntegrityError, transaction
-
-
 #Imagenes
 from PIL import Image
 #Reduce search
@@ -129,6 +127,32 @@ def static_page(request,slug=''):
         return Error404(request)
     #None    a pre cip
     return render_to_response(template,{'pagina':a,'gustar':pre,'total':cip},context_instance=RequestContext(request))
+
+
+@login_required(login_url = '/login')
+def misVotaciones(request):
+    template = "principal.html"
+    print "El Id que esta pasando para la consulta de mis Votos es : "
+    print request.user.id
+    try:
+        #questions = Question.objects.filter(for_search_user__contains = '-%s-'  %(str(request.user.id)))
+        questions = Question.objects.filter(for_search_user__icontains = '-%s' %(str(request.user.id)))
+        print "Las preguntas en donde Vote son las siguiente:"
+        print questions
+    except Exception ,e :
+        print e
+
+    for pregunta in questions:
+        pregunta.votos = pregunta.for_result_vote[0] + pregunta.for_result_vote[1]
+
+    cuatro_preferencias = cuatroPrefe(request.user.id)
+    return render_to_response(template,{'total':questions,'seguir':cuatro_preferencias},context_instance=RequestContext(request))
+
+
+
+
+
+
 #gridfs = GridFSStorage()
 #uploads = GridFSStorage(location='/uploads')
 @login_required(login_url='/login')
@@ -141,6 +165,8 @@ def principal(request):
         #You can do that using the regex search too, avoiding many Q expressions (which end up using that many where "and" clauses in the SQL, possibly dampening the performance), as follows:
         try:
             query = reduce(operator.or_, (Q(for_search_cip__contains = item) for item in lista ))
+            print "QUERY..."
+            print query
             total = Question.objects.exclude(for_search_user__contains='-%s-' %(str(request.user.id))).filter(query)
         except Exception, e:
             print e
@@ -149,6 +175,8 @@ def principal(request):
         #total = Question.objects.values('usuariovotar').annotate(numero_pregunta=Count('usuariovotar')).order_by('-usuariovotar')
         try:
             total = Question.objects.exclude(for_search_user__contains='-%s-' %(str(request.user.id))).order_by('-usuariovotar')
+            for pregunta in total:
+                pregunta.votos = pregunta.for_result_vote[0] + pregunta.for_result_vote[1]
         except Exception, e:
             total = None
         print len(total)
@@ -158,9 +186,41 @@ def principal(request):
         total = None
         print "Hubo un problema"
 
+    print "total"
+    print total
+    # try:
+    #     #aca esta el error
+    #     preferido = Preferencia.objects.filter(user=request.user.id,estado=True).values('programa__tipo_programa__id','programa__id')
+    #     cuatro_preferencias=[]
+    #     gustar = []
+    #     for dato in preferido:
+    #         gustar.append(dato['programa__id'])
+    #         if dato['programa__tipo_programa__id'] not in cuatro_preferencias:
+    #             cuatro_preferencias.append(dato['programa__tipo_programa__id'])
+    #     if cuatro_preferencias:
+    #         try:
+    #             cuatro_preferencias = Programa.objects.exclude(id__in=gustar).filter(tipo_programa__id__in=cuatro_preferencias).values('tipo_programa__id','nombre')[:4]
+    #         except Exception, e:
+    #             cuatro_preferencias = None
+    #     else:
+    #         try:
+    #             cuatro_preferencias = Programa.objects.all()[:4]
+    #         except Exception, e:
+    #             cuatro_preferencias = None
+
+    # except Exception, e:
+    #     print e        	
+    #     cuatro_preferencias = None
+    cuatro_preferencias = cuatroPrefe(request.user.id)
+    print "cuatro preferencias"
+    print cuatro_preferencias
+    return render_to_response(template,{'total':total,'seguir':cuatro_preferencias},context_instance=RequestContext(request))
+
+def cuatroPrefe(user_id):
+    print "entre a cuadroPrefe"
     try:
         #aca esta el error
-        preferido = Preferencia.objects.filter(user=request.user.id,estado=True).values('programa__tipo_programa__id','programa__id')
+        preferido = Preferencia.objects.filter(user=user_id,estado=True).values('programa__tipo_programa__id','programa__id')
         cuatro_preferencias=[]
         gustar = []
         for dato in preferido:
@@ -179,10 +239,16 @@ def principal(request):
                 cuatro_preferencias = None
 
     except Exception, e:
+<<<<<<< HEAD
         print e
+=======
+        print e         
+>>>>>>> c0570536b53e645884ea08aefc714a8c3ef452ef
         cuatro_preferencias = None
 
-    return render_to_response(template,{'total':total,'seguir':cuatro_preferencias},context_instance=RequestContext(request))
+    return cuatro_preferencias    
+
+#.--------------------------------------------------------------------------------------------------------------
 
 def lista_preferencia(id):
     try:
@@ -246,6 +312,7 @@ def votar(request):
                                 print pr.for_result_vote
                                 print pr.for_result_vote[0]
                                 print pr.for_result_vote[1]
+                                print pr.for_result_vote[0] + pr.for_result_vote[1]
                                 print "a ver que pasa"
 
                                 if pr.for_search_user:
@@ -255,6 +322,9 @@ def votar(request):
                                 pr.save()
                                 print "PR_For_result_vote"
                                 print pr.for_result_vote
+                                #----------------------------
+                                print "pr UsuarioVotar Count"
+                                print len(pr.usuariovotar)
                                 print 'Se creo el e-voting...'
 
                                 return HttpResponse(json.dumps(['1',pr.for_result_vote,id_q ]))
@@ -275,6 +345,10 @@ def votar(request):
                                     opc_actual = int(opcion)-1
                                     pr.for_result_vote[opc_actual] += 1
                                     #pr.for_result_vote[]
+
+                                    print "Totalus"
+                                    print pr.for_result_vote[0] + pr.for_result_vote[1]
+                                    print len(pr.usuariovotar)
                                     pr.save()
                                     print "Se actualizo el voto"
                                     print "PR_For_result_vote"
@@ -384,6 +458,8 @@ def manjar_imagen_subida(i):
 def fusion_imagen(img1,img2):
     try:
         q = unirlas(img1,img2)
+        print q
+        print "QQQQ"
     except Exception, e:
         print "ERRR"
         print e
@@ -399,10 +475,17 @@ def unirlas(a,b):
     out2 = b.resize((salida.size[0]/2 - 1, salida.size[1]),Image.ANTIALIAS)
     salida.paste(out1,(0,0))
     salida.paste(out2,(out1.size[0] + 2,0))
+<<<<<<< HEAD
     filename = "sandro1.jpg"
     imagefile = open(os.path.join("c:", "/Users/GianCarlos/Documents/Nueva",filename), 'wb')
     salida.save(imagefile,"JPEG", quality=90)
     imagefile = open(os.path.join("c:", "/Users/GianCarlos/Documents/Nueva",filename), 'rb')
+=======
+    filename = "sandro3.jpg"
+    imagefile = open(os.path.join("/home/sandro/Escritorio/pruebasImagenesDj/",filename), 'w')
+    salida.save(imagefile,"JPEG", quality=90)
+    imagefile = open(os.path.join("/home/sandro/Escritorio/pruebasImagenesDj/",filename), 'r')
+>>>>>>> c0570536b53e645884ea08aefc714a8c3ef452ef
     content = File(imagefile)
     return content
 
@@ -512,3 +595,4 @@ def get_or_none(model, **diccionario):
         print diccionario.get('id')
         print e
         return None
+

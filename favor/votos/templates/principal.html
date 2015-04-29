@@ -95,8 +95,16 @@
 			<section class="col-lg-8 col-sm-8 col-md-8 col-xs-12 ">
 
 			{% if total != None  %}
+				{% if total.votos %}
+					{% with total=total|dictsortreversed:"votos" %}
+					{%endwith%}
+				{% endif %}
 				{% for t in total %}
 
+<<<<<<< HEAD
+=======
+				    
+>>>>>>> c0570536b53e645884ea08aefc714a8c3ef452ef
 					<article class="col-lg-12 col-xs-12">
 
 
@@ -120,6 +128,8 @@
 						  				<a href="#" id = "derecha" class = "abc"><span class="sder rd{{t.id}}"> {{t.for_result_vote.1}}</span></a>
 
 						  				<div id = "resultados">
+
+						  				CANTIDAD DE VOTOS : ---------->		{{t.votos}}
 
 						  				</div>
 						  			</li>
@@ -149,11 +159,13 @@
 
 					</div>
 
+
 				</article>
 
 				{% empty %}
 				    <li>Disculpa, no tienes mas preguntas en la lista.</li>
 				{% endfor %}
+				
 
 			{% else %}
 			    <p>Ha habido un problema...vuelva a interntarlo posteriormente</p>

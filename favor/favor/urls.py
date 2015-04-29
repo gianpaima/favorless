@@ -87,5 +87,6 @@ urlpatterns += patterns('votos.views',
     url(r'^post_versus/$', 'post_versus', name='post_versus'),
     url(r'^pages/(?P<slug>[\w-]+)/$', 'static_page'),
     url(r'^search/results/$', 'resultados'),
+    url(r'^misvotos/$', 'misVotaciones', name='misVotaciones'),
 
 )
