@@ -126,7 +126,7 @@ def static_page(request,slug=''):
 
     elif a == []:
         #retornar error 404
-        return Error404(request)        
+        return Error404(request)
     #None    a pre cip
     return render_to_response(template,{'pagina':a,'gustar':pre,'total':cip},context_instance=RequestContext(request))
 #gridfs = GridFSStorage()
@@ -179,7 +179,7 @@ def principal(request):
                 cuatro_preferencias = None
 
     except Exception, e:
-        print e        	
+        print e
         cuatro_preferencias = None
 
     return render_to_response(template,{'total':total,'seguir':cuatro_preferencias},context_instance=RequestContext(request))
@@ -273,7 +273,7 @@ def votar(request):
                                     print pr.for_result_vote[opc_aux]
                                     pr.for_result_vote[opc_aux] -= 1
                                     opc_actual = int(opcion)-1
-                                    pr.for_result_vote[opc_actual] += 1 
+                                    pr.for_result_vote[opc_actual] += 1
                                     #pr.for_result_vote[]
                                     pr.save()
                                     print "Se actualizo el voto"
@@ -309,7 +309,7 @@ def votar(request):
     else:
 		return HttpResponse("Tomate un tiempo")
 
-    
+
 def fuente_user(request):
     if request.user.is_authenticated():
             user = request.user
@@ -399,10 +399,10 @@ def unirlas(a,b):
     out2 = b.resize((salida.size[0]/2 - 1, salida.size[1]),Image.ANTIALIAS)
     salida.paste(out1,(0,0))
     salida.paste(out2,(out1.size[0] + 2,0))
-    filename = "sandro3.jpg"
-    imagefile = open(os.path.join("/home/sandro/Escritorio/pruebasImagenesDj",filename), 'w')
+    filename = "sandro1.jpg"
+    imagefile = open(os.path.join("c:", "/Users/GianCarlos/Documents/Nueva",filename), 'wb')
     salida.save(imagefile,"JPEG", quality=90)
-    imagefile = open(os.path.join("/home/sandro/Escritorio/pruebasImagenesDj",filename), 'r')
+    imagefile = open(os.path.join("c:", "/Users/GianCarlos/Documents/Nueva",filename), 'rb')
     content = File(imagefile)
     return content
 

@@ -1,37 +1,42 @@
-<!doctype html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>Favorless</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!--Bootstrap -->
-  {% load static from staticfiles %}
-  <link href="{% static "static/css/bootstrap2.css"%}" rel="stylesheet">
-  <link href="{% static "static/css/estilos.css"%}" rel="stylesheet">
+{% extends "base.html" %}
+{% block title %}
+Favorless
+{% endblock %}
 
-</head>
+{% block header %}
+<div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="glyphicon glyphicon-search"></span>
+    </button>
 
-<body>
+    <a href="#" class="navbar-brand-centered"><img src="../static/static/img/titulologo2.png" alt="favorless logo"></a>
+</div>
 
-  <div class="container">
-    <header>
-      <nav class="navbar navbar-default navbar-static-top">
-        <div class="navbar-header">
-          <div class="navegador">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-          </div>
+<div>
+    <a class="pull-right" href="{% url "logout" %}"><span style="font-size:16px;" class="glyphicon glyphicon-cog"></span></a>
+</div>
 
-          <div>
-            <a href="#" class="navbar-brand-centered"><img src="{% static "static/img/titulologo2.png"%}" alt="favorless logo"></a>
-          </div>
-        </div>
-      </nav>
-    </header>
+<div class="navbar-collapse collapse">
+    <ul class="nav navbar-nav">
+        <form  method="get" action='/search/results/' class="navbar-form" role="search">
+            <div id="the-basics" class="input-group col-lg-3 col-md-3 col-sm-3">
+                <input type="text" class="form-control typeahead" placeholder="Buscar..." id="search" name="q">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                </span>
+            </div>
+        </form>
+    </ul>
+</div>
+<div id = "resultadoss">
+
+</div>
+{% endblock %}
+
+{% block content %}
 
     <form action="/principal/" method="post">
       <span id="alerta"></span>
@@ -60,7 +65,7 @@
                 {%for categoria in categoria_dato %}
                   <option value = "{{categoria.id}}">{{categoria.titulo}}</option>
 
-                {%endfor%} 
+                {%endfor%}
               </select>
 
 
@@ -70,30 +75,30 @@
               <div class="thumbnail">
                 <img src="{{MEDIA_URL}}{{programa_fav.programa.logo}} "  style = "width=200px; height:200px" alt="...">
                 <div class="caption">
-                 
+
                   <h3>{{programa_fav.programa.nombre}}</h3>
                   <h4>{{programa_fav.programa.nombre_abreviado}}</h4>
                   <p>{{programa_fav.programa.tipo_programa}}</p>
-                  
+
                   <p>
 
                     {% if programa_fav.estado == True %}
 
                      <a href="#" id  = "{{programa_fav.programa.id}}" class="js-no-megusta btn btn-danger"  role="button">
                      <span>Ya no  me gusta</span></a>
-                      
+
                     {% else %}
 
                     <a href="#" id  = "{{programa_fav.programa.id}}" class="js-megusta btn btn-primary" role="button">
                     <span>Me gusta</span></a>
 
                     {% endif%}
-                    
+
                   </p>
                 </div>
               </div>
           </div>
-     
+
       {%endfor%}
 
 
@@ -108,21 +113,27 @@
                   <h3>{{programa.nombre}}</h3>
                   <h4>{{programa.nombre_abreviado}}</h4>
                   <p>{{programa.tipo_programa}}</p>
-                  
+
                   <p>
                     <a href="#" id  = "{{programa.id}}" class="js-megusta btn btn-primary"  role="button">
                     <span>Me gusta</span></a>
                   </p>
-                    
+
 
                 </div>
               </div>
           </div>
-     
+
       {%endfor%}
-    <script src="{% static "static/js/respond.min.js"%}"></script>
-  <script src="{% static "static/js/jquery-1.8.3.min.js"%}"></script>
-  <script src="{% static "static/js/bootstrap.min.js"%}"></script>
-  <script src="{% static "static/js/js-preferencias.js"%}"></script>
-  </body>
-  </html>
+
+{% endblock %}
+
+{% block footer %}
+      <p>
+          <a href="http://getbootstrap.com">Favorless</a> desarrollado por <a href="https://twitter.com/FLS">@MGS</a>
+      </p>
+
+      <p>
+          <a href="#">Back to top</a>
+      </p>
+{% endblock %}

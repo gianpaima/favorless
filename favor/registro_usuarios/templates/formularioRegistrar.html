@@ -1,4 +1,4 @@
-<!--Bootstrap 
+<!--Bootstrap
 {% load static from staticfiles %}
 <link href="{% static "static/css/bootstrap2.css"%}" rel="stylesheet">
 <link rel="stylesheet" href="{% static "static/css/estilos.css"%}">
@@ -29,9 +29,9 @@
       <span id="nameInfo">Ingresa tu nombre y apellido.
         </span>
 {% endif %}
-              
-              
-    
+
+
+
             </div>
         </div>
 
@@ -54,7 +54,7 @@
   {% endif %}
 {% elif defecto %}
      <span id="emailInfo">¿Cual es tu dirección de correo electrónico?</span>
-{% endif %} 
+{% endif %}
             </div>
         </div>
 
@@ -75,13 +75,13 @@
 {% elif defecto %}
       <span id="pass1Info">6 caracteres o más! Sé ingenioso.
                 </span>
-{% endif %}     
-               
+{% endif %}
+
             </div>
         </div>
 
         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <div class="form-group nombreUsuario col-lg-6 col-md-6 col-sm-6">
+            <div class="form-group col-lg-6 col-md-6 col-sm-6">
                 <!--<input type="text" class="form-control" name="registro_input_usuario" id="r_input_usuario" placeholder="Nombre de Usuario">-->
         {{ form_registrar_usuario.registro_input_usuario }}
             </div>
@@ -96,7 +96,7 @@
   {% endif %}
 {% elif defecto %}
       <span id="userInfo">No te preocupes, puedes cambiarlo después.</span>
-{% endif %}          
+{% endif %}
             </div>
         </div>
 
@@ -105,5 +105,3 @@
                 <button type="submit" id="registrar" class="btn btn-primary">Regístrate</button>
             </div>
         </div>
-
-

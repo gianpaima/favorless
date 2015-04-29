@@ -1,57 +1,35 @@
-<!doctype html>
-<html lang="es">
-<head>
-	<meta charset="UTF-8">
-	<title>Favorless</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<!--Bootstrap -->
-	  {% load static from staticfiles %}
-	   <link href="{% static "static/css/bootstrap2.css"%}" rel="stylesheet">
-	<link rel="stylesheet" href="{% static "static/css/estilos.css"%}">
-	<style type="text/css">
-	.nombreUsuario
-	{
-		display: block;
-	}
-	</style>
+{% extends "base.html" %}
+{% block title %}
+Favorless
+{% endblock %}
 
-    <script src="{% static  "static/js/respond.min.js"%}"></script>
-</head>
-<body>
-	<div class="container">
-		<header class="row">
-		<nav class="navbar navbar-default" role="navigation">
-			<!-- B%}rand and toggle get grouped for better mobile display -->
-			<div class="col-lg-12">
-				<div class="navbar-header">
-					<a class="navbar-brand" href="#"><img src="{% static "static/img/titulologo2.png"%}" alt=""></a>
-		    	</div>
-		  	</div>
-		</nav>
-		</header>
+{% block header %}
+<div class="navbar-header">
+	<a href="#" class="navbar-brand-centered"><img src="../static/static/img/titulologo.png" alt="favorless logo"></a>
+</div>
+{% endblock %}
+
+{% block content %}
 		<div class="row col-xs-12">
 			<div class="navbar-nav">
 				<div class="panel-heading"><h1><strong>Uneté hoy a Favorless</strong></h1></div>
 				<div class="panel-body">
 				<!--	<form method="post" action="/create/user/" class="form-horizontal" role="form">-->
-				<form role="form" action="." method="post" id="customForm">		
+				<form role="form" action="." method="post" id="customForm">
 						{% include 'formularioRegistrar.html' %}
 					<!-- </form>  -->
 				</div>
 				<!--</div>//panel-->
 			</div>
 		</div>
-		<footer class="row col-xs-12">
-			<p>Favorless © ® Inc. 2013</p>
-		</footer>
-	</div>
+{% endblock %}
   			<!--Fin registro-->
+{% block footer %}
+<p>
+	<a href="http://getbootstrap.com">Favorless</a> desarrollado por <a href="https://twitter.com/FLS">@MGS</a>
+</p>
 
-
-<!-- javascript -->
-
-	<script src="{% static "static/js/jquery-1.8.3.min.js"%}"></script>
-    <script src="{% static "static/js/bootstrap.min.js"%}"></script>	
-    <script src="{% static "static/js/validation.js"%}"></script>
-</body>
-</html>
+<p>
+	<a href="#">Back to top</a>
+</p>
+{% endblock %}
