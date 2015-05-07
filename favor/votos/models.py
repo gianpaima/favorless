@@ -32,6 +32,7 @@ class Question(models.Model):
 	versus = models.ImageField(upload_to='fusion/',blank=True,null=True)
 	participante = ListField(DictField())
 	usuariovotar = DictField()
+	#usuariovotar = ListField(DictField())
 	#Para buscar....por usuario y (categoria,integrante,programa)
 	for_search_cip = models.CharField(max_length=200)
 	for_search_user= models.TextField()
@@ -41,6 +42,8 @@ class Question(models.Model):
 #estados_todos = (('Di', 'Disponible'), ('Br', 'Break'),('Ca', 'Cancelado'),)	
 #UsuarioVotar debe de ser formado:
 #{clave:valor}->{username:{voto:opcion,fecha:datetime,estado:activo}}
+#...
+#{clave:valor}-->{llave:username,valor:{voto:opcion,fecha:datetime,estado:activo}}
 #estados_todos = (('Ac', 'Activo'), ('Re', 'Reportado'),('Ca', 'Cancelado'),)
 
 """
