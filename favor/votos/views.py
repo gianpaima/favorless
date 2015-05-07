@@ -270,6 +270,7 @@ def votar(request):
                             with transaction.atomic():
                                 now = timezone.now()
                                 pr.usuariovotar.update({ str(usuario.id) :{'voto':opcion,'fecha':now,'estado':'activo'}})
+                                #pr.usuariovotar.append({'clave':str(usuario.id),'valor':{'voto':opcion,'fecha':now,'estado':'activo'}})
                                 #desde aca ver el result_vote
 
   
