@@ -102,26 +102,46 @@
             })
         .done(function(data,textStatus)
         {
-            console.log("ID: "+opc1Id);
-            if(data=="1")
-            {
-                $("#fpregunta").val('');
-                $(".search").val('');
-                $(".search2").val('');
-                $(".search").prop('id','');
-                $(".search2").prop('id','');
-                $("#imgOpc1").val('');
-                $("#imgOpc2").val('');
-                $("#resultados").html('');
-                $("#resultadosPart2").html('');
-                $("#respuesta").html('Se guardo la pregunta correctamente');
-                console.log("Se guardo la pregunta correctamente");
+            // console.log("ID: "+opc1Id);
+            // if(data=="1")
+            // {
+            //     $("#fpregunta").val('');
+            //     $(".search").val('');
+            //     $(".search2").val('');
+            //     $(".search").prop('id','');
+            //     $(".search2").prop('id','');
+            //     $("#imgOpc1").val('');
+            //     $("#imgOpc2").val('');
+            //     $("#resultados").html('');
+            //     $("#resultadosPart2").html('');
+            //     $("#respuesta").html('Se guardo la pregunta correctamente');
+            //     console.log("Se guardo la pregunta correctamente");
+            // }
+            // else
+            // {
+            //     $("#respuesta").html('Hubo un error');
+            //     console.log("Hubo un error");
+            // }
+            switch (data){
+                case "0" :
+                     $("#respuesta").html(' Ups! , Al parecer hubo un error ... , Espere un momento mientras lo solucionamos :)');
+                    break;
+
+                case "1" :
+                    $("#fpregunta").val('');
+                    $(".search").val('');
+                    $(".search2").val('');
+                    $(".search").prop('id','');
+                    $(".search2").prop('id','');
+                    $("#imgOpc1").val('');
+                    $("#imgOpc2").val('');
+                    $("#resultados").html('');
+                    $("#resultadosPart2").html('');
+                    $("#respuesta").html('Se guardo la pregunta correctamente');
+                    console.log("Se guardo la pregunta correctamente");
+                    break;
             }
-            else
-            {
-                $("#respuesta").html('Hubo un error');
-                console.log("Hubo un error");
-            }
+
             
         })
         .fail(function(){

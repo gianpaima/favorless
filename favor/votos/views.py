@@ -44,8 +44,6 @@ def buscarPrograma(buscar,preferencia):
                 if integrante:
                     total.extend(list(integrante))
         except Exception, e:
-            print e
-            print "Error buscar Programa o Integrante"
             total = None
         return total
     else:
@@ -62,7 +60,6 @@ def resultados(request):
             if prefer:
                 lista=lista_id_preferencia(prefer)
         except Exception, e:
-            print e
             lista = None
         if lista != None:
             total = buscarPrograma(search,lista)
@@ -74,8 +71,7 @@ def resultados(request):
             print "KILL retornar, vuelva a intentarlo otro dia"
     else:
         lista =""
-    print "listita"
-    print lista
+    
     #print "LISTA CON PREFERENCIA o SIN preferencia"
     template ="buscarprogramas.html"
     return render_to_response(template,{'total':lista},context_instance=RequestContext(request))
@@ -132,13 +128,9 @@ def static_page(request,slug=''):
 @login_required(login_url = '/login')
 def misVotaciones(request):
     template = "principal.html"
-    print "El Id que esta pasando para la consulta de mis Votos es : "
-    print request.user.id
     try:
         #questions = Question.objects.filter(for_search_user__contains = '-%s-'  %(str(request.user.id)))
         questions = Question.objects.filter(for_search_user__icontains = '-%s' %(str(request.user.id)))
-        print "Las preguntas en donde Vote son las siguiente:"
-        print questions
     except Exception ,e :
         print e
 
@@ -165,11 +157,8 @@ def principal(request):
         #You can do that using the regex search too, avoiding many Q expressions (which end up using that many where "and" clauses in the SQL, possibly dampening the performance), as follows:
         try:
             query = reduce(operator.or_, (Q(for_search_cip__contains = item) for item in lista ))
-            print "QUERY..."
-            print query
             total = Question.objects.exclude(for_search_user__contains='-%s-' %(str(request.user.id))).filter(query)
         except Exception, e:
-            print e
             total = None
     elif lista == []:
         #total = Question.objects.values('usuariovotar').annotate(numero_pregunta=Count('usuariovotar')).order_by('-usuariovotar')
@@ -179,14 +168,13 @@ def principal(request):
                 pregunta.votos = pregunta.for_result_vote[0] + pregunta.for_result_vote[1]
         except Exception, e:
             total = None
-        print len(total)
-        print "vacioooo"
+        
         #Listarle las preguntas mas votadas
     else:
         total = None
-        print "Hubo un problema"
+       
 
-    print "total"
+    
     print total
     # try:
     #     #aca esta el error
@@ -212,12 +200,12 @@ def principal(request):
     #     print e        	
     #     cuatro_preferencias = None
     cuatro_preferencias = cuatroPrefe(request.user.id)
-    print "cuatro preferencias"
+   
     print cuatro_preferencias
     return render_to_response(template,{'total':total,'seguir':cuatro_preferencias},context_instance=RequestContext(request))
 
 def cuatroPrefe(user_id):
-    print "entre a cuadroPrefe"
+   
     try:
         #aca esta el error
         preferido = Preferencia.objects.filter(user=user_id,estado=True).values('programa__tipo_programa__id','programa__id')
@@ -239,16 +227,14 @@ def cuatroPrefe(user_id):
                 cuatro_preferencias = None
 
     except Exception, e:
-<<<<<<< HEAD
         print e
-=======
-        print e         
->>>>>>> c0570536b53e645884ea08aefc714a8c3ef452ef
+
+
         cuatro_preferencias = None
 
     return cuatro_preferencias    
 
-#.--------------------------------------------------------------------------------------------------------------
+#.----------------------------------------------------------------------------------
 
 def lista_preferencia(id):
     try:
@@ -281,15 +267,11 @@ def votar(request):
 	#Necesita usuario y voto,opcion participante....
         usuario = fuente_user(request)
         if usuario:
-            print "Existe usuario"
-            print usuario.id
 
             try:
                 id_q = request.POST.get('question','')
                 pr = Question.objects.get(pk=ObjectId(id_q))
                 opcion = request.POST.get('opcion','')
-                print "sandro paso por aca"
-                print pr.participante
                 if buscarparticipante(pr.participante,opcion):
                     if not pr.usuariovotar.has_key(str(usuario.id)):
                         try:
@@ -299,34 +281,17 @@ def votar(request):
                                 #pr.usuariovotar.append({'clave':str(usuario.id),'valor':{'voto':opcion,'fecha':now,'estado':'activo'}})
                                 #desde aca ver el result_vote
 
-                                print " Manejo de  for_result_vote"
-                                print pr.for_result_vote
-                                print "Opcion que ha elegido"
-                                print opcion
-                                print "opcion para coger la opcion "
+  
                                 opc_actual = int(opcion)-1
-                                print opc_actual
-                                print pr.for_result_vote[opc_actual]
+
                                 pr.for_result_vote[opc_actual] +=1
-                                print pr.for_result_vote[opc_actual]
-                                print "---------------------------Pruebas------------------------"
-                                print pr.for_result_vote
-                                print pr.for_result_vote[0]
-                                print pr.for_result_vote[1]
-                                print pr.for_result_vote[0] + pr.for_result_vote[1]
-                                print "a ver que pasa"
+
 
                                 if pr.for_search_user:
                                     pr.for_search_user +=  str(usuario.id) + '-'
                                 else:
                                     pr.for_search_user += '-'+  str(usuario.id)+'-'
                                 pr.save()
-                                print "PR_For_result_vote"
-                                print pr.for_result_vote
-                                #----------------------------
-                                print "pr UsuarioVotar Count"
-                                print len(pr.usuariovotar)
-                                print 'Se creo el e-voting...'
 
                                 return HttpResponse(json.dumps(['1',pr.for_result_vote,id_q ]))
                         except IntegrityError:
@@ -341,26 +306,19 @@ def votar(request):
                                 with transaction.atomic():
                                     pr.usuariovotar.get(str(usuario.id))['voto']=opcion
                                     opc_aux = int(opcion_antes)-1
-                                    print pr.for_result_vote[opc_aux]
                                     pr.for_result_vote[opc_aux] -= 1
                                     opc_actual = int(opcion)-1
                                     pr.for_result_vote[opc_actual] += 1
                                     #pr.for_result_vote[]
 
-                                    print "Totalus"
-                                    print pr.for_result_vote[0] + pr.for_result_vote[1]
-                                    print len(pr.usuariovotar)
+
                                     pr.save()
-                                    print "Se actualizo el voto"
-                                    print "PR_For_result_vote"
                                     print pr.for_result_vote
 
                                     return HttpResponse(json.dumps(['1',pr.for_result_vote,id_q ]))
                            # except Exception, e:
                             except IntegrityError:
                                 print IntegrityError
-                                print "ERROR"
-                                print 'Hubo un error en la bd'
                                 return HttpResponse('0')
 
                         else:
@@ -377,8 +335,6 @@ def votar(request):
                 print e
                 return HttpResponse("0")
         else:
-            print "Retornar usuario no auntentificado"
-            print "esta aqui...."
             return HttpResponse('0')
 
     else:
@@ -395,11 +351,8 @@ def fuente_user(request):
                 session = Session.objects.get(session_key=request.POST.get('sessionid'))
 
                 user_id = session.get_decoded().get('_auth_user_id')
-                print "USER_ID"
-                print user_id
+
                 user = get_or_none(User,**{'id':user_id} )
-                print "Usuario--user"
-                print user
                 return user
             except Exception,e:
                 print e
@@ -409,18 +362,14 @@ def fuente_user(request):
 
 def buscarparticipante(lista,opcion_participante):
     for diccionario in lista:
-        print "Buscando el participante"
-        print diccionario
-        print "Fin de busqueda de participante"
         for i in diccionario.values():
           if i.get('opcion') == opcion_participante:
             return True
     return False
 
 def versus(request):
-    print "oh uh oh"
     if request.method == "GET":
-        print ("estoy en GET")
+        
         template = "crearVersus.html"
         return render_to_response(template,context_instance=RequestContext(request))
 
@@ -450,7 +399,6 @@ def manjar_imagen_subida(i):
     #Sfrom django.core.files import File
     image_str = ""
     for c in i.chunks():
-        print i.chunks()
         image_str += c
     imagenFile  = StringIO.StringIO(image_str)
     image = Image.open(imagenFile)
@@ -460,9 +408,7 @@ def fusion_imagen(img1,img2):
     try:
         q = unirlas(img1,img2)
         print q
-        print "QQQQ"
     except Exception, e:
-        print "ERRR"
         print e
         return None
     return q
@@ -476,17 +422,16 @@ def unirlas(a,b):
     out2 = b.resize((salida.size[0]/2 - 1, salida.size[1]),Image.ANTIALIAS)
     salida.paste(out1,(0,0))
     salida.paste(out2,(out1.size[0] + 2,0))
-<<<<<<< HEAD
-    filename = "sandro1.jpg"
-    imagefile = open(os.path.join("c:", "/Users/GianCarlos/Documents/Nueva",filename), 'wb')
-    salida.save(imagefile,"JPEG", quality=90)
-    imagefile = open(os.path.join("c:", "/Users/GianCarlos/Documents/Nueva",filename), 'rb')
-=======
+# <<<<<<< HEAD
+#     filename = "sandro1.jpg"
+#     imagefile = open(os.path.join("c:", "/Users/GianCarlos/Documents/Nueva",filename), 'wb')
+#     salida.save(imagefile,"JPEG", quality=90)
+#     imagefile = open(os.path.join("c:", "/Users/GianCarlos/Documents/Nueva",filename), 'rb')
+# =======
     filename = "sandro3.jpg"
     imagefile = open(os.path.join("/home/sandro/Escritorio/pruebasImagenesDj/",filename), 'w')
     salida.save(imagefile,"JPEG", quality=90)
     imagefile = open(os.path.join("/home/sandro/Escritorio/pruebasImagenesDj/",filename), 'r')
->>>>>>> c0570536b53e645884ea08aefc714a8c3ef452ef
     content = File(imagefile)
     return content
 
@@ -537,9 +482,7 @@ def post_versus(request):
         if lista_vacia(opc1) and lista_vacia(opc2):
             participante_1 = existe_entidad(opc1)
             participante_2 = existe_entidad(opc2)
-            print "PARTIIPANTE!!!"
-            print participante_1
-
+           
             if participante_1 and participante_2:
                 fusion = fusion_imagen(img1,img2)
                 #print fusion.getvalue()
@@ -548,33 +491,31 @@ def post_versus(request):
                 #p1[0].update(p2[0])
                 total = [p1[0],p2[0]]
                 #total.update(formar_participante(opc2,participante_2,'2'))
-                print "vamos a ver resultadossssss"
-                print p1
-                print "FIN DE RESULTADOSSSSSS"
+               
                 try:
                     Question.objects.create(for_result_vote=[0,0],usuario_creador=str(request.user.id),asking=pregunta,participante=total,versus=fusion,for_search_cip='%s%s' %(p1[1],p2[1])).save()
-                    print "VIENE QUESTION"
                     return HttpResponse("1")
                 except Exception, e:
-                    print "ERROR MONGODB"
                     print e
                     raise
-                    return HttpResponse("Hubo un error")
+                    return HttpResponse("0")
 
             else:
-                return HttpResponse("Hubo un error")
+                return HttpResponse("0")
         else:
-            return HttpResponse("Hubo un error")
+            return HttpResponse("0")
         #print q
-        print " salida q "
-        print " pregunta: %s  , idOpc: %s  , idOpc2 : %s " % (pregunta,opc1,opc2)
-
-
-        return HttpResponse("Look After You  oh uh oh")
+        return HttpResponse("0")
     else:
-        return HttpResponse("DONT GET")
+        return HttpResponse("0")
     # return HttpResponse("Look After You  oh uh oh")
 
+"""
+Mensajes para post_versus
+
+1: Se creo el Voto correctamente
+0 :error de servidor    
+"""
 
 def lista_vacia(args):
     for numero in args:
@@ -589,11 +530,8 @@ def get_or_none(model, **diccionario):
         else:
             return []
     except model.DoesNotExist:
-        print "ERROR ENCONTRAR ENTIDAD"
         return []
     except Exception, e:
-        print "ERROR SERVER GET_OR_NONE"
-        print diccionario.get('id')
         print e
         return None
 
