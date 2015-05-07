@@ -34,15 +34,15 @@ io.use(function(socket, next) {
   next();
 });
 
-io.sockets.on('connection', function (socket) 
+io.sockets.on('connection', function (socket)
 {
 var handshakeData = socket.request;
 //console.log("hand: "+handshakeData.headers.cookie);
 //console.log("Tipo: "+typeof handshakeData.headers.cookie);
 
 
-//arreglar esto...el 1) es io="cadena" 
-//2)sessionid="asdasdsa" 
+//arreglar esto...el 1) es io="cadena"
+//2)sessionid="asdasdsa"
 //3)csrftoken="sdsdsd"
 
 //console.log("Usuario UsessxDdxD:"+handshakeData.headers.cookie);
@@ -79,7 +79,7 @@ arreglo=formatearToken(arreglo);
             console.log('body: '+body);
         }
 
-     request(options,callback); 
+     request(options,callback);
 
   }
   else
@@ -131,10 +131,10 @@ console.log("Arreglo",arreglo);
                // var info = JSON.parse(body);
                // console.log(info.stargazers_count + " Stars");
                // console.log(info.forks_count + " Forks");
-               
+
                console.log('Twinem',body);
                socket.emit('pollOut',body)
-               
+
 
             }
             console.log("Error: "+error);
@@ -156,7 +156,7 @@ console.log("Arreglo",arreglo);
 });
 
 function formatearToken(arreglo){
- 
+
   //pos-0->csrftoken
   //pos-1->SessionId
   if(arreglo && arreglo != [])
@@ -168,7 +168,7 @@ function formatearToken(arreglo){
       console.log("arreglo",arreglo[i]);
           if(arreglo[i].toLowerCase().indexOf("csrftoken=")===0)
           {
-           
+
             informacion[0]=arreglo[i].substring(arreglo[i].indexOf("=")+1);
           }
           else
@@ -178,7 +178,7 @@ function formatearToken(arreglo){
               informacion[1] =arreglo[i].substring(arreglo[i].indexOf("=")+1);
 
             }
-           
+
           }
     }
 
@@ -207,7 +207,7 @@ function formatearToken(arreglo){
 
 
 console.log("Dato: "+data.text);
-request.get('http://127.0.0.1:8000/search?q='+data.text,
+request.get('http://127.0.0.1:8888/search?q='+data.text,
  {headers:
   {
         'User-Agent': 'request'
@@ -236,9 +236,9 @@ request.get('http://127.0.0.1:8000/search?q='+data.text,
 
   function enviar_emit(data)
   {
-    socket.emit('dataSend',data)    
+    socket.emit('dataSend',data)
   }
-  
+
 //--------------------------------------------------------------------------------------------
 
 
@@ -273,7 +273,7 @@ arreglo = formatearToken(arreglo);
        // var info = JSON.parse(body);
        // console.log(info.stargazers_count + " Stars");
        // console.log(info.forks_count + " Forks");
-             
+
              console.log(body);
              //socket.emit("update",body)
              socket.emit("update",["rv",data.id,body])
@@ -358,13 +358,13 @@ var options = {
         //'Content-Type': 'application/x-www-form-urlencoded',
         'Content-Length': values.length,
         'processData': false, // Don't process the files
-        'contentType': false, // 
+        'contentType': false, //
 
             },
         method: 'POST',
         body:values
-           
-          
+
+
         };
 
 function callback(error, response, body) {
@@ -372,7 +372,7 @@ function callback(error, response, body) {
        // var info = JSON.parse(body);
        // console.log(info.stargazers_count + " Stars");
        // console.log(info.forks_count + " Forks");
-       
+
        console.log(body);
        socket.emit("update",body)
 

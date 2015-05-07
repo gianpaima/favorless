@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+{% block title %}
+Favorless
+{% endblock %}
+
+{% block header %}
+<div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="glyphicon glyphicon-search"></span>
+    </button>
+    <a href="#" class="navbar-brand-centered"><img src="/static/static/img/titulologo2.png" alt="favorless logo"></a>
+</div>
+
+<div>
+    <a class="pull-right" href="{% url "logout" %}"><span style="font-size:16px;" class="glyphicon glyphicon-cog"></span></a>
+</div>
+
+<div class="navbar-collapse collapse">
+    <ul class="nav navbar-nav">
+        <form method="get" action="/search/results/" class="navbar-form" role="search">
+            <div id="the-basics" class="input-group col-lg-3 col-md-3 col-sm-3">
+                <input type="text" class="form-control typeahead" placeholder="Buscar..." id="search" name="q">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                </span>
+            </div>
+        </form>
+    </ul>
+</div>
+<div id = "resultadoss">
+
+</div>
+{% endblock %}
+{% block content %}
+                <section class="col-lg-4 col-sm-4 col-md-4 hidden-xs">
+                    {% if pagina != None %}
+                    <article>
+
+                        <div class="panel panel-default">
+                            {% load staticfiles %}
+                            {% if pagina.programa_p %}
+                                <div class="panel-body">
+
+                                    
+                                    <h5 class="media-heading">{{pagina.nombres}} {{pagina.apellido_paterno}} {{pagina.apellido_materno}}</h5>
+                                    <img src="{% static "static/img/img2.png"%}" alt="..." class="img-rounded">
+                                </div>
+
+                                <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi, et?
+                                    Lorem ipsum dolor sit amet.</span>
+
+                             <!--  <a href="#" id= "4" class="js-megusta btn btn-primary" role="button">
+                                <span>Me gusta</span>
+                                </a>
+                            -->
+                            {% else %}
+                                  <div class="panel-body">
+
+                                    
+                                    <h5 class="media-heading">{{pagina.nombre}} </h5>
+                                    <img src="{% static "static/img/24Horas.jpg"%}" alt="..." class="img-rounded">
+                                </div>
+
+                                <span>{{pagina.descripcion}}</span>
+                                {% if gustar != None %}
+                                   <a href="#" id= "{{pagina.id}}" class="js-no-megusta btn btn-danger" role="button">
+                                    <span>No me gusta</span>
+                                    </a>
+                                {% else %}
+                                     <a href="#" id= "{{pagina.id}}" class="js-megusta btn btn-primary" role="button">
+                                    <span>Me gusta</span>
+                                    </a>
+                                {% endif %}
+
+                        {% endif %}
+                            
+                        </div>
+                    {% endif %}   
+                </section>
+              
+
+                    <section class="col-lg-8 col-sm-8 col-md-8 col-xs-12 ">
+                    {% if total != None  %}
+                         {% for t in total %}
+                         <article class="col-lg-12 col-xs-12">
+                    
+
+                    <div class="panel panel-default">
+                         <div class="panel-heading"><a href="#" >{{t.asking}}</a>
+                         </div>
+
+                        <!-- <div class="col-lg-12 col-xs-12">   
+                            <div  id = "cajafuera">
+
+                                <ul  class  = "nav nav-pills">
+                                    <li class = "cajaun"> 
+                                        <a href="#"  id  ="izquierda" class  ="abc"> 
+                                            <span>222222</span>
+                                        </a>
+                                    </li>
+                            
+                                
+                                    <li  class = "cajaun">  
+                                        <a href="#" id = "derecha" class = " abc "><span>222222</span></a>
+
+                                        <div id = "resultados">
+
+                                        </div>
+                                    </li>
+                                </ul>
+
+                            </div>
+                        </div> -->
+
+                        <div class="panel-body">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div  id = "cajafuera">
+
+                                <ul  class  = "nav nav-pills ul-pers">
+                                    <li class ="cajaun" data-choice="1" data-poll="{{t.id}}"> 
+                                        <a href="#"  id  ="izquierda" class  ="abc"> 
+                                            <span></span>
+                                        </a>
+                                    </li>
+                            
+                                
+                                    <li  class = "cajaun" data-choice="2" data-poll="{{t.id}}">     
+                                        <a href="#" id = "derecha" class = "abc"><span></span></a>
+
+                                        <div id = "resultados">
+
+                                        </div>
+                                    </li>
+                                </ul>
+
+                                </div>
+
+                                <div>
+
+                                    <div>
+                                        <ul class = "nav nav-pills xyz">
+                            
+                                                <li class ="opt left">{{t.participante.0.items.0.1.alias}}</li>
+                                            <li class = "center">0</li>
+                                            <li class = "opt right" data-choice="2">{{t.participante.1.items.0.1.alias}}</li>
+                                        
+                                            
+                                        </ul>
+                                    </div>
+
+                                    <a href="#" class="thumbnail">
+                                        <img src="{{t.versus.url}}" alt="...">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>  
+
+                    </div>
+
+                </article>
+
+                {% empty %}
+                    <li>Disculpa, no tienes mas preguntas en la lista.</li>
+                {% endfor %}
+
+            {% else %}
+                <p>Ha habido un problema...vuelva a interntarlo posteriormente</p>
+            {% endif %}         
+                </section>
+
+{% endblock %}
+<!-- javascript -->
+
+{% block javascript %}
+{{ block.super }}
+<script src="http://localhost:3000/socket.io/socket.io.js"></script>
+<script src="{% static "static/js/socket/index.js"%}"></script>
+<script src="{% static "static/js/typeahead.jquery.min.js"%}"></script>
+<script src="{% static "static/js/socket/preferenciasSocket.js"%}"> </script>
+{% endblock %}
+       
+{% block footer %}
+<p>
+    <a href="http://getbootstrap.com">Favorless</a> desarrollado por <a href="https://twitter.com/FLS">@MGS</a>
+</p>
+
+<p>
+    <a href="#">Back to top</a>
+</p>
+{% endblock %}       

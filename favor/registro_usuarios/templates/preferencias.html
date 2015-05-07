@@ -47,7 +47,7 @@ Favorless
               <span id = "informacion">Usted ha seleccionado el minimo de programas requeridos</span>
              <button type="submit" id="siguiente"  class="btn btn-primary">Siguiente...</button>
             {% else %}
-             <span id = "informacion">Usted debe seleccionar 5 programas como minimo</span>
+             <span id = "informacion">Usted debe seleccionar 5 programas como minimoooo</span>
              <button type="submit" id="siguiente" disabled="disabled" class="btn btn-primary">Siguiente...</button>
             {% endif %}
       {% else %}
@@ -125,9 +125,12 @@ Favorless
           </div>
 
       {%endfor%}
-
 {% endblock %}
-
+{% load staticfiles %}
+{% block javascript %}
+{{ block.super }}
+<script src="{% static "static/js/js-preferencias.js"%}"></script>
+{% endblock %}
 {% block footer %}
       <p>
           <a href="http://getbootstrap.com">Favorless</a> desarrollado por <a href="https://twitter.com/FLS">@MGS</a>
@@ -137,3 +140,4 @@ Favorless
           <a href="#">Back to top</a>
       </p>
 {% endblock %}
+

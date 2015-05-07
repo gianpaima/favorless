@@ -197,7 +197,7 @@ def principal(request):
     #             cuatro_preferencias = None
 
     # except Exception, e:
-    #     print e        	
+    #     print e
     #     cuatro_preferencias = None
     cuatro_preferencias = cuatroPrefe(request.user.id)
    
@@ -228,11 +228,9 @@ def cuatroPrefe(user_id):
 
     except Exception, e:
         print e
-
-
         cuatro_preferencias = None
 
-    return cuatro_preferencias    
+    return cuatro_preferencias
 
 #.----------------------------------------------------------------------------------
 
@@ -278,7 +276,6 @@ def votar(request):
                             with transaction.atomic():
                                 now = timezone.now()
                                 pr.usuariovotar.update({ str(usuario.id) :{'voto':opcion,'fecha':now,'estado':'activo'}})
-                                #pr.usuariovotar.append({'clave':str(usuario.id),'valor':{'voto':opcion,'fecha':now,'estado':'activo'}})
                                 #desde aca ver el result_vote
 
   
@@ -296,7 +293,6 @@ def votar(request):
                                 return HttpResponse(json.dumps(['1',pr.for_result_vote,id_q ]))
                         except IntegrityError:
                             print IntegrityError
-                            print 'Hubo un error en la bd'
                             return HttpResponse('0')
                     else:
                         #update
@@ -310,11 +306,7 @@ def votar(request):
                                     opc_actual = int(opcion)-1
                                     pr.for_result_vote[opc_actual] += 1
                                     #pr.for_result_vote[]
-
-
                                     pr.save()
-                                    print pr.for_result_vote
-
                                     return HttpResponse(json.dumps(['1',pr.for_result_vote,id_q ]))
                            # except Exception, e:
                             except IntegrityError:
@@ -322,17 +314,13 @@ def votar(request):
                                 return HttpResponse('0')
 
                         else:
-                            print "Su voto ya ha sido Registrado "
                             return HttpResponse(json.dumps(['2',pr.for_result_vote]))
                         #model.DoesNotExist, ValidationError,ValueError
                 else:
-                    print 'No existe esa opcion'
                     return HttpResponse("0")
             except InvalidId, TypeError:
-                print "No existe en la bd"
                 return HttpResponse("0")
             except Exception, e:
-                print e
                 return HttpResponse("0")
         else:
             return HttpResponse('0')
@@ -534,4 +522,3 @@ def get_or_none(model, **diccionario):
     except Exception, e:
         print e
         return None
-
