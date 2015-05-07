@@ -72,17 +72,14 @@ def resultados(request):
     else:
         lista =""
     
-    #print "LISTA CON PREFERENCIA o SIN preferencia"
     template ="buscarprogramas.html"
     return render_to_response(template,{'total':lista},context_instance=RequestContext(request))
 
 def lista_id_preferencia(preferencia):
     lista = []
-    #print preferencia
     for p in preferencia:
         lista.append(p.get('programa'))
         #lista.append(str(p.programa))
-    #print lista
     return lista
 
 def static_page(request,slug=''):
@@ -115,7 +112,6 @@ def static_page(request,slug=''):
                 cip = Question.objects.exclude(for_search_user__contains='-%s-' %(str(request.user.id))).filter(for_search_cip__icontains=cip)
             except Exception, e:
                 print e
-                print "Error"
                 cip =None
 
     elif a == []:
@@ -175,7 +171,6 @@ def principal(request):
        
 
     
-    print total
     # try:
     #     #aca esta el error
     #     preferido = Preferencia.objects.filter(user=request.user.id,estado=True).values('programa__tipo_programa__id','programa__id')
@@ -201,7 +196,6 @@ def principal(request):
     #     cuatro_preferencias = None
     cuatro_preferencias = cuatroPrefe(request.user.id)
    
-    print cuatro_preferencias
     return render_to_response(template,{'total':total,'seguir':cuatro_preferencias},context_instance=RequestContext(request))
 
 def cuatroPrefe(user_id):
@@ -395,7 +389,6 @@ def manjar_imagen_subida(i):
 def fusion_imagen(img1,img2):
     try:
         q = unirlas(img1,img2)
-        print q
     except Exception, e:
         print e
         return None
