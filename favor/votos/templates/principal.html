@@ -9,7 +9,7 @@
 		<span class="sr-only">Toggle navigation</span>
 		<span class="glyphicon glyphicon-search"></span>
 	</button>
-	<a href="#" class="navbar-brand-centered"><img src="../static/static/img/titulologo2.png" alt="favorless logo"></a>
+	<a href="#" class="navbar-brand-centered"><img src="/static/static/img/titulologo2.png" alt="favorless logo"></a>
 </div>
 
 <div>
@@ -100,11 +100,6 @@
 					{%endwith%}
 				{% endif %}
 				{% for t in total %}
-
-<<<<<<< HEAD
-=======
-				    
->>>>>>> c0570536b53e645884ea08aefc714a8c3ef452ef
 					<article class="col-lg-12 col-xs-12">
 
 
@@ -179,7 +174,14 @@
 
 </section>
 {% endblock %}
-
+{% load staticfiles %}
+{% block javascript %}
+{{ block.super }}
+<script src="http://localhost:3000/socket.io/socket.io.js"></script>
+<script src="{% static "static/js/socket/index.js"%}"></script>
+<script src="{% static "static/js/typeahead.jquery.min.js"%}"></script>
+<script src="{% static "static/js/socket/preferenciasSocket.js"%}"> </script>
+{% endblock %}
 {% block footer %}
 <p>
 	<a href="http://getbootstrap.com">Favorless</a> desarrollado por <a href="https://twitter.com/FLS">@MGS</a>
