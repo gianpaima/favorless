@@ -305,7 +305,7 @@ def addpreference(request):
 
             return HttpResponse (json.dumps([vicam(user,id_post), cantidadpreferencia(user)]))
         else:
-            print "ELSE Preferencia"
+            
             if request.POST.get('sessionid'):
                 try:
                     session = Session.objects.get(session_key=request.POST.get('sessionid'))
@@ -328,7 +328,6 @@ def vicam(user_id,id):
     if (id.isdigit()):
         try:
             preferencia = Preferencia.objects.filter(user=user_id ,programa=id)[:1]
-            print preferencia
         except Exception, e:
             print e
             print Exception
@@ -336,35 +335,28 @@ def vicam(user_id,id):
 
 
         if(preferencia):
-            print "entre al If"
             try:
                 a = Preferencia.objects.get(pk=preferencia)
-                print "it's"
                 print a
 
                 a.estado = True
                 a.save()
                 return "1"
             except :
-                print "error"
                 raise
                 return "3"
         else:
-            print "Entre al else"
             try:
-                print "estoy cuando la preferenia no existe"
                 #print programa_p
                 try:
                     programa_p  = Programa.objects.get(pk = id)
                 except:
-                    print  "noononoono"
                     return "2"
 
                 p = Preferencia.objects.create(user = user_id, programa = programa_p)
                 p.save
                 return "1"
             except :
-                print "error"
                 return "3"
     else:
         return "0"
@@ -386,16 +378,9 @@ def pruebaNode (request):
 
 
 def pruebarealtime (request):
-    print request.session
-    print   "------------------"
-    print  "Es mi Dream"
     #session = Session.objects.get(session_key=request.GET.get('sessionid'))
-    print "sesion---"
-    print "session"
     #user_id = session.get_decoded().get('_auth_user_id')
     #user = User.objects.get(id=user_id)
-    print "------------"
-    print request.user
     return  HttpResponse("Murio tu Dream")
 
 
@@ -403,8 +388,6 @@ def pruebarealtime (request):
 
 def buscarPrograma(request):
     buscar = request.REQUEST.get('q','')
-    print "buscar"
-    print buscar
     if buscar:
         programa = Programa.objects.filter(nombre__icontains=buscar).values('id', 'nombre','logo')
         integrante = Integrante.objects.filter(Q(nombres__icontains=buscar) | Q(apellido_paterno__icontains=buscar) | Q(apellido_materno__icontains=buscar) ).values('id', 'nombres','apellido_paterno','apellido_materno','foto_a','programa_p')
@@ -428,16 +411,12 @@ def buscarPrograma(request):
             print e
             print "Error buscar Programa o Integrante"
             total = None
-        print "esta acaa"
-        print total
         return HttpResponse(json.dumps(total), content_type="application/json")
 
     return HttpResponse("")
 
 def versus(request):
-    print "oh uh oh"
     if request.method == "GET":
-        print ("estoy en GET")
         template = "crearVersus.html"
         return render_to_response(template,context_instance=RequestContext(request))
 
@@ -471,24 +450,9 @@ def post_versus(request):
         opc2 = request.POST.get('opc2Id')
         img1=manjar_imagen_subida(request.FILES['file1'])
         img2= manjar_imagen_subida(request.FILES['file2'])
-        print "--------------"
-        print request.FILES
-        # print pregunta
-        # print opc1
-        print "img 1"
-        print img1
-        print "img 2"
-        print img2
-        #print img2
-        #fs=uniimg(img1,img2)
-        # print opc2
-        #im1 = Image.open(img1)
         q = unirlas(img1,img2)
 
         
-        #print q 
-        print " salida q "
-        print " pregunta: %s  , idOpc: %s  , idOpc2 : %s " % (pregunta,opc1,opc2)
         return HttpResponse("Look After You  oh uh oh")
     # return HttpResponse("Look After You  oh uh oh")
 
