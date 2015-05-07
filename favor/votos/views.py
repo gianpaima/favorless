@@ -209,7 +209,7 @@ def principal(request):
     #             cuatro_preferencias = None
 
     # except Exception, e:
-    #     print e        	
+    #     print e
     #     cuatro_preferencias = None
     cuatro_preferencias = cuatroPrefe(request.user.id)
     print "cuatro preferencias"
@@ -239,14 +239,10 @@ def cuatroPrefe(user_id):
                 cuatro_preferencias = None
 
     except Exception, e:
-<<<<<<< HEAD
         print e
-=======
-        print e         
->>>>>>> c0570536b53e645884ea08aefc714a8c3ef452ef
         cuatro_preferencias = None
 
-    return cuatro_preferencias    
+    return cuatro_preferencias
 
 #.--------------------------------------------------------------------------------------------------------------
 
@@ -475,17 +471,10 @@ def unirlas(a,b):
     out2 = b.resize((salida.size[0]/2 - 1, salida.size[1]),Image.ANTIALIAS)
     salida.paste(out1,(0,0))
     salida.paste(out2,(out1.size[0] + 2,0))
-<<<<<<< HEAD
-    filename = "sandro1.jpg"
+    filename = "sandro3.jpg"
     imagefile = open(os.path.join("c:", "/Users/GianCarlos/Documents/Nueva",filename), 'wb')
     salida.save(imagefile,"JPEG", quality=90)
     imagefile = open(os.path.join("c:", "/Users/GianCarlos/Documents/Nueva",filename), 'rb')
-=======
-    filename = "sandro3.jpg"
-    imagefile = open(os.path.join("/home/sandro/Escritorio/pruebasImagenesDj/",filename), 'w')
-    salida.save(imagefile,"JPEG", quality=90)
-    imagefile = open(os.path.join("/home/sandro/Escritorio/pruebasImagenesDj/",filename), 'r')
->>>>>>> c0570536b53e645884ea08aefc714a8c3ef452ef
     content = File(imagefile)
     return content
 
@@ -595,4 +584,3 @@ def get_or_none(model, **diccionario):
         print diccionario.get('id')
         print e
         return None
-
