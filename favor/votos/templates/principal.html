@@ -9,11 +9,20 @@
 		<span class="sr-only">Toggle navigation</span>
 		<span class="glyphicon glyphicon-search"></span>
 	</button>
-	<a href="#" class="navbar-brand-centered"><img src="../static/static/img/titulologo2.png" alt="favorless logo"></a>
+	<a href="#" class="navbar-brand-centered"><img src="/static/static/img/titulologo2.png" alt="favorless logo"></a>
 </div>
 
 <div>
-	<a class="pull-right" href="{% url "logout" %}"><span style="font-size:16px;" class="glyphicon glyphicon-log-out"></span></a>
+	<div class="dropdown pull-right">
+		<button class=" glyphicon glyphicon-cog btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+			<span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+			<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Configuración</a></li>
+			<li role="presentation"><a role="menuitem" tabindex="-1" href="{% url "logout" %}">Salir</a></li>
+		</ul>
+
+	</div>
 </div>
 
 <div class="navbar-collapse collapse">
@@ -101,7 +110,6 @@
 				{% endif %}
 				{% for t in total %}
 
-
 					<article class="col-lg-12 col-xs-12">
 
 
@@ -176,7 +184,14 @@
 
 </section>
 {% endblock %}
-
+{% load staticfiles %}
+{% block javascript %}
+{{ block.super }}
+<script src="http://localhost:3000/socket.io/socket.io.js"></script>
+<script src="{% static "static/js/socket/index.js"%}"></script>
+<script src="{% static "static/js/typeahead.jquery.min.js"%}"></script>
+<script src="{% static "static/js/socket/preferenciasSocket.js"%}"> </script>
+{% endblock %}
 {% block footer %}
 <p>
 	<a href="http://getbootstrap.com">Favorless</a> desarrollado por <a href="https://twitter.com/FLS">@MGS</a>
