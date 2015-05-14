@@ -71,7 +71,7 @@ def resultados(request):
             print "KILL retornar, vuelva a intentarlo otro dia"
     else:
         lista =""
-    
+
     #print "LISTA CON PREFERENCIA o SIN preferencia"
     template ="buscarprogramas.html"
     return render_to_response(template,{'total':lista},context_instance=RequestContext(request))
@@ -168,13 +168,13 @@ def principal(request):
                 pregunta.votos = pregunta.for_result_vote[0] + pregunta.for_result_vote[1]
         except Exception, e:
             total = None
-        
+
         #Listarle las preguntas mas votadas
     else:
         total = None
-       
 
-    
+
+
     print total
     # try:
     #     #aca esta el error
@@ -200,12 +200,12 @@ def principal(request):
     #     print e
     #     cuatro_preferencias = None
     cuatro_preferencias = cuatroPrefe(request.user.id)
-   
+
     print cuatro_preferencias
     return render_to_response(template,{'total':total,'seguir':cuatro_preferencias},context_instance=RequestContext(request))
 
 def cuatroPrefe(user_id):
-   
+
     try:
         #aca esta el error
         preferido = Preferencia.objects.filter(user=user_id,estado=True).values('programa__tipo_programa__id','programa__id')
@@ -279,7 +279,7 @@ def votar(request):
                                 #pr.usuariovotar.append({'clave':str(usuario.id),'valor':{'voto':opcion,'fecha':now,'estado':'activo'}})
                                 #desde aca ver el result_vote
 
-  
+
                                 opc_actual = int(opcion)-1
 
                                 pr.for_result_vote[opc_actual] +=1
@@ -358,7 +358,7 @@ def buscarparticipante(lista,opcion_participante):
 
 def versus(request):
     if request.method == "GET":
-        
+
         template = "crearVersus.html"
         return render_to_response(template,context_instance=RequestContext(request))
 
@@ -411,16 +411,16 @@ def unirlas(a,b):
     out2 = b.resize((salida.size[0]/2 - 1, salida.size[1]),Image.ANTIALIAS)
     salida.paste(out1,(0,0))
     salida.paste(out2,(out1.size[0] + 2,0))
-# <<<<<<< HEAD
-#     filename = "sandro1.jpg"
-#     imagefile = open(os.path.join("c:", "/Users/GianCarlos/Documents/Nueva",filename), 'wb')
-#     salida.save(imagefile,"JPEG", quality=90)
-#     imagefile = open(os.path.join("c:", "/Users/GianCarlos/Documents/Nueva",filename), 'rb')
-# =======
+
     filename = "sandro3.jpg"
-    imagefile = open(os.path.join("/home/sandro/Escritorio/pruebasImagenesDj/",filename), 'w')
+    imagefile = open(os.path.join("c:", "/Users/GianCarlos/Documents/Nueva",filename), 'wb')
     salida.save(imagefile,"JPEG", quality=90)
-    imagefile = open(os.path.join("/home/sandro/Escritorio/pruebasImagenesDj/",filename), 'r')
+    imagefile = open(os.path.join("c:", "/Users/GianCarlos/Documents/Nueva",filename), 'rb')
+
+#    filename = "sandro3.jpg"
+#    imagefile = open(os.path.join("/home/sandro/Escritorio/pruebasImagenesDj/",filename), 'w')
+#    salida.save(imagefile,"JPEG", quality=90)
+#    imagefile = open(os.path.join("/home/sandro/Escritorio/pruebasImagenesDj/",filename), 'r')
     content = File(imagefile)
     return content
 
@@ -471,7 +471,7 @@ def post_versus(request):
         if lista_vacia(opc1) and lista_vacia(opc2):
             participante_1 = existe_entidad(opc1)
             participante_2 = existe_entidad(opc2)
-           
+
             if participante_1 and participante_2:
                 fusion = fusion_imagen(img1,img2)
                 #print fusion.getvalue()
@@ -480,7 +480,7 @@ def post_versus(request):
                 #p1[0].update(p2[0])
                 total = [p1[0],p2[0]]
                 #total.update(formar_participante(opc2,participante_2,'2'))
-               
+
                 try:
                     Question.objects.create(for_result_vote=[0,0],usuario_creador=str(request.user.id),asking=pregunta,participante=total,versus=fusion,for_search_cip='%s%s' %(p1[1],p2[1])).save()
                     return HttpResponse("1")
@@ -503,7 +503,7 @@ def post_versus(request):
 Mensajes para post_versus
 
 1: Se creo el Voto correctamente
-0 :error de servidor    
+0 :error de servidor
 """
 
 def lista_vacia(args):

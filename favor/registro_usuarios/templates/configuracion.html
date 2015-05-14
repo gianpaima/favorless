@@ -1,19 +1,10 @@
-<!doctype html>
-<html lang="es">
-<head>
-	<meta charset="UTF-8">
-	<title>Favorless</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<!--Bootstrap-->
-	{% load static from staticfiles %}
-	<link href="{% static "static/css/bootstrap2.css"%}" rel="stylesheet">
-	<link rel="stylesheet" href="{% static "static/css/estilos.css"%}">
-    <script src="{% static  "static/js/respond.min.js"%}"></script>
-</head>
-<body>
+{% extends "base.html" %}
+{% block title %}
+Favorless
+{% endblock %}
+{% load staticfiles %}
+{% block header %}
 
-<div class="container">
-	<header class="row">
 		<nav class="navbar navbar-default" role="navigation">
 		  <!-- Brand and toggle get grouped for better mobile display -->
 		  	<div class="col-lg-12">
@@ -22,12 +13,12 @@
 		   		 	<img src="{% static "static/img/titulologo.png"%}" alt=""></a>
 		    	</div>
 		  	</div>
-			
-		</nav>
-	</header>
 
-	<div class="row">
-	
+		</nav>
+{% endblock %}
+
+{% block content %}
+
 		 <div class="col-xs-12">
 		 	<div class="row">
 		 		<div class="panel panel-default col-sm-12 col-md-12">
@@ -41,7 +32,7 @@
 		    	<a class="navbar2-brand" href="#">Configuración</a>
 		       <div class="collapse navbar-collapse navbar-collapse2" id="bs-example-navbar-collapse-2">
 			       	<div class="navbar-nav">
-			       	<div class="panel-heading"><h1><strong>Configuración</strong><small></small></h1></div>	
+			       	<div class="panel-heading"><h1><strong>Configuración</strong><small></small></h1></div>
 			 			<div class="panel-body">
 
 			 				<form id="formulario" class="form-block" role="form" method="post" action=".">
@@ -52,7 +43,7 @@
 					  				<span id="errorInfo">{{ error|default:"" }}</span>
 					    			<label class="sr-only" for="passwordActual">Constraseña Anterior</label>
 					    			<input type="password" class="form-control" name="u_input_pass_before" id="passwordBefore" placeholder="Contraseña Anterior" >
-					    			
+
 					  			</div>
 					  			<div class="form-group">
 					    			<label class="sr-only" for="passwordNow">Constraseña Nueva</label>
@@ -69,11 +60,11 @@
 						<!--		   <input type="file" id="exampleInputFile"/>
 								    <p class="help-block">Cambiar foto de perfil.</p>
 					  			</div>-->
-					  			
+
 									<button disabled="disabled" id="actualizar" type="button" class="btn btn-primary">Guardar Cambios</button>
 							</form>
 			 			</div>
-					    	
+
 					</div>
 				</div>
 				</div>
@@ -81,22 +72,24 @@
 				</div>
  <!--Fin Logueo-->
 
-  			</div> 
+  			</div>
 		</div>
 	</div>
+
+{% endblock %}
   			<!--Fin registro-->
 
- 
 
-	<footer class="row">
-		<p><small>Favorless © ® Inc. 2015</small></p>
-	</footer>
+{% block javascript %}
+{{ block.super }}
+<script src="{% static "static/js/settingspassword.js"%}"> </script>
+{% endblock %}
+{% block footer %}
+<p>
+	<a href="http://getbootstrap.com">Favorless</a> desarrollado por <a href="https://twitter.com/FLS">@MGS</a>
+</p>
 
-</div>
-
-<!-- javascript -->
-	<script src="{% static "static/js/jquery-1.8.3.min.js"%}"></script>
-    <script src="{% static "static/js/bootstrap.min.js"%}"></script>
-    <script src="{% static "static/js/settingspassword.js"%}"></script>
-</body>
-</html>
+<p>
+	<a href="#">Back to top</a>
+</p>
+{% endblock %}
