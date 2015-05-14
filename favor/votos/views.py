@@ -72,8 +72,12 @@ def resultados(request):
     else:
         lista =""
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     #print "LISTA CON PREFERENCIA o SIN preferencia"
+=======
+    
+>>>>>>> 2bc2816e6b793c716a17a0c694088f96361f57b4
 =======
     
 >>>>>>> 2bc2816e6b793c716a17a0c694088f96361f57b4
@@ -175,9 +179,13 @@ def principal(request):
         total = None
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 
     print total
+=======
+    
+>>>>>>> 2bc2816e6b793c716a17a0c694088f96361f57b4
 =======
     
 >>>>>>> 2bc2816e6b793c716a17a0c694088f96361f57b4
@@ -206,8 +214,12 @@ def principal(request):
     #     cuatro_preferencias = None
     cuatro_preferencias = cuatroPrefe(request.user.id)
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     print cuatro_preferencias
+=======
+   
+>>>>>>> 2bc2816e6b793c716a17a0c694088f96361f57b4
 =======
    
 >>>>>>> 2bc2816e6b793c716a17a0c694088f96361f57b4
