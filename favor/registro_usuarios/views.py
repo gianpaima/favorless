@@ -369,9 +369,9 @@ ha ocurrido un error  servidor == 3
 
 
 # def pruebarealtime (request):
-#     #session = Session.objects.get(session_key=request.GET.get('sessionid'))
-#     #user_id = session.get_decoded().get('_auth_user_id')
-#     #user = User.objects.get(id=user_id)
+#     session = Session.objects.get(session_key=request.GET.get('sessionid'))
+#     user_id = session.get_decoded().get('_auth_user_id')
+#     user = User.objects.get(id=user_id)
 #     return  HttpResponse("Murio tu Dream")
 
 
