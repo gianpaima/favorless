@@ -84,7 +84,7 @@ def registrarUsuario(request):
                 return HttpResponse("Error en el servidor")
             except Exception,e:
                 print e
-                print "Hubo un error en la creacion del usuarioOOHHH"
+                print "Hubo un error en la creacion del usuario"
                 print "Se tiene que crear un diccionario que direccione el error"
                 return HttpResponse("Error en el servidor")
             else:
@@ -225,7 +225,7 @@ def preferencias(request):
 
 
 
-
+#puede ser un @login_requierd
 def removepreference(request):
     if request.method == 'POST':
         id_post  = request.POST.get('id','')
@@ -240,11 +240,11 @@ def removepreference(request):
                     user = User.objects.get(id=user_id)
                     return HttpResponse (vicam2(id_post,user))
                 except:
-                    return HttpResponse("ha ocuurido un error")
+                    return HttpResponse("ha ocurrido un error")
             else:
-                return HttpResponse("Anonimo Total")
+                 return HttpResponse ("ha ocurrido un error")
     else:
-        return HttpResponse ("Anda a casa estas borracho")
+        return HttpResponse ("ha ocurrido un error")
 
 
 
@@ -259,13 +259,10 @@ def vicam2(id_post,user_id):
 
         if p:
             try:
-                print user_id
-                print id_post
                 a = Preferencia.objects.filter(user=user_id ,programa=id_post)
                 if a :
 
                     preferencia = Preferencia.objects.get(pk = a)
-                    print preferencia
                     preferencia.estado = False
                     preferencia.save()
                     return "1"
@@ -292,7 +289,6 @@ def cantidadpreferencia(user_p):
     try:
         cantidad = Preferencia.objects.filter(user=user_p,estado=True).count()
     except Exception, e:
-        print "ERROR en cantidad de preferencias"
         cantidad = None
     finally:
         return cantidad
@@ -311,15 +307,13 @@ def addpreference(request):
                     session = Session.objects.get(session_key=request.POST.get('sessionid'))
                     user_id = session.get_decoded().get('_auth_user_id')
                     user = User.objects.get(id=user_id)
-                    #print vicam(user,id_post)
                     return HttpResponse (vicam(user,id_post))
                 except:
-                    return HttpResponse("ha ocuurido un error")
+                    return HttpResponse("ha ocurrido un error")
             else:
-                return HttpResponse("Anonimo Total")
+                return HttpResponse("ha ocurrido un error")
     else:
-        return HttpResponse("anda a casa estas borracho")
-
+        return HttpResponse("ha ocurrido un error")
 
 
 
@@ -337,8 +331,6 @@ def vicam(user_id,id):
         if(preferencia):
             try:
                 a = Preferencia.objects.get(pk=preferencia)
-                print a
-
                 a.estado = True
                 a.save()
                 return "1"
@@ -347,7 +339,6 @@ def vicam(user_id,id):
                 return "3"
         else:
             try:
-                #print programa_p
                 try:
                     programa_p  = Programa.objects.get(pk = id)
                 except:
@@ -372,16 +363,16 @@ ha ocurrido un error  servidor == 3
 
 
 
-def pruebaNode (request):
-    template = "buscar.html"
-    return render_to_response(template,context_instance=RequestContext(request))
+# def pruebaNode (request):
+#     template = "buscar.html"
+#     return render_to_response(template,context_instance=RequestContext(request))
 
 
-def pruebarealtime (request):
-    #session = Session.objects.get(session_key=request.GET.get('sessionid'))
-    #user_id = session.get_decoded().get('_auth_user_id')
-    #user = User.objects.get(id=user_id)
-    return  HttpResponse("Murio tu Dream")
+# def pruebarealtime (request):
+#     session = Session.objects.get(session_key=request.GET.get('sessionid'))
+#     user_id = session.get_decoded().get('_auth_user_id')
+#     user = User.objects.get(id=user_id)
+#     return  HttpResponse("Murio tu Dream")
 
 
 
@@ -409,82 +400,81 @@ def buscarPrograma(request):
                     total.extend(list(integrante))
         except Exception, e:
             print e
-            print "Error buscar Programa o Integrante"
             total = None
         return HttpResponse(json.dumps(total), content_type="application/json")
 
     return HttpResponse("")
 
-def versus(request):
-    if request.method == "GET":
-        template = "crearVersus.html"
-        return render_to_response(template,context_instance=RequestContext(request))
+# def versus(request):
+#     if request.method == "GET":
+#         template = "crearVersus.html"
+#         return render_to_response(template,context_instance=RequestContext(request))
 
 
-def uniimg(img1,img2):
-    #cargar las dos imagenes desde el directorio donde estoy ejecutando el Script
-    # Abrir  img  1
-    im1 = Image.open(img1)
-    # Abir img 2
-    im2 = Image.open(img2)
-    # crear una imagen de Fondo que  contiene las dos imagenes
-    salida  =  Image.new ("RGB", (640,480),(0,0,255)) # imagen de 640*480 de fondo blanco
-    # redimensionar cada imagenpng para que ocupe el lugar indicado
-    a = im1.resize((salida.size[0]/2 - 1, salida.size[1]))
-    b = im2.resize((salida.size[0]/2 - 1, salida.size[1]))
-    #Ahora copiar cada imagen a la imagen de salida
-    salida.paste(a,(0,0))
-    salida.paste(b,(a.size[0] + 2,0))
-    #salida.save("prueba.jpg", "JPEG")
-    return salida
-    #salida.save("salida2.jpg",optimize=True)
+# def uniimg(img1,img2):
+#     #cargar las dos imagenes desde el directorio donde estoy ejecutando el Script
+#     # Abrir  img  1
+#     im1 = Image.open(img1)
+#     # Abir img 2
+#     im2 = Image.open(img2)
+#     # crear una imagen de Fondo que  contiene las dos imagenes
+#     salida  =  Image.new ("RGB", (640,480),(0,0,255)) # imagen de 640*480 de fondo blanco
+#     # redimensionar cada imagenpng para que ocupe el lugar indicado
+#     a = im1.resize((salida.size[0]/2 - 1, salida.size[1]))
+#     b = im2.resize((salida.size[0]/2 - 1, salida.size[1]))
+#     #Ahora copiar cada imagen a la imagen de salida
+#     salida.paste(a,(0,0))
+#     salida.paste(b,(a.size[0] + 2,0))
+#     #salida.save("prueba.jpg", "JPEG")
+#     return salida
+#     #salida.save("salida2.jpg",optimize=True)
 
 
 
 
-def post_versus(request):
-    if request.method == "POST":
-        print request
-        pregunta = request.POST.get('pregunta')
-        opc1 = request.POST.get('opc1Id')
-        opc2 = request.POST.get('opc2Id')
-        img1=manjar_imagen_subida(request.FILES['file1'])
-        img2= manjar_imagen_subida(request.FILES['file2'])
-        q = unirlas(img1,img2)
+# def post_versus(request):
+#     if request.method == "POST":
+#         print request
+#         pregunta = request.POST.get('pregunta')
+#         opc1 = request.POST.get('opc1Id')
+#         opc2 = request.POST.get('opc2Id')
+#         img1=manjar_imagen_subida(request.FILES['file1'])
+#         img2= manjar_imagen_subida(request.FILES['file2'])
+#         q = unirlas(img1,img2)
 
         
-        return HttpResponse("Look After You  oh uh oh")
-    # return HttpResponse("Look After You  oh uh oh")
+#         return HttpResponse("Look After You  oh uh oh")
+#     # return HttpResponse("Look After You  oh uh oh")
 
-        total= []
-        if programa and integrante:
-            total = list(programa)
-            total.extend(list(integrante))
-        else:
-            if programa:
-                total = list(programa)
-            if integrante:
-                total.extend(list(integrante))
+#         total= []
+#         if programa and integrante:
+#             total = list(programa)
+#             total.extend(list(integrante))
+#         else:
+#             if programa:
+#                 total = list(programa)
+#             if integrante:
+#                 total.extend(list(integrante))
 
-        #print "TIPO" 
-        #print programa
-        #"###################"
-        #print integrante
-        return HttpResponse(json.dumps(total), content_type="application/json")
-    return HttpResponse("nada por aqui")
-    #     print "Estoy en POST"
-    #     # print request
+#         #print "TIPO" 
+#         #print programa
+#         #"###################"
+#         #print integrante
+#         return HttpResponse(json.dumps(total), content_type="application/json")
+#     return HttpResponse("nada por aqui")
+#     #     print "Estoy en POST"
+#     #     # print request
 
-    #     pregunta = request.POST.get("fpregunta")
-    #     print pregunta
-    #     id_op1 = request.POST.get("id")
-    #     print id_op1
-    #     id_op2  = request.POST.get("fopc2")
-    #     print id_op2
-    #     return HttpResponseRedirect("/versus")
+#     #     pregunta = request.POST.get("fpregunta")
+#     #     print pregunta
+#     #     id_op1 = request.POST.get("id")
+#     #     print id_op1
+#     #     id_op2  = request.POST.get("fopc2")
+#     #     print id_op2
+#     #     return HttpResponseRedirect("/versus")
 
-    # else:
-    #     return HttpResponse ("NO puedes Hacer nothing")
+#     # else:
+#     #     return HttpResponse ("NO puedes Hacer nothing")
 
 
 def Error404(request):

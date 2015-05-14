@@ -71,18 +71,20 @@ def resultados(request):
             print "KILL retornar, vuelva a intentarlo otro dia"
     else:
         lista =""
+<<<<<<< HEAD
 
     #print "LISTA CON PREFERENCIA o SIN preferencia"
+=======
+    
+>>>>>>> 2bc2816e6b793c716a17a0c694088f96361f57b4
     template ="buscarprogramas.html"
     return render_to_response(template,{'total':lista},context_instance=RequestContext(request))
 
 def lista_id_preferencia(preferencia):
     lista = []
-    #print preferencia
     for p in preferencia:
         lista.append(p.get('programa'))
         #lista.append(str(p.programa))
-    #print lista
     return lista
 
 def static_page(request,slug=''):
@@ -115,7 +117,6 @@ def static_page(request,slug=''):
                 cip = Question.objects.exclude(for_search_user__contains='-%s-' %(str(request.user.id))).filter(for_search_cip__icontains=cip)
             except Exception, e:
                 print e
-                print "Error"
                 cip =None
 
     elif a == []:
@@ -173,9 +174,13 @@ def principal(request):
     else:
         total = None
 
+<<<<<<< HEAD
 
 
     print total
+=======
+    
+>>>>>>> 2bc2816e6b793c716a17a0c694088f96361f57b4
     # try:
     #     #aca esta el error
     #     preferido = Preferencia.objects.filter(user=request.user.id,estado=True).values('programa__tipo_programa__id','programa__id')
@@ -200,8 +205,12 @@ def principal(request):
     #     print e
     #     cuatro_preferencias = None
     cuatro_preferencias = cuatroPrefe(request.user.id)
+<<<<<<< HEAD
 
     print cuatro_preferencias
+=======
+   
+>>>>>>> 2bc2816e6b793c716a17a0c694088f96361f57b4
     return render_to_response(template,{'total':total,'seguir':cuatro_preferencias},context_instance=RequestContext(request))
 
 def cuatroPrefe(user_id):
@@ -396,7 +405,6 @@ def manjar_imagen_subida(i):
 def fusion_imagen(img1,img2):
     try:
         q = unirlas(img1,img2)
-        print q
     except Exception, e:
         print e
         return None

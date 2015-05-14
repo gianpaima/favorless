@@ -24,10 +24,10 @@ $(document).ready(function(){
         };
     };
 
-    var states = ['Combate', 'Esto Es Guerra', 'Bienvenida La Tarde', 'Yo Soy', 'La Voz',
-    'Yo Soy Kids', 'Futbol En America', 'America Noticias', 'La Noche Es Mia', 'Enemigos Publicos', 'Hola a Todos',
-    '90 Segundos', 'Perú Tiene Talento', 'Fabrica de sueños', 'La Maquina Del Millon', 'El Valor De La Verdad', 'Amor, Amor, Amor'
-    ];
+    // var states = ['Combate', 'Esto Es Guerra', 'Bienvenida La Tarde', 'Yo Soy', 'La Voz',
+    // 'Yo Soy Kids', 'Futbol En America', 'America Noticias', 'La Noche Es Mia', 'Enemigos Publicos', 'Hola a Todos',
+    // '90 Segundos', 'Perú Tiene Talento', 'Fabrica de sueños', 'La Maquina Del Millon', 'El Valor De La Verdad', 'Amor, Amor, Amor'
+    // ];
 
     $('#the-basics .typeahead').typeahead({
         hint: true,
@@ -35,7 +35,7 @@ $(document).ready(function(){
         minLength: 1
     },
     {
-        name: 'states',
+        name: 'pr',
         displayKey: 'value',
         source: substringMatcher(states)
     });
